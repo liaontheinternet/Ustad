@@ -1,0 +1,49 @@
+.legal-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  overflow-y: auto;
+  background: rgba(13,27,42,.97);
+  padding: 60px var(--px) 80px;
+}
+
+.legal-modal.active {
+  display: block;
+}
+
+.legal-body h2 {
+  font-family: 'Lexend Zetta', sans-serif;
+  font-size: 13px;
+  font-weight: 200;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin: 28px 0 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(232,224,212,.08);
+}
+
+.legal-body p,
+.legal-body li {
+  font-size: 14px;
+  color: var(--beige);
+  opacity: .72;
+  line-height: 1.85;
+  margin-bottom: 10px;
+}
+
+.legal-body ul {
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
+
+.legal-body li {
+  margin-bottom: 6px;
+}
+
+.legal-body strong {
+  color: var(--white);
+  opacity: 1;
+  font-weight: 400;
+}
