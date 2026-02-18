@@ -1,0 +1,97 @@
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px var(--px);
+  background: rgba(13,27,42,.97);
+  border-bottom: 1px solid var(--bord);
+  gap: 12px;
+}
+
+.nav-logo {
+  font-family: 'Lexend Zetta', sans-serif;
+  font-size: clamp(13px, 3.5vw, 18px);
+  font-weight: 200;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--white);
+  flex-shrink: 0;
+}
+
+.nav-logo small {
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 8px;
+  letter-spacing: .28em;
+  color: var(--beige);
+  opacity: .55;
+  margin-top: 2px;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-shrink: 0;
+}
+
+.nav-links {
+  display: none;
+  list-style: none;
+  gap: 28px;
+}
+
+@media (min-width: 768px) {
+  .nav-links {
+    display: flex;
+  }
+}
+
+.nav-links a {
+  color: var(--beige);
+  text-decoration: none;
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  opacity: .6;
+  transition: opacity .25s;
+  cursor: pointer;
+}
+
+.nav-links a:hover {
+  opacity: 1;
+}
+
+.nav-lang {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-lang button {
+  background: none;
+  border: none;
+  color: var(--beige);
+  cursor: pointer;
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  opacity: .4;
+  transition: opacity .25s;
+  padding: 4px 2px;
+}
+
+.nav-lang button.on {
+  opacity: 1;
+  color: var(--white);
+}
+
+.nav-lang .sep {
+  color: var(--bord-lt);
+  font-size: 11px;
+}
