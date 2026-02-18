@@ -1,0 +1,24 @@
+:root {
+  --night:    #0D1B2A;
+  --night-md: #112030;
+  --night-lt: #162336;
+  --red:      #8B1A1A;
+  --red-lt:   #A52020;
+  --beige:    #E8E0D4;
+  --white:    #F5F0E8;
+  --bord:     rgba(232,224,212,.10);
+  --bord-lt:  rgba(232,224,212,.20);
+  --px: 16px;
+}
+
+@media (min-width: 600px) {
+  :root {
+    --px: 36px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --px: 60px;
+  }
+}
