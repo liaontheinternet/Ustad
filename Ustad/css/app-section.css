@@ -1,0 +1,256 @@
+.app-sec {
+  padding: 52px var(--px) 72px;
+  position: relative;
+}
+
+.app-sec::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: var(--px);
+  right: var(--px);
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(232,224,212,.12), transparent);
+}
+
+.app-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 44px;
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .app-inner {
+    flex-direction: row;
+    align-items: center;
+    gap: 72px;
+  }
+
+  .app-text {
+    flex: 1;
+  }
+}
+
+.app-desc {
+  font-size: 14px;
+  color: var(--beige);
+  opacity: .68;
+  line-height: 1.9;
+  margin: 22px 0 32px;
+  max-width: 420px;
+}
+
+.stores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.store {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(232,224,212,.07);
+  border: 1px solid rgba(232,224,212,.14);
+  padding: 12px 18px;
+  text-decoration: none;
+  color: var(--white);
+  transition: all .25s;
+}
+
+.store:hover {
+  background: rgba(232,224,212,.12);
+  border-color: rgba(232,224,212,.28);
+}
+
+.store svg {
+  width: 18px;
+  height: 18px;
+  fill: var(--white);
+  flex-shrink: 0;
+}
+
+.store-sub {
+  font-size: 8px;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  opacity: .45;
+  display: block;
+}
+
+.store-n {
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.phone {
+  width: min(240px, 70vw);
+  aspect-ratio: 9/19;
+  background: var(--night-lt);
+  border-radius: 32px;
+  border: 1px solid rgba(232,224,212,.1);
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 28px 56px rgba(0,0,0,.42);
+  flex-shrink: 0;
+}
+
+.ph-notch {
+  width: 80px;
+  height: 22px;
+  background: var(--night);
+  border-radius: 0 0 14px 14px;
+  margin: 0 auto;
+}
+
+.ph-screen {
+  padding: 0 16px;
+  height: calc(100% - 22px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ph-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0 14px;
+}
+
+.ph-logo {
+  font-family: 'Lexend Zetta', sans-serif;
+  font-size: 12px;
+  font-weight: 200;
+  letter-spacing: .18em;
+}
+
+.ph-av {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  flex-shrink: 0;
+}
+
+.ph-greet {
+  font-family: 'Lexend Zetta', sans-serif;
+  font-size: 13px;
+  font-weight: 100;
+  margin-bottom: 2px;
+}
+
+.ph-greet em {
+  font-style: normal;
+  font-weight: 300;
+  color: var(--beige);
+  opacity: .65;
+}
+
+.ph-sub {
+  font-size: 8px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--beige);
+  opacity: .35;
+  margin-bottom: 14px;
+}
+
+.ph-card {
+  background: rgba(232,224,212,.05);
+  border: 1px solid rgba(232,224,212,.08);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.ph-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(232,224,212,.06);
+}
+
+.ph-row:last-child {
+  border-bottom: none;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-r {
+  background: var(--red);
+}
+
+.dot-b {
+  background: var(--beige);
+  opacity: .3;
+}
+
+.ph-lbl {
+  font-size: 7px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--beige);
+  opacity: .32;
+  flex: 1;
+}
+
+.ph-val {
+  font-size: 10px;
+  opacity: .72;
+}
+
+.ph-btn {
+  background: var(--red);
+  border: none;
+  color: var(--white);
+  width: 100%;
+  padding: 11px;
+  border-radius: 7px;
+  font-size: 8px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-top: 2px;
+}
+
+.ph-tabs {
+  display: flex;
+  justify-content: space-around;
+  border-top: 1px solid rgba(232,224,212,.07);
+  padding: 9px 0 12px;
+  margin-top: auto;
+}
+
+.ph-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-size: 6px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--beige);
+  opacity: .28;
+}
+
+.ph-tab.on {
+  opacity: 1;
+  color: var(--red);
+}
+
+.ph-tab svg {
+  width: 14px;
+  height: 14px;
+}
