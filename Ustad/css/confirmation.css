@@ -1,0 +1,162 @@
+.confirm-screen {
+  display: none;
+  padding: 48px 20px 64px;
+  text-align: center;
+  animation: up .7s ease forwards;
+}
+
+.confirm-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 28px;
+  border-radius: 50%;
+  background: rgba(139,26,26,.12);
+  border: 1px solid rgba(139,26,26,.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirm-icon svg {
+  width: 32px;
+  height: 32px;
+  fill: none;
+  stroke: var(--red);
+  stroke-width: 1.5;
+}
+
+.confirm-title {
+  font-family: 'Lexend Zetta', sans-serif;
+  font-size: clamp(20px, 5vw, 32px);
+  font-weight: 100;
+  margin-bottom: 16px;
+}
+
+.confirm-title em {
+  font-style: normal;
+  color: var(--beige);
+  font-weight: 300;
+}
+
+.confirm-ref {
+  font-size: 10px;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--red);
+  opacity: .7;
+  margin-bottom: 32px;
+}
+
+.confirm-recap {
+  background: rgba(13,27,42,.7);
+  border: 1px solid var(--bord);
+  max-width: 560px;
+  margin: 0 auto 32px;
+  text-align: left;
+}
+
+.cr-row {
+  display: flex;
+  align-items: flex-start;
+  padding: 13px 18px;
+  border-bottom: 1px solid rgba(232,224,212,.06);
+  gap: 14px;
+}
+
+.cr-row:last-child {
+  border-bottom: none;
+}
+
+.cr-lbl {
+  font-size: 8px;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--beige);
+  opacity: .38;
+  flex-shrink: 0;
+  min-width: 90px;
+  padding-top: 2px;
+}
+
+.cr-val {
+  font-size: 14px;
+  color: var(--white);
+  line-height: 1.4;
+}
+
+.cr-price {
+  font-family: 'Lexend Zetta', sans-serif;
+  font-size: 24px;
+  font-weight: 100;
+  color: var(--white);
+}
+
+.confirm-msg {
+  font-size: 12px;
+  color: var(--beige);
+  opacity: .5;
+  line-height: 1.8;
+  margin-bottom: 28px;
+  max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.confirm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.confirm-wa {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #25D366;
+  color: #fff;
+  border: none;
+  padding: 14px 22px;
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background .25s;
+}
+
+.confirm-wa:hover {
+  background: #1db954;
+}
+
+.confirm-wa svg {
+  width: 18px;
+  height: 18px;
+  fill: white;
+  flex-shrink: 0;
+}
+
+.confirm-new {
+  background: none;
+  border: 1px solid var(--bord-lt);
+  color: var(--beige);
+  padding: 14px 22px;
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all .25s;
+}
+
+.confirm-new:hover {
+  border-color: var(--beige);
+  color: var(--white);
+}
+
+.email-status {
+  font-size: 11px;
+  color: var(--beige);
+  opacity: .4;
+  margin-top: 12px;
+  letter-spacing: .06em;
+}
