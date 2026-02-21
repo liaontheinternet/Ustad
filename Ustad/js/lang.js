@@ -3,7 +3,7 @@
 ════════════════════════════════════════════ */
 
 function setLang(l) {
-  lang = l;
+  APP_STATE.lang = l;
 
   // Highlight button
   document.querySelectorAll('.nav-lang button').forEach(b => {

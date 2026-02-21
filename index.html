@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ustad — Chauffeurs Privés · France &amp; Europe</title>
+  <meta name="description" content="Service de chauffeurs privés premium sur la Côte d'Azur. Nice, Monaco, Cannes, Saint-Tropez et toute l'Europe.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend+Zetta:wght@100;200;300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="Ustad/css/variables.css">
+  <link rel="stylesheet" href="Ustad/css/resets.css">
+  <link rel="stylesheet" href="Ustad/css/nav.css">
+  <link rel="stylesheet" href="Ustad/css/hero.css">
+  <link rel="stylesheet" href="Ustad/css/sections.css">
+  <link rel="stylesheet" href="Ustad/css/tabs.css">
+  <link rel="stylesheet" href="Ustad/css/forms.css">
+  <link rel="stylesheet" href="Ustad/css/autocomplete.css">
+  <link rel="stylesheet" href="Ustad/css/confirmation.css">
+  <link rel="stylesheet" href="Ustad/css/driver-section.css">
+  <link rel="stylesheet" href="Ustad/css/contact-bar.css">
+  <link rel="stylesheet" href="Ustad/css/footer.css">
+  <link rel="stylesheet" href="Ustad/css/modals.css">
+  <link rel="stylesheet" href="Ustad/css/noise.css">
+
+  <!-- EmailJS SDK (activer après création du compte) -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script> -->
+</head>
+<body>
+
+<!-- ═══ BRUIT / TEXTURE ═══ -->
+<div class="noise" aria-hidden="true"></div>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <div class="nav-logo">
+    Ustad
+    <small>Savoir-Faire in Motion</small>
+  </div>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#booking" data-fr="Réserver" data-en="Book">Réserver</a></li>
+      <li><a href="#driver"  data-fr="Chauffeurs" data-en="Drivers">Chauffeurs</a></li>
+      <li><a href="#contact" data-fr="Contact" data-en="Contact">Contact</a></li>
+    </ul>
+    <div class="nav-lang">
+      <button id="btn-fr" class="on" data-lang="fr">FR</button>
+      <span class="sep">|</span>
+      <button id="btn-en" data-lang="en">EN</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-accent"></div>
+  </div>
+  <div class="hero-content">
+    <span class="hero-tag" data-fr="Chauffeurs Privés · France &amp; Europe" data-en="Private Drivers · France &amp; Europe">Chauffeurs Privés · France &amp; Europe</span>
+    <h1 class="hero-h1">Private Travel<br>with <em>Savoir-Faire</em></h1>
+    <div class="hero-rule"></div>
+    <p class="hero-sub" data-fr="Votre trajet entre les mains<br>des meilleurs chauffeurs" data-en="Your journey in the hands<br>of the finest drivers">Votre trajet entre les mains<br>des meilleurs chauffeurs</p>
+    <div class="hero-ctas">
+      <a href="#booking" class="btn-red" data-fr="Réserver maintenant" data-en="Book now">Réserver maintenant</a>
+      <a href="#driver"  class="btn-out" data-fr="Devenir chauffeur" data-en="Become a driver">Devenir chauffeur</a>
+    </div>
+    <div class="hero-stats">
+      <div class="st">
+        <span class="st-n">+10 ans</span>
+        <span class="st-l" data-fr="d'expérience" data-en="of experience">d'expérience</span>
+      </div>
+      <div class="st-sep"></div>
+      <div class="st">
+        <span class="st-n">100%</span>
+        <span class="st-l" data-fr="certifiés" data-en="certified">certifiés</span>
+      </div>
+      <div class="st-sep"></div>
+      <div class="st">
+        <span class="st-n">24/7</span>
+        <span class="st-l" data-fr="disponible" data-en="available">disponible</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SECTION 01 — RÉSERVATION ═══ -->
+<section class="sec sec-alt" id="booking">
+  <div class="sec-head">
+    <span class="sec-num">01</span>
+    <h2 class="sec-title" data-fr="Réservez <em>votre trajet</em>" data-en="Book <em>your ride</em>">Réservez <em>votre trajet</em></h2>
+  </div>
+
+  <!-- Onglets -->
+  <div class="tabs">
+    <button class="tab on" data-tab="now"
+      data-fr="À la demande" data-en="On demand">À la demande</button>
+    <button class="tab" data-tab="planned"
+      data-fr="Planifiée" data-en="Planned">Planifiée</button>
+    <button class="tab" data-tab="hourly"
+      data-fr="À l'heure" data-en="Hourly">À l'heure</button>
+    <button class="tab" data-tab="enterprise"
+      data-fr="Entreprise" data-en="Enterprise">Entreprise</button>
+  </div>
+
+  <!-- ── Formulaire Standard ── -->
+  <div id="std">
+
+    <!-- Alerte véhicule -->
+    <div id="valert" class="valert" style="display:none"></div>
+
+    <div class="form">
+
+      <!-- Départ + Destination -->
+      <div class="row row--2">
+        <div class="f f--w">
+          <span class="lbl" data-fr="Lieu de départ" data-en="Pickup location">Lieu de départ</span>
+          <div class="ac-wrap">
+            <input id="pickup" type="text" autocomplete="off"
+              data-fr-placeholder="Ex : Nice Aéroport, Cannes, Monaco…"
+              data-en-placeholder="E.g.: Nice Airport, Cannes, Monaco…"
+              placeholder="Ex : Nice Aéroport, Cannes, Monaco…">
+            <div id="pickup-ac" class="ac-list" style="display:none"></div>
+          </div>
+        </div>
+        <div class="f f--w" id="dest-wrap">
+          <span class="lbl" data-fr="Destination" data-en="Destination">Destination</span>
+          <div class="ac-wrap">
+            <input id="dest" type="text" autocomplete="off"
+              data-fr-placeholder="Ex : Monaco, Hôtel du Cap, Cannes…"
+              data-en-placeholder="E.g.: Monaco, Hotel du Cap, Cannes…"
+              placeholder="Ex : Monaco, Hôtel du Cap, Cannes…">
+            <div id="dest-ac" class="ac-list" style="display:none"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Date/heure (Planifiée) -->
+      <div class="row row--2" id="dt-wrap" style="display:none">
+        <div class="f f--w">
+          <span class="lbl" data-fr="Date &amp; heure de prise en charge" data-en="Pickup date &amp; time">Date &amp; heure de prise en charge</span>
+          <input id="bdt" type="datetime-local">
+        </div>
+      </div>
+
+      <!-- Durée (À l'heure) -->
+      <div class="row" id="dur-wrap" style="display:none">
+        <div class="f">
+          <span class="lbl" data-fr="Durée souhaitée (heures)" data-en="Duration (hours)">Durée souhaitée (heures)</span>
+          <input id="dur" type="number" min="1" max="24" value="2">
+        </div>
+      </div>
+
+      <!-- Véhicule / Passagers / Bagages -->
+      <div class="row row--3">
+        <div class="f">
+          <span class="lbl" data-fr="Véhicule" data-en="Vehicle">Véhicule</span>
+          <select id="veh">
+            <option value="berline" data-fr="Berline — Classe E" data-en="Sedan — Class E">Berline — Classe E</option>
+            <option value="van"     data-fr="Van — Classe V"     data-en="Van — Class V">Van — Classe V</option>
+            <option value="classe_s" data-fr="Berline — Classe S" data-en="Sedan — Class S">Berline — Classe S</option>
+          </select>
+        </div>
+        <div class="f">
+          <span class="lbl" data-fr="Passagers" data-en="Passengers">Passagers</span>
+          <select id="pax">
+            <option>1</option><option>2</option><option>3</option>
+            <option>4</option><option>5</option><option>6</option><option>7</option>
+          </select>
+        </div>
+        <div class="f">
+          <span class="lbl" data-fr="Bagages cabine" data-en="Cabin bags">Bagages cabine</span>
+          <div class="counter">
+            <button class="cbtn" type="button" data-count="c" data-dir="-1">−</button>
+            <span class="cval" id="cn">0</span>
+            <button class="cbtn" type="button" data-count="c" data-dir="1">+</button>
+          </div>
+        </div>
+        <div class="f">
+          <span class="lbl" data-fr="Grandes valises" data-en="Large bags">Grandes valises</span>
+          <div class="counter">
+            <button class="cbtn" type="button" data-count="l" data-dir="-1">−</button>
+            <span class="cval" id="ln">0</span>
+            <button class="cbtn" type="button" data-count="l" data-dir="1">+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Options -->
+      <div class="row row--2">
+        <div class="f">
+          <span class="lbl" data-fr="Options" data-en="Options">Options</span>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-top:4px">
+            <input id="std-baby" type="checkbox">
+            <span data-fr="Siège bébé — Incl." data-en="Baby seat — Incl.">Siège bébé — Incl.</span>
+          </label>
+        </div>
+        <div class="f">
+          <span class="lbl" data-fr="Code partenaire hôtel" data-en="Hotel partner code">Code partenaire hôtel</span>
+          <input id="pcode" type="text" autocomplete="off"
+            data-fr-placeholder="Code USTADHOTELS"
+            data-en-placeholder="Code USTADHOTELS"
+            placeholder="Code USTADHOTELS">
+          <div id="pmsg" class="pmsg" style="display:none"></div>
+        </div>
+      </div>
+
+      <!-- Info tarifs partenaire hôtel (affiché quand code validé) -->
+      <div id="hotel-wrap" style="display:none">
+        <div class="f">
+          <span class="lbl" data-fr="Destinations — tarifs partenaires" data-en="Destinations — partner rates">Destinations — tarifs partenaires</span>
+          <p style="font-size:12px;opacity:.6;margin-top:6px;line-height:1.7"
+            data-fr="Tarifs fixes disponibles vers : Aéroport · Gare Nice · Monaco · Cannes · Villefranche · Beaulieu · Cap Ferrat · Vence · Antibes · Sophia Antipolis · Èze · Menton · Grasse · Vintimille · Fréjus · San Remo · Isola 2000 · Saint-Tropez · Marseille"
+            data-en="Fixed rates available to: Airport · Nice Station · Monaco · Cannes · Villefranche · Beaulieu · Cap Ferrat · Vence · Antibes · Sophia Antipolis · Èze · Menton · Grasse · Ventimiglia · Fréjus · San Remo · Isola 2000 · Saint-Tropez · Marseille">
+            Tarifs fixes disponibles vers : Aéroport · Gare Nice · Monaco · Cannes · Villefranche · Beaulieu · Cap Ferrat · Vence · Antibes · Sophia Antipolis · Èze · Menton · Grasse · Vintimille · Fréjus · San Remo · Isola 2000 · Saint-Tropez · Marseille
+          </p>
+        </div>
+      </div>
+
+      <!-- Coordonnées client -->
+      <div class="row row--2">
+        <div class="f">
+          <span class="lbl" data-fr="Prénom" data-en="First name">Prénom</span>
+          <input id="std-fname" type="text"
+            data-fr-placeholder="Jean" data-en-placeholder="John"
+            placeholder="Jean">
+        </div>
+        <div class="f">
+          <span class="lbl" data-fr="Nom" data-en="Last name">Nom</span>
+          <input id="std-lname" type="text"
+            data-fr-placeholder="Dupont" data-en-placeholder="Smith"
+            placeholder="Dupont">
+        </div>
+      </div>
+      <div class="row row--2">
+        <div class="f">
+          <span class="lbl" data-fr="Téléphone" data-en="Phone">Téléphone</span>
+          <input id="std-phone" type="tel"
+            data-fr-placeholder="+33 6 00 00 00 00" data-en-placeholder="+33 6 00 00 00 00"
+            placeholder="+33 6 00 00 00 00">
+        </div>
+        <div class="f">
+          <span class="lbl" data-fr="Votre e-mail" data-en="Your e-mail">Votre e-mail</span>
+          <input id="std-email" type="email"
+            data-fr-placeholder="votre@email.com" data-en-placeholder="your@email.com"
+            placeholder="votre@email.com">
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div class="f">
+        <span class="lbl" data-fr="Notes &amp; demandes spéciales" data-en="Notes &amp; special requests">Notes &amp; demandes spéciales</span>
+        <textarea id="std-notes" rows="3"
+          data-fr-placeholder="Accueil avec pancarte, siège bébé, etc."
+          data-en-placeholder="Meet &amp; greet, baby seat, etc."
+          placeholder="Accueil avec pancarte, siège bébé, etc."></textarea>
+      </div>
+
+      <!-- RGPD -->
+      <label class="rgpd" id="rgpd-std">
+        <input type="checkbox" id="rgpd-std-chk">
+        <span class="rgpd-text" data-fr="J'accepte que mes données personnelles soient collectées et utilisées par Ustad pour le traitement de ma réservation, conformément à notre <a id='link-privacy-std'>Politique de confidentialité</a>. Elles ne seront jamais cédées à des tiers." data-en="I agree that my personal data is collected and used by Ustad to process my booking, in accordance with our <a id='link-privacy-std'>Privacy Policy</a>. Data will never be shared with third parties.">
+          J'accepte que mes données personnelles soient collectées et utilisées par Ustad pour le traitement de ma réservation, conformément à notre <a id="link-privacy-std">Politique de confidentialité</a>. Elles ne seront jamais cédées à des tiers.
+        </span>
+      </label>
+
+      <!-- Barre de prix + Bouton -->
+      <div class="pbar">
+        <div class="pleft">
+          <div id="pok" style="display:none">
+            <span class="plbl" id="pv"></span>
+            <span class="phint" id="pno"></span>
+          </div>
+          <span class="phint" id="phint" data-fr="Renseignez votre trajet pour une estimation" data-en="Fill in your trip for an estimate">Renseignez votre trajet pour une estimation</span>
+        </div>
+        <button id="btn-sub-std" class="btn-sub" type="button"
+          data-fr="Confirmer la réservation" data-en="Confirm booking">Confirmer la réservation</button>
+      </div>
+
+      <!-- Tarifs indicatifs -->
+      <div class="slbl" data-fr="Tarifs indicatifs" data-en="Indicative rates">Tarifs indicatifs</div>
+      <div class="tarifs">
+        <div class="tbadge">
+          <strong>Berline Classe E</strong>
+          <span>3 €/km · 90 €/h</span>
+        </div>
+        <div class="tbadge">
+          <strong>Van Classe V</strong>
+          <span>4 €/km · 110 €/h</span>
+        </div>
+        <div class="tbadge">
+          <strong data-fr="Berline Classe S" data-en="Sedan Class S">Berline Classe S</strong>
+          <span data-fr="Tarifs sur devis" data-en="Quote on request">Tarifs sur devis</span>
+        </div>
+        <div class="tbadge">
+          <strong data-fr="Suppléments" data-en="Supplements">Suppléments</strong>
+          <span data-fr="+10€ aéro/port/gare · +20% avant 7h &amp; après 20h" data-en="+€10 airport/port/station · +20% before 7am &amp; after 8pm">+10€ aéro/port/gare · +20% avant 7h &amp; après 20h</span>
+        </div>
+      </div>
+
+    </div><!-- /.form -->
+
+    <!-- ── Écran de confirmation ── -->
+    <div id="conf-wrap" style="display:none">
+      <div class="conf-inner">
+        <div class="conf-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <h3 class="conf-title" data-fr="Réservation transmise" data-en="Booking submitted">Réservation transmise</h3>
+        <p class="conf-ref-lbl" data-fr="Référence" data-en="Reference">Référence</p>
+        <p class="conf-ref" id="conf-ref">UST-——</p>
+        <p class="conf-sub" data-fr="Un conseiller Ustad vous contactera très prochainement pour confirmer votre trajet." data-en="An Ustad advisor will contact you shortly to confirm your journey.">
+          Un conseiller Ustad vous contactera très prochainement pour confirmer votre trajet.
+        </p>
+        <table class="conf-recap">
+          <tr><td data-fr="Prise en charge" data-en="Pickup">Prise en charge</td><td id="conf-pickup">—</td></tr>
+          <tr><td data-fr="Destination" data-en="Destination">Destination</td><td id="conf-dest">—</td></tr>
+          <tr><td data-fr="Véhicule" data-en="Vehicle">Véhicule</td><td id="conf-veh">—</td></tr>
+          <tr><td data-fr="Passagers" data-en="Passengers">Passagers</td><td id="conf-pax">—</td></tr>
+          <tr><td data-fr="Date &amp; heure" data-en="Date &amp; time">Date &amp; heure</td><td id="conf-date">—</td></tr>
+          <tr><td data-fr="Tarif estimé" data-en="Estimated fare">Tarif estimé</td><td id="conf-price">—</td></tr>
+        </table>
+        <button id="conf-new" class="btn-sub" type="button"
+          data-fr="Nouvelle réservation" data-en="New booking">Nouvelle réservation</button>
+      </div>
+    </div>
+
+  </div><!-- /#std -->
+
+  <!-- ── Formulaire Entreprise ── -->
+  <div id="ent" style="display:none">
+    <div class="form">
+
+      <!-- Infos entreprise -->
+      <div class="row row--2">
+        <div class="f">
+          <span class="lbl" data-fr="Raison sociale" data-en="Company name">Raison sociale</span>
+          <input id="ent-company" type="text"
+            data-fr-placeholder="Nom de l'entreprise" data-en-placeholder="Company name"
+            placeholder="Nom de l'entreprise">
+        </div>
+        <div class="f">
+          <span class="lbl" data-fr="Responsable du compte" data-en="Account manager">Responsable du compte</span>
+          <input id="ent-contact" type="text"
+            data-fr-placeholder="Prénom Nom" data-en-placeholder="First Last"
+            placeholder="Prénom Nom">
+        </div>
+      </div>
+      <div class="row row--2">
+        <div class="f">
+          <span class="lbl" data-fr="E-mail" data-en="E-mail">E-mail</span>
+          <input id="ent-email" type="email"
+            data-fr-placeholder="contact@entreprise.com" data-en-placeholder="contact@company.com"
+            placeholder="contact@entreprise.com">
+        </div>
+        <div class="f">
+          <span class="lbl" data-fr="Téléphone" data-en="Phone">Téléphone</span>
+          <input id="ent-phone" type="tel"
+            data-fr-placeholder="+33 1 00 00 00 00" data-en-placeholder="+33 1 00 00 00 00"
+            placeholder="+33 1 00 00 00 00">
+        </div>
+      </div>
+
+      <!-- Trajets -->
+      <div id="trips"></div>
+      <button id="btn-add-trip" class="add-trip" type="button"
+        data-fr="+ Ajouter un trajet" data-en="+ Add a journey">+ Ajouter un trajet</button>
+
+      <!-- Document joint -->
+      <button id="btn-attach-ent" class="attach" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/>
+        </svg>
+        <span data-fr="Joindre un document (cahier des charges, budget…)" data-en="Attach a document (brief, budget…)">Joindre un document (cahier des charges, budget…)</span>
+      </button>
+      <input id="ent-file" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none">
+      <span id="ent-fname" style="display:none;font-size:12px;opacity:.6;margin-top:4px"></span>
+
+      <!-- RGPD -->
+      <label class="rgpd" id="rgpd-ent">
+        <input type="checkbox" id="rgpd-ent-chk">
+        <span class="rgpd-text" data-fr="J'accepte que les données de cette demande soient collectées par Ustad conformément à notre <a id='link-privacy-ent'>Politique de confidentialité</a>." data-en="I agree that this request data is collected by Ustad in accordance with our <a id='link-privacy-ent'>Privacy Policy</a>.">
+          J'accepte que les données de cette demande soient collectées par Ustad conformément à notre <a id="link-privacy-ent">Politique de confidentialité</a>.
+        </span>
+      </label>
+
+      <div style="margin-top:16px">
+        <button id="btn-sub-ent" class="btn-sub" type="button"
+          data-fr="Envoyer la demande" data-en="Send request">Envoyer la demande</button>
+      </div>
+
+    </div>
+  </div><!-- /#ent -->
+
+</section>
+
+<!-- ═══ SECTION 02 — RECRUTEMENT ═══ -->
+<section class="driver-sec" id="driver">
+  <div class="sec-head">
+    <span class="sec-num">02</span>
+    <h2 class="sec-title" data-fr="Devenir <em>chauffeur Ustad</em>" data-en="Become an <em>Ustad driver</em>">Devenir <em>chauffeur Ustad</em></h2>
+  </div>
+  <div class="form">
+    <div class="row row--2">
+      <div class="f">
+        <span class="lbl" data-fr="Prénom" data-en="First name">Prénom</span>
+        <input id="d-fname" type="text"
+          data-fr-placeholder="Jean" data-en-placeholder="John"
+          placeholder="Jean">
+      </div>
+      <div class="f">
+        <span class="lbl" data-fr="Nom" data-en="Last name">Nom</span>
+        <input id="d-lname" type="text"
+          data-fr-placeholder="Dupont" data-en-placeholder="Smith"
+          placeholder="Dupont">
+      </div>
+    </div>
+    <div class="row row--2">
+      <div class="f">
+        <span class="lbl" data-fr="Téléphone" data-en="Phone">Téléphone</span>
+        <input id="d-phone" type="tel"
+          data-fr-placeholder="+33 6 00 00 00 00" data-en-placeholder="+33 6 00 00 00 00"
+          placeholder="+33 6 00 00 00 00">
+      </div>
+      <div class="f">
+        <span class="lbl" data-fr="E-mail" data-en="E-mail">E-mail</span>
+        <input id="d-email" type="email"
+          data-fr-placeholder="votre@email.com" data-en-placeholder="your@email.com"
+          placeholder="votre@email.com">
+      </div>
+    </div>
+    <div class="f">
+      <span class="lbl" data-fr="Motivation" data-en="Motivation">Motivation</span>
+      <textarea id="d-motiv" rows="4"
+        data-fr-placeholder="Décrivez votre expérience et motivations…"
+        data-en-placeholder="Describe your experience and motivations…"
+        placeholder="Décrivez votre expérience et motivations…"></textarea>
+    </div>
+    <button id="btn-attach-driver" class="attach" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/>
+      </svg>
+      <span data-fr="Joindre votre CV (PDF, Word)" data-en="Attach your CV (PDF, Word)">Joindre votre CV (PDF, Word)</span>
+    </button>
+    <input id="d-cv" type="file" accept=".pdf,.doc,.docx" style="display:none">
+    <span id="d-cvname" style="display:none;font-size:12px;opacity:.6;margin-top:4px"></span>
+
+    <label class="rgpd" id="rgpd-drv">
+      <input type="checkbox" id="rgpd-drv-chk">
+      <span class="rgpd-text" data-fr="J'accepte que les données de ma candidature (nom, coordonnées, CV) soient collectées et utilisées par Ustad dans le cadre du recrutement, conformément à notre <a id='link-privacy-driver'>Politique de confidentialité</a>. Elles seront conservées 24 mois maximum." data-en="I agree that my application data (name, contact, CV) is collected by Ustad for recruitment purposes, in accordance with our <a id='link-privacy-driver'>Privacy Policy</a>. Data is kept for 24 months maximum.">
+        J'accepte que les données de ma candidature (nom, coordonnées, CV) soient collectées et utilisées par Ustad dans le cadre du recrutement, conformément à notre <a id="link-privacy-driver">Politique de confidentialité</a>. Elles seront conservées 24 mois maximum.
+      </span>
+    </label>
+    <p class="driver-note" data-fr="Seules les candidatures justifiant d'au moins 8 ans d'expérience en tant que chauffeur professionnel seront étudiées." data-en="Only applications with at least 8 years of professional driving experience will be considered.">
+      Seules les candidatures justifiant d'au moins 8 ans d'expérience en tant que chauffeur professionnel seront étudiées.
+    </p>
+    <div style="margin-top:16px">
+      <button id="btn-submit-driver" class="btn-sub" type="button"
+        data-fr="Envoyer ma candidature" data-en="Submit my application">Envoyer ma candidature</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ BARRE DE CONTACT ═══ -->
+<div class="contact-bar" id="contact">
+  <a class="cbar-item" href="tel:+33661505454">
+    <div class="cbar-icon">
+      <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.1 10.82a19.79 19.79 0 01-3.07-8.68A2 2 0 012 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92v2z"/></svg>
+    </div>
+    <div class="cbar-text">
+      <span class="cbar-lbl" data-fr="Appeler" data-en="Call us">Appeler</span>
+      <span class="cbar-val">+33 6 61 50 54 54</span>
+    </div>
+  </a>
+  <a class="cbar-item" href="mailto:ustadcontact@gmail.com">
+    <div class="cbar-icon">
+      <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+    </div>
+    <div class="cbar-text">
+      <span class="cbar-lbl" data-fr="Nous écrire" data-en="Write to us">Nous écrire</span>
+      <span class="cbar-val">ustadcontact@gmail.com</span>
+    </div>
+  </a>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div>
+    <div class="f-logo">Ustad</div>
+    <div class="f-base">Savoir-Faire in Motion</div>
+  </div>
+  <ul class="f-links">
+    <li><a id="link-legal"   href="#" data-fr="Mentions légales"  data-en="Legal notices">Mentions légales</a></li>
+    <li><a id="link-privacy" href="#" data-fr="Confidentialité"   data-en="Privacy">Confidentialité</a></li>
+    <li><a href="mailto:ustadcontact@gmail.com" data-fr="Contact" data-en="Contact">Contact</a></li>
+    <li><a id="link-driver"  href="#driver" data-fr="Devenir chauffeur" data-en="Become a driver">Devenir chauffeur</a></li>
+  </ul>
+  <span class="f-copy">© 2025 Ustad. All rights reserved.</span>
+</footer>
+
+<!-- ═══ MODAL — MENTIONS LÉGALES ═══ -->
+<div id="legal" class="modal" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <button id="btn-close-legal" class="modal-close" aria-label="Fermer">← RETOUR</button>
+    <h2 data-fr="Mentions légales" data-en="Legal notices">Mentions légales</h2>
+    <h3 data-fr="Éditeur du site" data-en="Site editor">Éditeur du site</h3>
+    <p data-fr="Le site ustad.fr est édité par la société Ustad SAS, immatriculée au Registre du Commerce et des Sociétés sous le numéro À COMPLÉTER, dont le siège social est situé à À COMPLÉTER, France." data-en="The website ustad.fr is published by Ustad SAS, registered under number TO BE COMPLETED, headquartered in TO BE COMPLETED, France.">Le site ustad.fr est édité par la société Ustad SAS, immatriculée au Registre du Commerce et des Sociétés sous le numéro À COMPLÉTER, dont le siège social est situé à À COMPLÉTER, France.</p>
+    <p data-fr="Directeur de la publication : À COMPLÉTER — E-mail : ustadcontact@gmail.com" data-en="Publication director: TO BE COMPLETED — E-mail: ustadcontact@gmail.com">Directeur de la publication : À COMPLÉTER — E-mail : ustadcontact@gmail.com</p>
+    <h3 data-fr="Hébergement" data-en="Hosting">Hébergement</h3>
+    <p data-fr="Le site est hébergé par Netlify, Inc., 44 Montgomery Street, Suite 300, San Francisco, California 94104." data-en="The site is hosted by Netlify, Inc., 44 Montgomery Street, Suite 300, San Francisco, California 94104.">Le site est hébergé par Netlify, Inc.</p>
+    <h3 data-fr="Propriété intellectuelle" data-en="Intellectual property">Propriété intellectuelle</h3>
+    <p data-fr="L'ensemble des contenus présents sur le site (textes, images, logos, graphismes) est la propriété exclusive d'Ustad SAS. Toute reproduction sans autorisation écrite préalable est interdite." data-en="All content on this site (text, images, logos, graphics) is the exclusive property of Ustad SAS. Any reproduction without prior written permission is prohibited.">L'ensemble des contenus présents sur le site (textes, images, logos, graphismes) est la propriété exclusive d'Ustad SAS. Toute reproduction sans autorisation écrite préalable est interdite.</p>
+    <h3 data-fr="Responsabilité" data-en="Liability">Responsabilité</h3>
+    <p data-fr="Les estimations de prix affichées sont fournies à titre indicatif uniquement. La confirmation finale est réalisée par l'équipe Ustad." data-en="Price estimates shown are for informational purposes only. Final confirmation is made by the Ustad team.">Les estimations de prix affichées sont fournies à titre indicatif uniquement.</p>
+    <p style="opacity:.4;font-size:11px;margin-top:24px" data-fr="Dernière mise à jour : janvier 2025" data-en="Last updated: January 2025">Dernière mise à jour : janvier 2025</p>
+  </div>
+</div>
+
+<!-- ═══ MODAL — POLITIQUE DE CONFIDENTIALITÉ ═══ -->
+<div id="privacy" class="modal" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <button id="btn-close-privacy" class="modal-close" aria-label="Fermer">← RETOUR</button>
+    <h2 data-fr="Politique de confidentialité" data-en="Privacy Policy">Politique de confidentialité</h2>
+    <h3 data-fr="Responsable du traitement" data-en="Data controller">Responsable du traitement</h3>
+    <p>Ustad SAS — ustadcontact@gmail.com</p>
+    <h3 data-fr="Données collectées" data-en="Data collected">Données collectées</h3>
+    <ul>
+      <li data-fr="Réservation : nom, prénom, email, téléphone, adresses, date/heure." data-en="Booking: name, email, phone, addresses, date/time.">Réservation : nom, prénom, email, téléphone, adresses, date/heure.</li>
+      <li data-fr="Entreprise : raison sociale, responsable, email, téléphone, trajets." data-en="Enterprise: company name, contact, email, phone, journeys.">Entreprise : raison sociale, responsable, email, téléphone, trajets.</li>
+      <li data-fr="Chauffeur : nom, prénom, email, téléphone, motivation, CV." data-en="Driver: name, email, phone, motivation, CV.">Chauffeur : nom, prénom, email, téléphone, motivation, CV.</li>
+    </ul>
+    <h3 data-fr="Durée de conservation" data-en="Retention period">Durée de conservation</h3>
+    <ul>
+      <li data-fr="Réservations : 3 ans" data-en="Bookings: 3 years">Réservations : 3 ans</li>
+      <li data-fr="Données entreprise : 5 ans" data-en="Enterprise data: 5 years">Données entreprise : 5 ans</li>
+      <li data-fr="Candidatures chauffeurs : 24 mois" data-en="Driver applications: 24 months">Candidatures chauffeurs : 24 mois</li>
+    </ul>
+    <h3 data-fr="Vos droits" data-en="Your rights">Vos droits</h3>
+    <p data-fr="Vous disposez de droits d'accès, de rectification et d'effacement. Contactez ustadcontact@gmail.com pour exercer vos droits." data-en="You have rights of access, rectification and deletion. Contact ustadcontact@gmail.com to exercise your rights.">Vous disposez de droits d'accès, de rectification et d'effacement. Contactez ustadcontact@gmail.com pour exercer vos droits.</p>
+    <p style="opacity:.4;font-size:11px;margin-top:24px" data-fr="Dernière mise à jour : janvier 2025" data-en="Last updated: January 2025">Dernière mise à jour : janvier 2025</p>
+  </div>
+</div>
+
+<!-- ═══ SCRIPTS ═══ -->
+<script src="Ustad/js/config.js"></script>
+<script src="Ustad/js/autocomplete.js"></script>
+<script src="Ustad/js/booking.js"></script>
+<script src="Ustad/js/tabs.js"></script>
+<script src="Ustad/js/lang.js"></script>
+<script src="Ustad/js/confirmation.js"></script>
+<script src="Ustad/js/form.js"></script>
+<script src="Ustad/js/driver.js"></script>
+<script src="Ustad/js/modals.js"></script>
+<script src="Ustad/js/init.js"></script>
+<script>
+  // Init EmailJS quand le compte sera configuré
+  // emailjs.init(CFG.emailjs_public_key);
+</script>
+
+</body>
+</html>
