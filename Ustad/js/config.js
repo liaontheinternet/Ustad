@@ -4,10 +4,10 @@
 
 const CFG = {
   // Email de réception
-  email_reception: 'reservations@ustad.fr',
+  email_reception: 'ustadcontact@gmail.com',
 
   // WhatsApp — numéro international sans espaces ni +
-  whatsapp_numero: '33600000000',
+  whatsapp_numero: '33661505454',
 
   // EmailJS
   emailjs_service_id:   'YOUR_SERVICE_ID',
