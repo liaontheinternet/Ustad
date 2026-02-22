@@ -27,8 +27,8 @@
   <link rel="stylesheet" href="Ustad/css/modals.css">
   <link rel="stylesheet" href="Ustad/css/noise.css">
 
-  <!-- EmailJS SDK (activer après création du compte) -->
-  <!-- <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script> -->
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 
@@ -560,8 +560,7 @@
 <script src="Ustad/js/modals.js"></script>
 <script src="Ustad/js/init.js"></script>
 <script>
-  // Init EmailJS quand le compte sera configuré
-  // emailjs.init(CFG.emailjs_public_key);
+  emailjs.init(CFG.emailjs_public_key);
 </script>
 
 </body>

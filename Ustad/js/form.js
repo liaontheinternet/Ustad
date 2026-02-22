@@ -124,11 +124,11 @@ USTAD · ustadcontact@gmail.com
 `.trim();
 
   _sendEmail(CFG.emailjs_template_std, {
-    to_email:   CFG.email_reception,
-    subject:    `[${ref}] Nouvelle demande — ${fname} ${lname}`,
-    bdc:        bdc,
-    client_email: email,
-    ref:        ref,
+    from_name:  `${fname} ${lname}`,
+    from_email: email,
+    reply_to:   email,
+    to_name:    'Équipe Ustad',
+    message:    bdc,
   }, () => {
     showConfirmation({
       pickup: pickup,
@@ -208,11 +208,11 @@ USTAD · ustadcontact@gmail.com
 `.trim();
 
   _sendEmail(CFG.emailjs_template_ent, {
-    to_email:   CFG.email_reception,
-    subject:    `[${ref}] Demande Entreprise — ${company}`,
-    bdc:        bdc,
-    client_email: email,
-    ref:        ref,
+    from_name:  `${company} — ${contact}`,
+    from_email: email,
+    reply_to:   email,
+    to_name:    'Équipe Ustad',
+    message:    bdc,
   }, () => {
     showConfirmation({
       pickup: '(voir trajets ci-dessous)',
@@ -232,17 +232,7 @@ function _sendEmail(templateId, params, onSuccess) {
   const btn = document.getElementById('btn-sub-std') || document.getElementById('btn-sub-ent');
   if (btn) { btn.disabled = true; btn.textContent = fr ? 'Envoi en cours…' : 'Sending…'; }
 
-  if (typeof emailjs === 'undefined' || CFG.emailjs_service_id === 'YOUR_SERVICE_ID') {
-    // EmailJS non configuré — mode démo
-    console.warn('EmailJS non configuré. Bon de commande :', params.bdc);
-    setTimeout(() => {
-      if (btn) { btn.disabled = false; btn.textContent = fr ? 'Confirmer la réservation' : 'Confirm booking'; }
-      onSuccess();
-    }, 800);
-    return;
-  }
-
-  emailjs.send(CFG.emailjs_service_id, templateId, params, CFG.emailjs_public_key)
+  emailjs.send(CFG.emailjs_service_id, templateId, params)
     .then(() => {
       if (btn) { btn.disabled = false; btn.textContent = fr ? 'Confirmer la réservation' : 'Confirm booking'; }
       onSuccess();

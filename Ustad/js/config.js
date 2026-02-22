@@ -10,10 +10,10 @@ const CFG = {
   whatsapp_numero: '33661505454',
 
   // EmailJS
-  emailjs_service_id:   'YOUR_SERVICE_ID',
-  emailjs_template_std: 'YOUR_TEMPLATE_STD',
-  emailjs_template_ent: 'YOUR_TEMPLATE_ENT',
-  emailjs_public_key:   'YOUR_PUBLIC_KEY',
+  emailjs_service_id:   'service_adlzlv7',
+  emailjs_template_std: 'template_te2tcuu',
+  emailjs_template_ent: 'template_te2tcuu',
+  emailjs_public_key:   'Cg_-rym5ScOdhBeAv',
 };
 
 /* ════ TARIFS FIXES PARTENAIRES HÔTELS ════ */
