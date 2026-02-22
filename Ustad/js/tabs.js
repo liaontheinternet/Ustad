@@ -19,13 +19,27 @@ function setTab(t) {
 
   if (!isEnt) {
     // Show/hide conditional fields
-    const dtWrap = document.getElementById('dt-wrap');
-    const durWrap = document.getElementById('dur-wrap');
+    const dtWrap   = document.getElementById('dt-wrap');
+    const durWrap  = document.getElementById('dur-wrap');
     const destWrap = document.getElementById('dest-wrap');
+    const destLbl  = document.getElementById('dest-lbl');
 
-    if (dtWrap) dtWrap.style.display = (t === 'planned') ? 'block' : 'none';
-    if (durWrap) durWrap.style.display = (t === 'hourly') ? 'block' : 'none';
-    if (destWrap) destWrap.style.display = (t === 'hourly') ? 'none' : 'block';
+    if (dtWrap)   dtWrap.style.display   = (t === 'planned' || t === 'hourly') ? 'block' : 'none';
+    if (durWrap)  durWrap.style.display  = (t === 'hourly') ? 'block' : 'none';
+    if (destWrap) destWrap.style.display = 'block';
+
+    // Label destination adaptatif selon l'onglet
+    if (destLbl) {
+      if (t === 'hourly') {
+        destLbl.textContent = APP_STATE.lang === 'fr' ? 'Lieu d\'arrivée finale' : 'Final drop-off';
+        destLbl.setAttribute('data-fr', 'Lieu d\'arrivée finale');
+        destLbl.setAttribute('data-en', 'Final drop-off');
+      } else {
+        destLbl.textContent = APP_STATE.lang === 'fr' ? 'Destination' : 'Destination';
+        destLbl.setAttribute('data-fr', 'Destination');
+        destLbl.setAttribute('data-en', 'Destination');
+      }
+    }
 
     calcPrice();
   } else {

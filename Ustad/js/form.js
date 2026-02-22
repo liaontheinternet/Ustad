@@ -21,115 +21,121 @@ function makeRef() {
 
 /* ─── Tab label ─── */
 function tabLabel() {
-  const map = { now:'Trajet minute', planned:'Trajet planifié', hourly:'À l\'heure', enterprise:'Entreprise' };
+  const map = { now:'Trajet minute', planned:'Trajet planifié', hourly:'Mise à disposition', enterprise:'Entreprise' };
   return map[APP_STATE.tab] || APP_STATE.tab;
 }
 
-/* ─── Génération du bon de commande HTML stylisé ─── */
+/* ─── Génération du bon de commande HTML (table-based pour Gmail dark mode) ─── */
 function genEmailHtml({ ref, now, fname, lname, email, phone, type, dateLabel, pickup, dest, vehLabel, pax, cabin, large, baby, partner, notes, prix }) {
-  const s = {
-    wrap:       'max-width:620px;margin:0 auto;font-family:Arial,Helvetica,sans-serif;',
-    banner:     'background-color:#0D1B2A !important;padding:32px 40px 28px;border-bottom:3px solid #8B1A1A;',
-    logo:       'font-family:Georgia,serif;font-size:24px;letter-spacing:.32em;text-transform:uppercase;color:#F5F0E8;margin:0;font-weight:normal;',
-    sub:        'font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:rgba(232,224,212,.42);margin-top:5px;',
-    metaWrap:   'margin-top:24px;',
-    refLbl:     'font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(232,224,212,.65);',
-    refVal:     'font-size:14px;letter-spacing:.12em;color:#F5F0E8;font-weight:bold;',
-    date:       'font-size:10px;color:rgba(232,224,212,.45);letter-spacing:.06em;margin-top:6px;',
-    main:       'background-color:#F5F0E8 !important;padding:32px 40px 24px;',
-    intro:      'font-size:13px;color:rgba(13,27,42,.62);line-height:1.7;margin-bottom:28px;padding-bottom:22px;border-bottom:1px solid rgba(13,27,42,.10);',
-    block:      'border:1px solid #8B1A1A;margin-bottom:14px;',
-    bhead:      'background-color:#8B1A1A !important;padding:9px 16px;',
-    bheadSpan:  'font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:#F5F0E8;font-weight:normal;',
-    row:        'display:flex;align-items:baseline;padding:9px 16px;border-bottom:1px solid rgba(13,27,42,.07);',
-    rowLast:    'display:flex;align-items:baseline;padding:9px 16px;',
-    lbl:        'font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(13,27,42,.45);width:38%;padding-right:12px;',
-    val:        'font-size:13px;color:#0D1B2A;font-weight:600;line-height:1.4;',
-    priceBlock: 'border:1px solid #8B1A1A;background-color:rgba(139,26,26,.05) !important;margin-bottom:14px;padding:22px 16px;display:flex;align-items:center;justify-content:space-between;',
-    priceLbl:   'font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:#8B1A1A;',
-    priceNote:  'font-size:10px;color:rgba(13,27,42,.40);margin-top:5px;line-height:1.5;',
-    priceVal:   'font-size:32px;color:#0D1B2A;font-weight:700;letter-spacing:-.01em;',
-    footer:     'background-color:#0D1B2A !important;padding:24px 40px;border-top:3px solid #8B1A1A;text-align:center;',
-    flogo:      'font-family:Georgia,serif;font-size:14px;letter-spacing:.32em;text-transform:uppercase;color:rgba(232,224,212,.58);',
-    fcontact:   'font-size:11px;color:rgba(232,224,212,.38);margin-top:8px;letter-spacing:.06em;',
-    flegal:     'font-size:9px;color:rgba(232,224,212,.22);margin-top:18px;line-height:1.6;letter-spacing:.04em;',
-  };
+  const NAVY  = '#0D1B2A';
+  const RED   = '#8B1A1A';
+  const CREAM = '#F5F0E8';
+  const SEP   = 'border-bottom:1px solid rgba(13,27,42,.07);';
 
-  const row = (label, value, last = false) =>
-    `<div style="${last ? s.rowLast : s.row}"><span style="${s.lbl}">${label}</span><span style="${s.val}">${value || '—'}</span></div>`;
+  // Ligne de données : cellule label + cellule valeur
+  const trow = (lbl, val, last = false) => (val && val !== '—') ? `
+      <tr><td style="padding:0;${last ? '' : SEP}">
+        <table width="100%" cellpadding="0" cellspacing="0"><tr>
+          <td width="38%" style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(13,27,42,.45);padding:9px 12px 9px 16px;vertical-align:top;">${lbl}</td>
+          <td style="font-size:13px;color:${NAVY};font-weight:600;line-height:1.4;padding:9px 16px 9px 0;word-break:normal;overflow-wrap:break-word;">${val}</td>
+        </tr></table>
+      </td></tr>` : '';
 
-  const notesBlock = notes ? `
-    <div style="${s.block}">
-      <div style="${s.bhead}"><span style="${s.bheadSpan}">Demandes spéciales</span></div>
-      <div><div style="${s.rowLast}"><span style="${s.val}">${notes}</span></div></div>
-    </div>` : '';
+  // Bloc avec en-tête bordeaux
+  const tblock = (title, rows) => !rows.trim() ? '' : `
+    <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid ${RED};margin-bottom:14px;">
+      <tr><td bgcolor="${RED}" style="background-color:${RED};padding:9px 16px;">
+        <span style="font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:${CREAM};font-weight:normal;">${title}</span>
+      </td></tr>
+      ${rows}
+    </table>`;
 
-  return `<!DOCTYPE html><html lang="fr" style="color-scheme:light;" data-color-mode="light"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="color-scheme" content="light only"><meta name="supported-color-schemes" content="light"><title>Bon de commande Ustad — ${ref}</title><style>:root{color-scheme:light only !important;}body,div,table,td,th,p,span{color-scheme:light !important;}</style></head>
-<body style="margin:0;padding:0;background-color:#c5bdb4 !important;color-scheme:light;">
-<div style="${s.wrap}">
+  const clientRows =
+    trow('Nom', `${fname} ${lname}`) +
+    trow('E-mail', email) +
+    trow('Téléphone', phone, true);
 
-  <div style="${s.banner}">
-    <div style="${s.logo}">Ustad</div>
-    <div style="${s.sub}">Savoir-Faire in Motion</div>
-    <div style="${s.metaWrap}">
-      <div style="${s.refLbl}">Référence</div>
-      <div style="${s.refVal}">${ref}</div>
-      <div style="${s.date}">${now}</div>
-    </div>
-  </div>
+  const prestationRows =
+    trow('Type', type) +
+    trow('Date &amp; heure', dateLabel) +
+    trow('Prise en charge', pickup) +
+    trow('Destination', dest) +
+    trow('Véhicule', vehLabel) +
+    trow('Passagers', String(pax), true);
 
-  <div style="${s.main}">
-    <p style="${s.intro}">Bonjour ${fname},<br>Votre demande de réservation a bien été transmise à l'équipe Ustad. Un conseiller vous contactera très prochainement pour confirmer votre trajet.</p>
+  const baggageRows =
+    trow('Bagages cabine', String(cabin)) +
+    trow('Grandes valises', String(large)) +
+    trow('Siège bébé', baby ? 'Oui' : 'Non') +
+    trow('Code partenaire', partner ? 'USTADHOTELS' : '—', true);
 
-    <div style="${s.block}">
-      <div style="${s.bhead}"><span style="${s.bheadSpan}">Client</span></div>
-      <div>
-        ${row('Nom', `${fname} ${lname}`)}
-        ${row('E-mail', email)}
-        ${row('Téléphone', phone, true)}
-      </div>
-    </div>
+  const notesBlock = notes ? tblock('Demandes spéciales',
+    `<tr><td style="font-size:13px;color:${NAVY};font-weight:600;line-height:1.5;padding:10px 16px;">${notes}</td></tr>`) : '';
 
-    <div style="${s.block}">
-      <div style="${s.bhead}"><span style="${s.bheadSpan}">Prestation</span></div>
-      <div>
-        ${row('Type', type)}
-        ${row('Date &amp; heure', dateLabel)}
-        ${row('Prise en charge', pickup)}
-        ${row('Destination', dest)}
-        ${row('Véhicule', vehLabel)}
-        ${row('Passagers', pax, true)}
-      </div>
-    </div>
+  return `<!DOCTYPE html>
+<html lang="fr"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="color-scheme" content="light">
+  <meta name="supported-color-schemes" content="light">
+  <title>Bon de commande Ustad — ${ref}</title>
+</head>
+<body bgcolor="#c5bdb4" style="margin:0;padding:0;background-color:#c5bdb4;">
+<table width="100%" cellpadding="0" cellspacing="0" bgcolor="#c5bdb4" style="background-color:#c5bdb4;">
+<tr><td align="center" style="padding:24px 16px;">
 
-    <div style="${s.block}">
-      <div style="${s.bhead}"><span style="${s.bheadSpan}">Bagages &amp; Options</span></div>
-      <div>
-        ${row('Bagages cabine', cabin)}
-        ${row('Grandes valises', large)}
-        ${row('Siège bébé', baby ? 'Oui' : 'Non')}
-        ${row('Code partenaire', partner ? 'USTADHOTELS' : '—', true)}
-      </div>
-    </div>
+  <!-- BANNIÈRE -->
+  <table width="620" cellpadding="0" cellspacing="0" bgcolor="${NAVY}" style="max-width:620px;background-color:${NAVY};">
+    <tr><td style="padding:32px 40px 28px;border-bottom:3px solid ${RED};">
+      <p style="font-family:Georgia,serif;font-size:24px;letter-spacing:.32em;text-transform:uppercase;color:${CREAM};margin:0;font-weight:normal;">Ustad</p>
+      <p style="font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:rgba(232,224,212,.42);margin:4px 0 0;">Savoir-Faire in Motion</p>
+      <p style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(232,224,212,.65);margin:22px 0 0;">Référence</p>
+      <p style="font-size:14px;letter-spacing:.12em;color:${CREAM};font-weight:bold;margin:3px 0 0;">${ref}</p>
+      <p style="font-size:10px;color:rgba(232,224,212,.45);letter-spacing:.06em;margin:6px 0 0;">${now}</p>
+    </td></tr>
+  </table>
 
-    <div style="${s.priceBlock}">
-      <div>
-        <div style="${s.priceLbl}">Tarif estimé</div>
-        <div style="${s.priceNote}">Tarif indicatif<br>Confirmation par l'équipe Ustad</div>
-      </div>
-      <div style="${s.priceVal}">${prix}</div>
-    </div>
+  <!-- CORPS -->
+  <table width="620" cellpadding="0" cellspacing="0" bgcolor="${CREAM}" style="max-width:620px;background-color:${CREAM};">
+    <tr><td style="padding:32px 40px 24px;">
+      <p style="font-size:13px;color:rgba(13,27,42,.62);line-height:1.7;margin:0 0 24px;padding-bottom:22px;border-bottom:1px solid rgba(13,27,42,.10);">
+        Bonjour ${fname},<br>
+        Votre demande de réservation a bien été transmise à l'équipe Ustad.<br>
+        Un conseiller vous contactera très prochainement pour confirmer votre trajet.
+      </p>
 
-    ${notesBlock}
-  </div>
+      ${tblock('Client', clientRows)}
+      ${tblock('Prestation', prestationRows)}
+      ${tblock('Bagages &amp; Options', baggageRows)}
+      ${notesBlock}
 
-  <div style="${s.footer}">
-    <div style="${s.flogo}">Ustad</div>
-    <div style="${s.fcontact}">ustadcontact@gmail.com &nbsp;·&nbsp; +33 6 61 50 54 54</div>
-    <div style="${s.flegal}">Ce bon de commande est généré automatiquement lors de votre réservation en ligne.<br>© ${new Date().getFullYear()} Ustad — Savoir-Faire in Motion</div>
-  </div>
+      <!-- TARIF -->
+      <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid ${RED};margin-bottom:14px;">
+        <tr><td style="padding:20px 16px;">
+          <table width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td>
+              <p style="font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:${RED};margin:0;">Tarif estimé</p>
+              <p style="font-size:10px;color:rgba(13,27,42,.40);margin:5px 0 0;line-height:1.5;">Tarif indicatif<br>Confirmation par l'équipe Ustad</p>
+            </td>
+            <td align="right" style="font-size:32px;color:${NAVY};font-weight:700;letter-spacing:-.01em;white-space:nowrap;vertical-align:middle;">${prix}</td>
+          </tr></table>
+        </td></tr>
+      </table>
 
-</div>
+    </td></tr>
+  </table>
+
+  <!-- PIED DE PAGE -->
+  <table width="620" cellpadding="0" cellspacing="0" bgcolor="${NAVY}" style="max-width:620px;background-color:${NAVY};">
+    <tr><td style="padding:22px 40px;border-top:3px solid ${RED};text-align:center;">
+      <p style="font-family:Georgia,serif;font-size:14px;letter-spacing:.32em;text-transform:uppercase;color:rgba(232,224,212,.58);margin:0;">Ustad</p>
+      <p style="font-size:11px;color:rgba(232,224,212,.38);margin:7px 0 0;letter-spacing:.06em;">ustadcontact@gmail.com &nbsp;·&nbsp; +33 6 61 50 54 54</p>
+      <p style="font-size:9px;color:rgba(232,224,212,.22);margin:16px 0 0;line-height:1.6;letter-spacing:.04em;">Ce bon de commande est généré automatiquement lors de votre réservation en ligne.<br>© ${new Date().getFullYear()} Ustad — Savoir-Faire in Motion</p>
+    </td></tr>
+  </table>
+
+</td></tr>
+</table>
 </body></html>`;
 }
 
@@ -164,7 +170,7 @@ function submitStd() {
   if (!lname)   { markErr('std-lname',  true); ok = false; } else markErr('std-lname',  false);
   if (!email)   { markErr('std-email',  true); ok = false; } else markErr('std-email',  false);
   if (!pickup)  { markErr('pickup',     true); ok = false; } else markErr('pickup',     false);
-  if (APP_STATE.tab !== 'hourly' && !dest) {
+  if (!dest) {
     markErr('dest', true); ok = false;
   } else {
     markErr('dest', false);
@@ -201,7 +207,7 @@ function submitStd() {
     type:      tabLabel(),
     dateLabel,
     pickup,
-    dest:      APP_STATE.tab === 'hourly' ? '(À l\'heure — sans destination fixe)' : dest,
+    dest,
     vehLabel,
     pax,
     cabin:     APP_STATE.cabin,
@@ -225,12 +231,13 @@ function submitStd() {
       type:  tabLabel(),
       date:  dateLabel,
       pickup,
-      dest:  APP_STATE.tab === 'hourly' ? '—' : dest,
+      dest,
       veh:   vehLabel,
       pax,
       notes,
       price: prix,
       emailSent,
+      emailHtml: bdc,
     });
     // Reset
     APP_STATE.cabin = 0; APP_STATE.large = 0; APP_STATE.partner = false;
@@ -320,6 +327,7 @@ USTAD · ustadcontact@gmail.com
       notes: '',
       price: fr ? 'Sur devis' : 'Quote',
       emailSent,
+      emailHtml: bdc,
     });
     APP_STATE.trips = 0;
   });

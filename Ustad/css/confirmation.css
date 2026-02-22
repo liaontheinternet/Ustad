@@ -165,6 +165,10 @@
   width: 36%;
   flex-shrink: 0;
   padding-top: 1px;
+  /* Pas de coupure en milieu de mot */
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: none;
 }
 
 .bdc-val {
@@ -172,7 +176,10 @@
   color: #0D1B2A;
   font-weight: 600;
   line-height: 1.4;
-  word-break: break-word;
+  /* Coupure uniquement si un seul mot est trop long, jamais au milieu arbitrairement */
+  word-break: normal;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 /* ── Bloc tarif ── */
@@ -246,6 +253,32 @@
 }
 
 /* ── Boutons ── */
+.conf-btn-pdf {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: 1px solid #8B1A1A;
+  color: #8B1A1A;
+  padding: 13px 22px;
+  font-size: 9px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+}
+
+.conf-btn-pdf:hover {
+  background: #8B1A1A;
+  color: #F5F0E8;
+}
+
+.conf-btn-pdf svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
 .conf-btn-new {
   background: none;
   border: 1px solid rgba(13,27,42,.22);
