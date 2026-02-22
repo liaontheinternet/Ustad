@@ -29,30 +29,30 @@ function tabLabel() {
 function genEmailHtml({ ref, now, fname, lname, email, phone, type, dateLabel, pickup, dest, vehLabel, pax, cabin, large, baby, partner, notes, prix }) {
   const s = {
     wrap:       'max-width:620px;margin:0 auto;font-family:Arial,Helvetica,sans-serif;',
-    banner:     'background:#0D1B2A;padding:32px 40px 28px;border-bottom:3px solid #8B1A1A;',
+    banner:     'background-color:#0D1B2A !important;padding:32px 40px 28px;border-bottom:3px solid #8B1A1A;',
     logo:       'font-family:Georgia,serif;font-size:24px;letter-spacing:.32em;text-transform:uppercase;color:#F5F0E8;margin:0;font-weight:normal;',
-    sub:        'font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:#E8E0D4;opacity:.38;margin-top:5px;',
+    sub:        'font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:rgba(232,224,212,.42);margin-top:5px;',
     metaWrap:   'margin-top:24px;',
-    refLbl:     'font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#E8E0D4;opacity:.6;',
+    refLbl:     'font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(232,224,212,.65);',
     refVal:     'font-size:14px;letter-spacing:.12em;color:#F5F0E8;font-weight:bold;',
-    date:       'font-size:10px;color:#E8E0D4;opacity:.45;letter-spacing:.06em;margin-top:6px;',
-    main:       'background:#F5F0E8;padding:32px 40px 24px;',
-    intro:      'font-size:13px;color:#0D1B2A;opacity:.6;line-height:1.7;margin-bottom:28px;padding-bottom:22px;border-bottom:1px solid rgba(13,27,42,.10);',
+    date:       'font-size:10px;color:rgba(232,224,212,.45);letter-spacing:.06em;margin-top:6px;',
+    main:       'background-color:#F5F0E8 !important;padding:32px 40px 24px;',
+    intro:      'font-size:13px;color:rgba(13,27,42,.62);line-height:1.7;margin-bottom:28px;padding-bottom:22px;border-bottom:1px solid rgba(13,27,42,.10);',
     block:      'border:1px solid #8B1A1A;margin-bottom:14px;',
-    bhead:      'background:#8B1A1A;padding:9px 16px;',
+    bhead:      'background-color:#8B1A1A !important;padding:9px 16px;',
     bheadSpan:  'font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:#F5F0E8;font-weight:normal;',
     row:        'display:flex;align-items:baseline;padding:9px 16px;border-bottom:1px solid rgba(13,27,42,.07);',
     rowLast:    'display:flex;align-items:baseline;padding:9px 16px;',
-    lbl:        'font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#0D1B2A;opacity:.45;width:38%;padding-right:12px;',
+    lbl:        'font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(13,27,42,.45);width:38%;padding-right:12px;',
     val:        'font-size:13px;color:#0D1B2A;font-weight:600;line-height:1.4;',
-    priceBlock: 'border:1px solid #8B1A1A;background:rgba(139,26,26,.05);margin-bottom:14px;padding:22px 16px;display:flex;align-items:center;justify-content:space-between;',
+    priceBlock: 'border:1px solid #8B1A1A;background-color:rgba(139,26,26,.05) !important;margin-bottom:14px;padding:22px 16px;display:flex;align-items:center;justify-content:space-between;',
     priceLbl:   'font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:#8B1A1A;',
-    priceNote:  'font-size:10px;color:#0D1B2A;opacity:.38;margin-top:5px;line-height:1.5;',
+    priceNote:  'font-size:10px;color:rgba(13,27,42,.40);margin-top:5px;line-height:1.5;',
     priceVal:   'font-size:32px;color:#0D1B2A;font-weight:700;letter-spacing:-.01em;',
-    footer:     'background:#0D1B2A;padding:24px 40px;border-top:3px solid #8B1A1A;text-align:center;',
-    flogo:      'font-family:Georgia,serif;font-size:14px;letter-spacing:.32em;text-transform:uppercase;color:#E8E0D4;opacity:.55;',
-    fcontact:   'font-size:11px;color:#E8E0D4;opacity:.35;margin-top:8px;letter-spacing:.06em;',
-    flegal:     'font-size:9px;color:#E8E0D4;opacity:.2;margin-top:18px;line-height:1.6;letter-spacing:.04em;',
+    footer:     'background-color:#0D1B2A !important;padding:24px 40px;border-top:3px solid #8B1A1A;text-align:center;',
+    flogo:      'font-family:Georgia,serif;font-size:14px;letter-spacing:.32em;text-transform:uppercase;color:rgba(232,224,212,.58);',
+    fcontact:   'font-size:11px;color:rgba(232,224,212,.38);margin-top:8px;letter-spacing:.06em;',
+    flegal:     'font-size:9px;color:rgba(232,224,212,.22);margin-top:18px;line-height:1.6;letter-spacing:.04em;',
   };
 
   const row = (label, value, last = false) =>
@@ -64,8 +64,8 @@ function genEmailHtml({ ref, now, fname, lname, email, phone, type, dateLabel, p
       <div><div style="${s.rowLast}"><span style="${s.val}">${notes}</span></div></div>
     </div>` : '';
 
-  return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="color-scheme" content="light"><meta name="supported-color-schemes" content="light"><title>Bon de commande Ustad — ${ref}</title><style>:root{color-scheme:light only;}</style></head>
-<body style="margin:0;padding:0;background:#c5bdb4;color-scheme:light;">
+  return `<!DOCTYPE html><html lang="fr" style="color-scheme:light;" data-color-mode="light"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="color-scheme" content="light only"><meta name="supported-color-schemes" content="light"><title>Bon de commande Ustad — ${ref}</title><style>:root{color-scheme:light only !important;}body,div,table,td,th,p,span{color-scheme:light !important;}</style></head>
+<body style="margin:0;padding:0;background-color:#c5bdb4 !important;color-scheme:light;">
 <div style="${s.wrap}">
 
   <div style="${s.banner}">
