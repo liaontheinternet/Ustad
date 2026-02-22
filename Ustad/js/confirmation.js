@@ -100,6 +100,14 @@ function showConfirmation(data) {
       ${notesBlock}
 
       <div class="bdc-actions">
+        <button id="conf-pdf" class="conf-btn-pdf" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          ${fr ? 'Télécharger PDF' : 'Download PDF'}
+        </button>
         <button id="conf-new" class="conf-btn-new" type="button">
           ${fr ? 'Nouvelle réservation' : 'New booking'}
         </button>
@@ -129,5 +137,19 @@ function showConfirmation(data) {
     wrap.style.display = 'none';
     if (std)    std.style.display    = 'block';
     if (tabsEl) tabsEl.style.display = '';
+  });
+
+  document.getElementById('conf-pdf')?.addEventListener('click', () => {
+    const html = data.emailHtml;
+    if (!html) return;
+    const win = window.open('', '_blank', 'width=720,height=960');
+    if (!win) return;
+    win.document.open();
+    win.document.write(html);
+    win.document.close();
+    // Attendre le chargement complet avant d'ouvrir la boîte d'impression
+    win.addEventListener('load', () => {
+      setTimeout(() => { win.focus(); win.print(); }, 400);
+    });
   });
 }
