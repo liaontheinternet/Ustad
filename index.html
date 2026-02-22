@@ -374,45 +374,7 @@
 
   <!-- ── Écran de confirmation ── -->
   <div id="conf-wrap" style="display:none">
-    <div class="conf-inner">
-      <div class="conf-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="20 6 9 17 4 12"/>
-        </svg>
-      </div>
-      <h3 class="conf-title" data-fr="Réservation transmise" data-en="Booking submitted">Réservation transmise</h3>
-      <p class="conf-ref-lbl" data-fr="Référence" data-en="Reference">Référence</p>
-      <p class="conf-ref" id="conf-ref">UST-——</p>
-      <p class="conf-sub" data-fr="Un conseiller Ustad vous contactera très prochainement pour confirmer votre trajet." data-en="An Ustad advisor will contact you shortly to confirm your journey.">
-        Un conseiller Ustad vous contactera très prochainement pour confirmer votre trajet.
-      </p>
-      <p class="conf-email-note" data-fr="La confirmation de votre réservation vous sera envoyée par e-mail." data-en="Your booking confirmation will be sent to you by e-mail.">
-        La confirmation de votre réservation vous sera envoyée par e-mail.
-      </p>
-      <p id="conf-send-status" class="email-status" style="display:none"></p>
-      <table class="conf-recap">
-        <tr><td data-fr="Prise en charge" data-en="Pickup">Prise en charge</td><td id="conf-pickup">—</td></tr>
-        <tr><td data-fr="Destination" data-en="Destination">Destination</td><td id="conf-dest">—</td></tr>
-        <tr><td data-fr="Véhicule" data-en="Vehicle">Véhicule</td><td id="conf-veh">—</td></tr>
-        <tr><td data-fr="Passagers" data-en="Passengers">Passagers</td><td id="conf-pax">—</td></tr>
-        <tr><td data-fr="Date &amp; heure" data-en="Date &amp; time">Date &amp; heure</td><td id="conf-date">—</td></tr>
-        <tr><td data-fr="Tarif estimé" data-en="Estimated fare">Tarif estimé</td><td id="conf-price">—</td></tr>
-      </table>
-      <div class="conf-actions">
-        <button id="conf-new" class="conf-btn-new" type="button"
-          data-fr="Nouvelle réservation" data-en="New booking">Nouvelle réservation</button>
-        <a class="conf-btn-contact" href="tel:+33661505454"
-          data-fr="Appeler" data-en="Call us">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.1 10.82a19.79 19.79 0 01-3.07-8.68A2 2 0 012 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92v2z"/></svg>
-          Appeler
-        </a>
-        <a class="conf-btn-contact" href="mailto:ustadcontact@gmail.com"
-          data-fr="Nous écrire" data-en="Write to us">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          Nous écrire
-        </a>
-      </div>
-    </div>
+    <div id="conf-inner" class="bdc-card"></div>
   </div>
 
 </section>
