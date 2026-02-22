@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aperçu — Bon de commande Ustad</title>
+  <style>
+    /* ── Fond de page (simuler la boîte mail) ── */
+    body {
+      margin: 0;
+      padding: 48px 16px;
+      background: #c5bdb4;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .email-wrap {
+      max-width: 620px;
+      margin: 0 auto;
+      box-shadow: 0 24px 64px rgba(0,0,0,.28);
+    }
+
+    /* ══ BANNIÈRE ══ */
+    .banner {
+      background: #0D1B2A;
+      padding: 32px 40px 28px;
+      border-bottom: 3px solid #8B1A1A;
+    }
+
+    .banner-logo {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 24px;
+      letter-spacing: .32em;
+      text-transform: uppercase;
+      color: #F5F0E8;
+      margin: 0;
+      font-weight: normal;
+    }
+
+    .banner-sub {
+      font-size: 9px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: #E8E0D4;
+      opacity: .38;
+      margin-top: 5px;
+    }
+
+    .banner-meta {
+      margin-top: 24px;
+      display: flex;
+      align-items: baseline;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .banner-ref-lbl {
+      font-size: 9px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: #E8E0D4;
+      opacity: .42;
+    }
+
+    .banner-ref-val {
+      font-size: 14px;
+      letter-spacing: .12em;
+      color: #F5F0E8;
+      font-weight: bold;
+    }
+
+    .banner-date {
+      font-size: 10px;
+      color: #E8E0D4;
+      opacity: .35;
+      letter-spacing: .06em;
+    }
+
+    /* ══ CORPS PRINCIPAL ══ */
+    .main {
+      background: #F5F0E8;
+      padding: 32px 40px 24px;
+    }
+
+    /* ── Intro ── */
+    .intro {
+      font-size: 13px;
+      color: #0D1B2A;
+      opacity: .58;
+      line-height: 1.65;
+      margin-bottom: 28px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid rgba(13,27,42,.10);
+    }
+
+    /* ── Blocs ── */
+    .block {
+      border: 1px solid #8B1A1A;
+      margin-bottom: 14px;
+    }
+
+    .block-head {
+      background: #8B1A1A;
+      padding: 9px 16px;
+    }
+
+    .block-head span {
+      font-size: 9px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: #F5F0E8;
+      font-weight: normal;
+    }
+
+    .block-body {
+      padding: 4px 0;
+    }
+
+    .row {
+      display: flex;
+      align-items: baseline;
+      padding: 9px 16px;
+      border-bottom: 1px solid rgba(13,27,42,.07);
+    }
+
+    .row:last-child {
+      border-bottom: none;
+    }
+
+    .lbl {
+      font-size: 9px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #0D1B2A;
+      opacity: .45;
+      width: 38%;
+      flex-shrink: 0;
+      padding-right: 12px;
+      padding-top: 1px;
+    }
+
+    .val {
+      font-size: 13px;
+      color: #0D1B2A;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    /* ── Bloc tarif (mis en avant) ── */
+    .price-block {
+      border: 1px solid #8B1A1A;
+      background: rgba(139,26,26,.05);
+      margin-bottom: 14px;
+      padding: 22px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .price-left .price-lbl {
+      font-size: 9px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: #8B1A1A;
+    }
+
+    .price-left .price-note {
+      font-size: 10px;
+      color: #0D1B2A;
+      opacity: .38;
+      margin-top: 5px;
+      line-height: 1.5;
+    }
+
+    .price-val {
+      font-size: 32px;
+      color: #0D1B2A;
+      font-weight: 700;
+      letter-spacing: -.01em;
+      white-space: nowrap;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      background: #0D1B2A;
+      padding: 24px 40px;
+      border-top: 3px solid #8B1A1A;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 14px;
+      letter-spacing: .32em;
+      text-transform: uppercase;
+      color: #E8E0D4;
+      opacity: .55;
+    }
+
+    .footer-contact {
+      font-size: 11px;
+      color: #E8E0D4;
+      opacity: .3;
+      margin-top: 8px;
+      letter-spacing: .06em;
+    }
+
+    .footer-legal {
+      font-size: 9px;
+      color: #E8E0D4;
+      opacity: .18;
+      margin-top: 18px;
+      line-height: 1.6;
+      letter-spacing: .04em;
+    }
+
+    /* ── Label d'aperçu ── */
+    .preview-label {
+      text-align: center;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: #6b5e55;
+      margin-bottom: 20px;
+      opacity: .7;
+    }
+  </style>
+</head>
+<body>
+
+  <p class="preview-label">Aperçu — Bon de commande · Exemple fictif</p>
+
+  <div class="email-wrap">
+
+    <!-- ══ BANNIÈRE ══ -->
+    <div class="banner">
+      <div class="banner-logo">Ustad</div>
+      <div class="banner-sub">Savoir-Faire in Motion</div>
+      <div class="banner-meta">
+        <div>
+          <div class="banner-ref-lbl">Référence</div>
+          <div class="banner-ref-val">UST-X4K9B2</div>
+        </div>
+        <div class="banner-date">22 février 2026 · 14:32</div>
+      </div>
+    </div>
+
+    <!-- ══ CORPS ══ -->
+    <div class="main">
+
+      <p class="intro">
+        Bonjour Jean,<br>
+        Votre demande de réservation a bien été transmise à l'équipe Ustad.
+        Un conseiller vous contactera très prochainement pour confirmer votre trajet.
+      </p>
+
+      <!-- CLIENT -->
+      <div class="block">
+        <div class="block-head"><span>Client</span></div>
+        <div class="block-body">
+          <div class="row">
+            <span class="lbl">Nom</span>
+            <span class="val">Jean Dupont</span>
+          </div>
+          <div class="row">
+            <span class="lbl">E-mail</span>
+            <span class="val">jean.dupont@email.com</span>
+          </div>
+          <div class="row">
+            <span class="lbl">Téléphone</span>
+            <span class="val">+33 6 00 00 00 00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRESTATION -->
+      <div class="block">
+        <div class="block-head"><span>Prestation</span></div>
+        <div class="block-body">
+          <div class="row">
+            <span class="lbl">Type</span>
+            <span class="val">Planifiée</span>
+          </div>
+          <div class="row">
+            <span class="lbl">Date &amp; heure</span>
+            <span class="val">Lundi 23 février 2026 à 09:00</span>
+          </div>
+          <div class="row">
+            <span class="lbl">Prise en charge</span>
+            <span class="val">Aéroport de Nice — Terminal 1</span>
+          </div>
+          <div class="row">
+            <span class="lbl">Destination</span>
+            <span class="val">Hôtel du Cap-Eden-Roc, Antibes</span>
+          </div>
+          <div class="row">
+            <span class="lbl">Véhicule</span>
+            <span class="val">Berline — Classe E</span>
+          </div>
+          <div class="row">
+            <span class="lbl">Passagers</span>
+            <span class="val">3</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- BAGAGES & OPTIONS -->
+      <div class="block">
+        <div class="block-head"><span>Bagages &amp; Options</span></div>
+        <div class="block-body">
+          <div class="row">
+            <span class="lbl">Bagages cabine</span>
+            <span class="val">2</span>
+          </div>
+          <div class="row">
+            <span class="lbl">Grandes valises</span>
+            <span class="val">3</span>
+          </div>
+          <div class="row">
+            <span class="lbl">Siège bébé</span>
+            <span class="val">Non</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TARIF -->
+      <div class="price-block">
+        <div class="price-left">
+          <div class="price-lbl">Tarif estimé</div>
+          <div class="price-note">
+            Tarif indicatif<br>
+            Confirmation par l'équipe Ustad
+          </div>
+        </div>
+        <div class="price-val">86 €</div>
+      </div>
+
+      <!-- DEMANDES SPÉCIALES -->
+      <div class="block">
+        <div class="block-head"><span>Demandes spéciales</span></div>
+        <div class="block-body">
+          <div class="row">
+            <span class="val">Accueil avec pancarte au nom de M. Dupont. Vol AF1234.</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.main -->
+
+    <!-- ══ FOOTER ══ -->
+    <div class="footer">
+      <div class="footer-logo">Ustad</div>
+      <div class="footer-contact">ustadcontact@gmail.com &nbsp;·&nbsp; +33 6 61 50 54 54</div>
+      <div class="footer-legal">
+        Ce bon de commande est généré automatiquement lors de votre réservation en ligne.<br>
+        © 2025 Ustad — Savoir-Faire in Motion
+      </div>
+    </div>
+
+  </div><!-- /.email-wrap -->
+
+</body>
+</html>
