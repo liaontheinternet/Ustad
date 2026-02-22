@@ -50,7 +50,7 @@ const TARIFS_HEURE = { berline: 90, van: 110, classe_s: 115 };
 /* ════ ÉTAT GLOBAL ════ */
 const APP_STATE = {
   lang:       'fr',
-  tab:        'now',
+  tab:        'planned',
   cabin:      0,
   large:      0,
   partner:    false,

@@ -21,8 +21,116 @@ function makeRef() {
 
 /* ─── Tab label ─── */
 function tabLabel() {
-  const map = { now:'À la demande', planned:'Planifiée', hourly:'À l\'heure', enterprise:'Entreprise' };
+  const map = { now:'Trajet minute', planned:'Trajet planifié', hourly:'À l\'heure', enterprise:'Entreprise' };
   return map[APP_STATE.tab] || APP_STATE.tab;
+}
+
+/* ─── Génération du bon de commande HTML stylisé ─── */
+function genEmailHtml({ ref, now, fname, lname, email, phone, type, dateLabel, pickup, dest, vehLabel, pax, cabin, large, baby, partner, notes, prix }) {
+  const s = {
+    wrap:       'max-width:620px;margin:0 auto;font-family:Arial,Helvetica,sans-serif;',
+    banner:     'background:#0D1B2A;padding:32px 40px 28px;border-bottom:3px solid #8B1A1A;',
+    logo:       'font-family:Georgia,serif;font-size:24px;letter-spacing:.32em;text-transform:uppercase;color:#F5F0E8;margin:0;font-weight:normal;',
+    sub:        'font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:#E8E0D4;opacity:.38;margin-top:5px;',
+    metaWrap:   'margin-top:24px;',
+    refLbl:     'font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#E8E0D4;opacity:.6;',
+    refVal:     'font-size:14px;letter-spacing:.12em;color:#F5F0E8;font-weight:bold;',
+    date:       'font-size:10px;color:#E8E0D4;opacity:.45;letter-spacing:.06em;margin-top:6px;',
+    main:       'background:#F5F0E8;padding:32px 40px 24px;',
+    intro:      'font-size:13px;color:#0D1B2A;opacity:.6;line-height:1.7;margin-bottom:28px;padding-bottom:22px;border-bottom:1px solid rgba(13,27,42,.10);',
+    block:      'border:1px solid #8B1A1A;margin-bottom:14px;',
+    bhead:      'background:#8B1A1A;padding:9px 16px;',
+    bheadSpan:  'font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:#F5F0E8;font-weight:normal;',
+    row:        'display:flex;align-items:baseline;padding:9px 16px;border-bottom:1px solid rgba(13,27,42,.07);',
+    rowLast:    'display:flex;align-items:baseline;padding:9px 16px;',
+    lbl:        'font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#0D1B2A;opacity:.45;width:38%;padding-right:12px;',
+    val:        'font-size:13px;color:#0D1B2A;font-weight:600;line-height:1.4;',
+    priceBlock: 'border:1px solid #8B1A1A;background:rgba(139,26,26,.05);margin-bottom:14px;padding:22px 16px;display:flex;align-items:center;justify-content:space-between;',
+    priceLbl:   'font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:#8B1A1A;',
+    priceNote:  'font-size:10px;color:#0D1B2A;opacity:.38;margin-top:5px;line-height:1.5;',
+    priceVal:   'font-size:32px;color:#0D1B2A;font-weight:700;letter-spacing:-.01em;',
+    footer:     'background:#0D1B2A;padding:24px 40px;border-top:3px solid #8B1A1A;text-align:center;',
+    flogo:      'font-family:Georgia,serif;font-size:14px;letter-spacing:.32em;text-transform:uppercase;color:#E8E0D4;opacity:.55;',
+    fcontact:   'font-size:11px;color:#E8E0D4;opacity:.35;margin-top:8px;letter-spacing:.06em;',
+    flegal:     'font-size:9px;color:#E8E0D4;opacity:.2;margin-top:18px;line-height:1.6;letter-spacing:.04em;',
+  };
+
+  const row = (label, value, last = false) =>
+    `<div style="${last ? s.rowLast : s.row}"><span style="${s.lbl}">${label}</span><span style="${s.val}">${value || '—'}</span></div>`;
+
+  const notesBlock = notes ? `
+    <div style="${s.block}">
+      <div style="${s.bhead}"><span style="${s.bheadSpan}">Demandes spéciales</span></div>
+      <div><div style="${s.rowLast}"><span style="${s.val}">${notes}</span></div></div>
+    </div>` : '';
+
+  return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Bon de commande Ustad — ${ref}</title></head>
+<body style="margin:0;padding:0;background:#c5bdb4;">
+<div style="${s.wrap}">
+
+  <div style="${s.banner}">
+    <div style="${s.logo}">Ustad</div>
+    <div style="${s.sub}">Savoir-Faire in Motion</div>
+    <div style="${s.metaWrap}">
+      <div style="${s.refLbl}">Référence</div>
+      <div style="${s.refVal}">${ref}</div>
+      <div style="${s.date}">${now}</div>
+    </div>
+  </div>
+
+  <div style="${s.main}">
+    <p style="${s.intro}">Bonjour ${fname},<br>Votre demande de réservation a bien été transmise à l'équipe Ustad. Un conseiller vous contactera très prochainement pour confirmer votre trajet.</p>
+
+    <div style="${s.block}">
+      <div style="${s.bhead}"><span style="${s.bheadSpan}">Client</span></div>
+      <div>
+        ${row('Nom', `${fname} ${lname}`)}
+        ${row('E-mail', email)}
+        ${row('Téléphone', phone, true)}
+      </div>
+    </div>
+
+    <div style="${s.block}">
+      <div style="${s.bhead}"><span style="${s.bheadSpan}">Prestation</span></div>
+      <div>
+        ${row('Type', type)}
+        ${row('Date &amp; heure', dateLabel)}
+        ${row('Prise en charge', pickup)}
+        ${row('Destination', dest)}
+        ${row('Véhicule', vehLabel)}
+        ${row('Passagers', pax, true)}
+      </div>
+    </div>
+
+    <div style="${s.block}">
+      <div style="${s.bhead}"><span style="${s.bheadSpan}">Bagages &amp; Options</span></div>
+      <div>
+        ${row('Bagages cabine', cabin)}
+        ${row('Grandes valises', large)}
+        ${row('Siège bébé', baby ? 'Oui' : 'Non')}
+        ${row('Code partenaire', partner ? 'USTADHOTELS' : '—', true)}
+      </div>
+    </div>
+
+    <div style="${s.priceBlock}">
+      <div>
+        <div style="${s.priceLbl}">Tarif estimé</div>
+        <div style="${s.priceNote}">Tarif indicatif<br>Confirmation par l'équipe Ustad</div>
+      </div>
+      <div style="${s.priceVal}">${prix}</div>
+    </div>
+
+    ${notesBlock}
+  </div>
+
+  <div style="${s.footer}">
+    <div style="${s.flogo}">Ustad</div>
+    <div style="${s.fcontact}">ustadcontact@gmail.com &nbsp;·&nbsp; +33 6 61 50 54 54</div>
+    <div style="${s.flegal}">Ce bon de commande est généré automatiquement lors de votre réservation en ligne.<br>© ${new Date().getFullYear()} Ustad — Savoir-Faire in Motion</div>
+  </div>
+
+</div>
+</body></html>`;
 }
 
 /* ─── Prix courant affiché ─── */
@@ -86,42 +194,23 @@ function submitStd() {
   const ref  = makeRef();
   const now  = new Date().toLocaleString(fr ? 'fr-FR' : 'en-GB');
 
-  // Bon de commande
-  const bdc = `
-╔══════════════════════════════════════════╗
-║       BON DE COMMANDE — USTAD            ║
-╚══════════════════════════════════════════╝
-
-Référence       : ${ref}
-Date de demande : ${now}
-
-─── CLIENT ────────────────────────────────
-Nom             : ${fname} ${lname}
-Email           : ${email}
-Téléphone       : ${phone || '—'}
-
-─── PRESTATION ────────────────────────────
-Type            : ${tabLabel()}
-Date & Heure    : ${dateLabel}
-Prise en charge : ${pickup}
-Destination     : ${APP_STATE.tab === 'hourly' ? '(À l\'heure — sans destination fixe)' : dest}
-Véhicule        : ${vehLabel}
-Passagers       : ${pax}
-Bagages cabine  : ${APP_STATE.cabin}
-Grandes valises : ${APP_STATE.large}
-Siège bébé      : ${baby ? 'Oui' : 'Non'}
-Code partenaire : ${APP_STATE.partner ? 'USTADHOTELS' : '—'}
-
-─── TARIF ESTIMÉ ──────────────────────────
-${prix}
-(Tarif indicatif — confirmation par l'équipe Ustad)
-
-─── DEMANDES SPÉCIALES ────────────────────
-${notes || '—'}
-
-──────────────────────────────────────────
-USTAD · ustadcontact@gmail.com
-`.trim();
+  // Bon de commande HTML stylisé
+  const bdc = genEmailHtml({
+    ref, now,
+    fname, lname, email, phone,
+    type:      tabLabel(),
+    dateLabel,
+    pickup,
+    dest:      APP_STATE.tab === 'hourly' ? '(À l\'heure — sans destination fixe)' : dest,
+    vehLabel,
+    pax,
+    cabin:     APP_STATE.cabin,
+    large:     APP_STATE.large,
+    baby,
+    partner:   APP_STATE.partner,
+    notes,
+    prix,
+  });
 
   _sendEmail(CFG.emailjs_template_std, {
     from_name:  `${fname} ${lname}`,
