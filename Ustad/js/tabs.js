@@ -40,4 +40,5 @@ document.addEventListener('DOMContentLoaded', () => {
       setTab(btn.getAttribute('data-tab'));
     });
   });
+  setTab(APP_STATE.tab);
 });
