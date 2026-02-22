@@ -1,4 +1,5 @@
-.legal-modal {
+/* ══ OVERLAY ══ */
+.modal {
   display: none;
   position: fixed;
   inset: 0;
@@ -8,24 +9,65 @@
   padding: 60px var(--px) 80px;
 }
 
-.legal-modal.active {
+.modal.active {
   display: block;
 }
 
-.legal-body h2 {
+/* ══ BOÎTE DE CONTENU ══ */
+.modal-box {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* ══ BOUTON RETOUR ══ */
+.modal-close {
+  font-family: 'Lexend Zetta', sans-serif;
+  font-size: 10px;
+  font-weight: 200;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--beige);
+  opacity: .45;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 48px;
+  display: block;
+  transition: opacity .25s;
+}
+
+.modal-close:hover {
+  opacity: 1;
+}
+
+/* ══ TITRES ══ */
+.modal-box h2 {
   font-family: 'Lexend Zetta', sans-serif;
   font-size: 13px;
   font-weight: 200;
-  letter-spacing: .12em;
+  letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--red);
-  margin: 28px 0 10px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid rgba(232,224,212,.08);
+  color: var(--white);
+  margin-bottom: 36px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--bord-lt);
 }
 
-.legal-body p,
-.legal-body li {
+.modal-box h3 {
+  font-family: 'Lexend Zetta', sans-serif;
+  font-size: 10px;
+  font-weight: 200;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin: 32px 0 12px;
+}
+
+/* ══ TEXTE ══ */
+.modal-box p,
+.modal-box li {
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   color: var(--beige);
   opacity: .72;
@@ -33,16 +75,16 @@
   margin-bottom: 10px;
 }
 
-.legal-body ul {
+.modal-box ul {
   padding-left: 20px;
   margin-bottom: 10px;
 }
 
-.legal-body li {
+.modal-box li {
   margin-bottom: 6px;
 }
 
-.legal-body strong {
+.modal-box strong {
   color: var(--white);
   opacity: 1;
   font-weight: 400;
