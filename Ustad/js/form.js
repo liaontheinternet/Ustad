@@ -64,8 +64,8 @@ function genEmailHtml({ ref, now, fname, lname, email, phone, type, dateLabel, p
       <div><div style="${s.rowLast}"><span style="${s.val}">${notes}</span></div></div>
     </div>` : '';
 
-  return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Bon de commande Ustad — ${ref}</title></head>
-<body style="margin:0;padding:0;background:#c5bdb4;">
+  return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="color-scheme" content="light"><meta name="supported-color-schemes" content="light"><title>Bon de commande Ustad — ${ref}</title><style>:root{color-scheme:light only;}</style></head>
+<body style="margin:0;padding:0;background:#c5bdb4;color-scheme:light;">
 <div style="${s.wrap}">
 
   <div style="${s.banner}">
@@ -220,22 +220,18 @@ function submitStd() {
     message:    bdc,
   }, (emailSent) => {
     showConfirmation({
-      pickup: pickup,
-      dest:   APP_STATE.tab === 'hourly' ? '—' : dest,
-      veh:    vehLabel,
-      pax:    pax,
-      date:   dateLabel,
-      price:  prix,
+      ref, now,
+      fname, lname, email, phone,
+      type:  tabLabel(),
+      date:  dateLabel,
+      pickup,
+      dest:  APP_STATE.tab === 'hourly' ? '—' : dest,
+      veh:   vehLabel,
+      pax,
+      notes,
+      price: prix,
+      emailSent,
     });
-    const statusEl = document.getElementById('conf-send-status');
-    if (statusEl) {
-      if (!emailSent) {
-        statusEl.textContent = fr ? 'E-mail non envoyé — appelez-nous directement si besoin.' : 'E-mail not sent — please call us if needed.';
-        statusEl.style.display = 'block';
-      } else {
-        statusEl.style.display = 'none';
-      }
-    }
     // Reset
     APP_STATE.cabin = 0; APP_STATE.large = 0; APP_STATE.partner = false;
   });
@@ -313,22 +309,18 @@ USTAD · ustadcontact@gmail.com
     message:    bdc,
   }, (emailSent) => {
     showConfirmation({
-      pickup: '(voir trajets ci-dessous)',
-      dest:   '—',
-      veh:    '—',
-      pax:    '—',
-      date:   now,
-      price:  'Sur devis',
+      ref, now,
+      fname: contact, lname: '', email, phone,
+      type:  fr ? 'Entreprise' : 'Enterprise',
+      date:  now,
+      pickup: fr ? 'Voir les trajets dans l\'e-mail' : 'See journeys in e-mail',
+      dest:  '—',
+      veh:   '—',
+      pax:   '—',
+      notes: '',
+      price: fr ? 'Sur devis' : 'Quote',
+      emailSent,
     });
-    const statusEl = document.getElementById('conf-send-status');
-    if (statusEl) {
-      if (!emailSent) {
-        statusEl.textContent = fr ? 'E-mail non envoyé — appelez-nous directement si besoin.' : 'E-mail not sent — please call us if needed.';
-        statusEl.style.display = 'block';
-      } else {
-        statusEl.style.display = 'none';
-      }
-    }
     APP_STATE.trips = 0;
   });
 }

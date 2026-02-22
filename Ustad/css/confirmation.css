@@ -1,177 +1,217 @@
-.confirm-screen {
-  display: none;
-  padding: 48px 20px 64px;
-  text-align: center;
-  animation: up .7s ease forwards;
+/* ════════════════════════════════════════════
+   ÉCRAN DE CONFIRMATION — CARD STYLE BDC
+════════════════════════════════════════════ */
+
+/* ── Conteneur ── */
+#conf-wrap {
+  padding: 32px var(--px) 64px;
+  animation: up .6s ease forwards;
 }
 
-.confirm-icon {
-  width: 72px;
-  height: 72px;
-  margin: 0 auto 28px;
+.bdc-card {
+  max-width: 620px;
+  margin: 0 auto;
+  box-shadow: 0 24px 64px rgba(0,0,0,.35);
+}
+
+/* ── Bandeau supérieur ── */
+.bdc-banner {
+  background: #0D1B2A;
+  padding: 32px 36px 28px;
+  border-bottom: 3px solid #8B1A1A;
+}
+
+.bdc-logo {
+  font-family: 'Lexend Zetta', Georgia, serif;
+  font-size: 20px;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+  color: #F5F0E8;
+  font-weight: 100;
+}
+
+.bdc-sub {
+  font-size: 9px;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: #E8E0D4;
+  opacity: .38;
+  margin-top: 4px;
+}
+
+.bdc-meta {
+  margin-top: 22px;
+}
+
+.bdc-ref-lbl {
+  font-size: 9px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: #E8E0D4;
+  opacity: .55;
+}
+
+.bdc-ref-val {
+  font-size: 15px;
+  letter-spacing: .14em;
+  color: #F5F0E8;
+  font-weight: 700;
+  margin-top: 3px;
+}
+
+.bdc-date {
+  font-size: 10px;
+  color: #E8E0D4;
+  opacity: .38;
+  letter-spacing: .05em;
+  margin-top: 6px;
+}
+
+/* ── Corps principal (fond crème) ── */
+.bdc-body {
+  background: #F5F0E8;
+  padding: 28px 36px 24px;
+}
+
+/* ── Intro avec coche ── */
+.bdc-intro {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(13,27,42,.10);
+}
+
+.bdc-check {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
   border-radius: 50%;
-  background: rgba(139,26,26,.12);
-  border: 1px solid rgba(139,26,26,.3);
+  background: rgba(139,26,26,.10);
+  border: 1px solid rgba(139,26,26,.28);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.confirm-icon svg {
-  width: 32px;
-  height: 32px;
-  fill: none;
-  stroke: var(--red);
-  stroke-width: 1.5;
+.bdc-check svg {
+  width: 20px;
+  height: 20px;
+  stroke: #8B1A1A;
 }
 
-.confirm-title {
-  font-family: 'Lexend Zetta', sans-serif;
-  font-size: clamp(20px, 5vw, 32px);
-  font-weight: 100;
-  margin-bottom: 16px;
+.bdc-intro-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0D1B2A;
+  letter-spacing: .02em;
 }
 
-.confirm-title em {
-  font-style: normal;
-  color: var(--beige);
-  font-weight: 300;
+.bdc-intro-sub {
+  font-size: 12px;
+  color: #0D1B2A;
+  opacity: .55;
+  line-height: 1.7;
+  margin-top: 5px;
 }
 
-.confirm-ref {
-  font-size: 10px;
-  letter-spacing: .28em;
+.bdc-warn {
+  font-size: 11px;
+  color: #8B1A1A;
+  margin-top: 8px;
+  letter-spacing: .04em;
+}
+
+/* ── Blocs données ── */
+.bdc-block {
+  border: 1px solid #8B1A1A;
+  margin-bottom: 12px;
+}
+
+.bdc-bhead {
+  background: #8B1A1A;
+  padding: 8px 14px;
+}
+
+.bdc-bhead span {
+  font-size: 9px;
+  letter-spacing: .26em;
   text-transform: uppercase;
-  color: var(--red);
-  opacity: .7;
-  margin-bottom: 32px;
+  color: #F5F0E8;
+  font-weight: normal;
 }
 
-.confirm-recap {
-  background: rgba(13,27,42,.7);
-  border: 1px solid var(--bord);
-  max-width: 560px;
-  margin: 0 auto 32px;
-  text-align: left;
-}
+.bdc-bbody {}
 
-.cr-row {
+.bdc-row {
   display: flex;
-  align-items: flex-start;
-  padding: 13px 18px;
-  border-bottom: 1px solid rgba(232,224,212,.06);
-  gap: 14px;
+  align-items: baseline;
+  padding: 9px 14px;
+  border-bottom: 1px solid rgba(13,27,42,.07);
+  gap: 12px;
 }
 
-.cr-row:last-child {
+.bdc-row:last-child {
   border-bottom: none;
 }
 
-.cr-lbl {
-  font-size: 8px;
-  letter-spacing: .26em;
+.bdc-lbl {
+  font-size: 9px;
+  letter-spacing: .16em;
   text-transform: uppercase;
-  color: var(--beige);
-  opacity: .38;
+  color: #0D1B2A;
+  opacity: .42;
+  width: 36%;
   flex-shrink: 0;
-  min-width: 90px;
-  padding-top: 2px;
+  padding-top: 1px;
 }
 
-.cr-val {
-  font-size: 14px;
-  color: var(--white);
+.bdc-val {
+  font-size: 13px;
+  color: #0D1B2A;
+  font-weight: 600;
   line-height: 1.4;
+  word-break: break-word;
 }
 
-.cr-price {
-  font-family: 'Lexend Zetta', sans-serif;
-  font-size: 24px;
-  font-weight: 100;
-  color: var(--white);
-}
-
-.confirm-msg {
-  font-size: 12px;
-  color: var(--beige);
-  opacity: .5;
-  line-height: 1.8;
-  margin-bottom: 28px;
-  max-width: 440px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.confirm-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-}
-
-.confirm-wa {
+/* ── Bloc tarif ── */
+.bdc-price-block {
+  border: 1px solid #8B1A1A;
+  background: rgba(139,26,26,.05);
+  padding: 20px 14px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  background: #25D366;
-  color: #fff;
-  border: none;
-  padding: 14px 22px;
-  font-size: 10px;
-  letter-spacing: .2em;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.bdc-price-lbl {
+  font-size: 9px;
+  letter-spacing: .26em;
   text-transform: uppercase;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background .25s;
+  color: #8B1A1A;
 }
 
-.confirm-wa:hover {
-  background: #1db954;
-}
-
-.confirm-wa svg {
-  width: 18px;
-  height: 18px;
-  fill: white;
-  flex-shrink: 0;
-}
-
-.confirm-new {
-  background: none;
-  border: 1px solid var(--bord-lt);
-  color: var(--beige);
-  padding: 14px 22px;
+.bdc-price-note {
   font-size: 10px;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all .25s;
+  color: #0D1B2A;
+  opacity: .40;
+  margin-top: 4px;
+  line-height: 1.5;
 }
 
-.confirm-new:hover {
-  border-color: var(--beige);
-  color: var(--white);
+.bdc-price-val {
+  font-size: 30px;
+  color: #0D1B2A;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  white-space: nowrap;
 }
 
-.email-status {
-  font-size: 11px;
-  color: var(--beige);
-  opacity: .4;
-  margin-top: 12px;
-  letter-spacing: .06em;
-}
-
-/* ── Note email confirmation ── */
-.conf-email-note {
-  font-size: 11px;
-  color: var(--beige);
-  opacity: .45;
-  letter-spacing: .06em;
-  margin-bottom: 24px;
-}
-
-/* ── Groupe de boutons ── */
-.conf-actions {
+/* ── Actions ── */
+.bdc-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -179,21 +219,48 @@
   margin-top: 24px;
 }
 
+/* ── Pied de page ── */
+.bdc-footer {
+  background: #0D1B2A;
+  padding: 22px 36px;
+  border-top: 3px solid #8B1A1A;
+  text-align: center;
+}
+
+.bdc-footer-logo {
+  font-family: 'Lexend Zetta', Georgia, serif;
+  font-size: 13px;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+  color: #E8E0D4;
+  opacity: .5;
+  font-weight: 100;
+}
+
+.bdc-footer-contact {
+  font-size: 11px;
+  color: #E8E0D4;
+  opacity: .30;
+  margin-top: 7px;
+  letter-spacing: .05em;
+}
+
+/* ── Boutons ── */
 .conf-btn-new {
   background: none;
-  border: 1px solid rgba(232,224,212,.28);
-  color: var(--beige);
+  border: 1px solid rgba(13,27,42,.22);
+  color: #0D1B2A;
   padding: 13px 22px;
   font-size: 9px;
   letter-spacing: .22em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: border-color .2s, color .2s;
+  transition: border-color .2s, background .2s;
 }
 
 .conf-btn-new:hover {
-  border-color: var(--beige);
-  color: var(--white);
+  border-color: #0D1B2A;
+  background: rgba(13,27,42,.05);
 }
 
 .conf-btn-contact {
@@ -220,4 +287,41 @@
   width: 14px;
   height: 14px;
   flex-shrink: 0;
+}
+
+/* ── Note e-mail ── */
+.email-status {
+  font-size: 11px;
+  color: #8B1A1A;
+  margin-top: 12px;
+  letter-spacing: .06em;
+}
+
+@media (max-width: 480px) {
+  .bdc-banner,
+  .bdc-body,
+  .bdc-footer {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .bdc-price-block {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .bdc-price-val {
+    font-size: 26px;
+  }
+
+  .bdc-actions {
+    flex-direction: column;
+  }
+
+  .conf-btn-new,
+  .conf-btn-contact {
+    justify-content: center;
+    text-align: center;
+  }
 }
