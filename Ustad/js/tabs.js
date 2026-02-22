@@ -3,7 +3,7 @@
 ════════════════���═══════════════════════════ */
 
 function setTab(t) {
-  tab = t;
+  APP_STATE.tab = t;
   const isEnt = t === 'enterprise';
 
   // Highlight tab
@@ -30,7 +30,7 @@ function setTab(t) {
     calcPrice();
   } else {
     // Enterprise: add first trip if empty
-    if (trips === 0) addTrip();
+    if (APP_STATE.trips === 0) addTrip();
   }
 }
 

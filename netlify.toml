@@ -1,14 +1,14 @@
 [build]
-  command = "npm run build"
-  publish = "dist"
+  publish = "."
 
 [[redirects]]
   from = "/*"
-  to = "index.html"
+  to = "/index.html"
   status = 200
 
-[headers]
-  /*
+[[headers]]
+  for = "/*"
+  [headers.values]
     cache-control = "max-age=0, no-cache, no-store, must-revalidate"
     pragma = "no-cache"
     expires = "0"

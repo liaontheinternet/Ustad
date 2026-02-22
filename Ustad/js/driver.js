@@ -57,7 +57,7 @@ function submitDriver() {
   const cv = document.getElementById('d-cv')?.files.length || 0;
 
   if (!fname || !lname || !phone || !email || !motiv || !cv) {
-    alert(lang === 'fr'
+    alert(APP_STATE.lang === 'fr'
       ? 'Tous les champs sont obligatoires, y compris votre CV.'
       : 'All fields are required, including your CV.');
     return;
@@ -65,7 +65,7 @@ function submitDriver() {
 
   if (!document.getElementById('rgpd-drv-chk')?.checked) {
     document.getElementById('rgpd-drv')?.classList.add('rgpd-err');
-    alert(lang === 'fr'
+    alert(APP_STATE.lang === 'fr'
       ? 'Veuillez accepter la politique de confidentialité.'
       : 'Please accept the privacy policy.');
     return;
@@ -73,7 +73,7 @@ function submitDriver() {
 
   document.getElementById('rgpd-drv')?.classList.remove('rgpd-err');
 
-  alert(lang === 'fr'
+  alert(APP_STATE.lang === 'fr'
     ? '✓ Candidature transmise. Nous reviendrons vers vous si votre profil correspond à nos critères.'
     : '✓ Application submitted. We will be in touch if your profile matches our criteria.');
 }

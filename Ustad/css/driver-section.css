@@ -2,7 +2,7 @@
   padding: 52px var(--px) 72px;
   position: relative;
   background: var(--night);
-  display: none;
+  display: block;
 }
 
 .driver-sec::before {
