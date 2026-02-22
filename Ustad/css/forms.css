@@ -42,7 +42,6 @@
   background: rgba(13,27,42,.85);
   border: 1px solid var(--bord);
   padding: 16px 16px 13px;
-  overflow: hidden;
   transition: background .22s, border-color .22s;
 }
 
@@ -79,6 +78,11 @@
   font-weight: 300;
   line-height: 1.4;
   font-size: max(16px, 1em);
+}
+
+.f input[type=checkbox] {
+  width: auto;
+  flex-shrink: 0;
 }
 
 .f select {
