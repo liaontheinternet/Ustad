@@ -160,3 +160,64 @@
   margin-top: 12px;
   letter-spacing: .06em;
 }
+
+/* ── Note email confirmation ── */
+.conf-email-note {
+  font-size: 11px;
+  color: var(--beige);
+  opacity: .45;
+  letter-spacing: .06em;
+  margin-bottom: 24px;
+}
+
+/* ── Groupe de boutons ── */
+.conf-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.conf-btn-new {
+  background: none;
+  border: 1px solid rgba(232,224,212,.28);
+  color: var(--beige);
+  padding: 13px 22px;
+  font-size: 9px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color .2s, color .2s;
+}
+
+.conf-btn-new:hover {
+  border-color: var(--beige);
+  color: var(--white);
+}
+
+.conf-btn-contact {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #8B1A1A;
+  color: #F5F0E8;
+  border: none;
+  padding: 13px 22px;
+  font-size: 9px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.conf-btn-contact:hover {
+  background: #a32020;
+}
+
+.conf-btn-contact svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
