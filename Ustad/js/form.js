@@ -129,7 +129,7 @@ USTAD · ustadcontact@gmail.com
     reply_to:   email,
     to_name:    'Équipe Ustad',
     message:    bdc,
-  }, () => {
+  }, (emailSent) => {
     showConfirmation({
       pickup: pickup,
       dest:   APP_STATE.tab === 'hourly' ? '—' : dest,
@@ -138,6 +138,15 @@ USTAD · ustadcontact@gmail.com
       date:   dateLabel,
       price:  prix,
     });
+    const statusEl = document.getElementById('conf-send-status');
+    if (statusEl) {
+      if (!emailSent) {
+        statusEl.textContent = fr ? 'E-mail non envoyé — appelez-nous directement si besoin.' : 'E-mail not sent — please call us if needed.';
+        statusEl.style.display = 'block';
+      } else {
+        statusEl.style.display = 'none';
+      }
+    }
     // Reset
     APP_STATE.cabin = 0; APP_STATE.large = 0; APP_STATE.partner = false;
   });
@@ -213,7 +222,7 @@ USTAD · ustadcontact@gmail.com
     reply_to:   email,
     to_name:    'Équipe Ustad',
     message:    bdc,
-  }, () => {
+  }, (emailSent) => {
     showConfirmation({
       pickup: '(voir trajets ci-dessous)',
       dest:   '—',
@@ -222,6 +231,15 @@ USTAD · ustadcontact@gmail.com
       date:   now,
       price:  'Sur devis',
     });
+    const statusEl = document.getElementById('conf-send-status');
+    if (statusEl) {
+      if (!emailSent) {
+        statusEl.textContent = fr ? 'E-mail non envoyé — appelez-nous directement si besoin.' : 'E-mail not sent — please call us if needed.';
+        statusEl.style.display = 'block';
+      } else {
+        statusEl.style.display = 'none';
+      }
+    }
     APP_STATE.trips = 0;
   });
 }
@@ -235,11 +253,11 @@ function _sendEmail(templateId, params, onSuccess) {
   emailjs.send(CFG.emailjs_service_id, templateId, params)
     .then(() => {
       if (btn) { btn.disabled = false; btn.textContent = fr ? 'Confirmer la réservation' : 'Confirm booking'; }
-      onSuccess();
+      onSuccess(true);
     })
     .catch((err) => {
       console.error('EmailJS error:', err);
       if (btn) { btn.disabled = false; btn.textContent = fr ? 'Confirmer la réservation' : 'Confirm booking'; }
-      alert(fr ? 'Une erreur est survenue. Veuillez réessayer ou nous contacter directement.' : 'An error occurred. Please try again or contact us directly.');
+      onSuccess(false);
     });
 }

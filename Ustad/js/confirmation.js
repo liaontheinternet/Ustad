@@ -21,6 +21,9 @@ function showConfirmation(formData) {
   if (!wrap) return;
   wrap.style.display = 'block';
 
+  const statusEl = document.getElementById('conf-send-status');
+  if (statusEl) statusEl.style.display = 'none';
+
   const refEl = document.getElementById('conf-ref');
   if (refEl) refEl.textContent = ref;
 
