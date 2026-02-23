@@ -24,6 +24,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
+  // Pax change → vérifier aussi le véhicule
+  document.getElementById('pax')?.addEventListener('change', checkVeh);
+
   // Multi-trip button
   document.getElementById('btn-add-trip').addEventListener('click', addTrip);
 
@@ -54,35 +57,60 @@ function cnt(type, dir) {
 }
 
 function checkVeh() {
-  const p = parseInt(document.getElementById('pax').value);
-  const sel = document.getElementById('veh');
-  const al = document.getElementById('valert');
-  let need = false, msg = '';
+  const p     = parseInt(document.getElementById('pax').value) || 1;
+  const sel   = document.getElementById('veh');
+  const al    = document.getElementById('valert');
+  const fr    = APP_STATE.lang === 'fr';
+  const cabin = APP_STATE.cabin;
+  const large = APP_STATE.large;
 
-  if (p >= 4) {
-    need = true;
-    msg = APP_STATE.lang === 'fr'
-      ? `⚠ ${p} passagers — Van Classe V recommandé (max 7).`
-      : `⚠ ${p} passengers — Van Class V recommended (max 7).`;
-  } else if (APP_STATE.large >= 3) {
-    need = true;
-    msg = APP_STATE.lang === 'fr'
-      ? `⚠ ${APP_STATE.large} grandes valises — Van Classe V recommandé.`
-      : `⚠ ${APP_STATE.large} large bags — Van Class V recommended.`;
-  } else if (APP_STATE.large >= 2 && APP_STATE.cabin >= 2) {
-    need = true;
-    msg = APP_STATE.lang === 'fr'
-      ? '⚠ Volume important — Van Classe V recommandé.'
-      : '⚠ High volume — Van Class V recommended.';
-  }
-
-  if (need && sel.value !== 'van') {
-    al.style.display = 'block';
-    al.textContent = msg;
+  // ── Bascule automatique Van ──────────────────────────────
+  if (p >= 5) {
     sel.value = 'van';
-  } else if (!need) {
-    al.style.display = 'none';
+    al.style.display = 'block';
+    al.className = 'valert';
+    al.textContent = fr
+      ? `⚠ ${p} passagers — Van sélectionné automatiquement (max 4 en berline).`
+      : `⚠ ${p} passengers — Van selected automatically (max 4 in sedan).`;
+    return;
   }
+  if (large > 2) {
+    sel.value = 'van';
+    al.style.display = 'block';
+    al.className = 'valert';
+    al.textContent = fr
+      ? `⚠ ${large} grandes valises — Van sélectionné automatiquement (max 2 en berline).`
+      : `⚠ ${large} large bags — Van selected automatically (max 2 in sedan).`;
+    return;
+  }
+
+  // ── Recommandations (sans bascule) ──────────────────────
+  if (p >= 4) {
+    al.style.display = 'block';
+    al.className = 'valert';
+    al.textContent = fr
+      ? `⚠ ${p} passagers — Le Van est recommandé au-delà de 3 passagers pour votre confort.`
+      : `⚠ ${p} passengers — Van recommended above 3 passengers for comfort.`;
+    return;
+  }
+  if (large >= 2 && cabin >= 1) {
+    al.style.display = 'block';
+    al.className = 'valert';
+    al.textContent = fr
+      ? '⚠ 2 grandes valises + bagages cabine — Le Van est recommandé pour ce volume.'
+      : '⚠ 2 large bags + cabin bags — Van recommended for this volume.';
+    return;
+  }
+  if (cabin > 4) {
+    al.style.display = 'block';
+    al.className = 'valert';
+    al.textContent = fr
+      ? `⚠ ${cabin} bagages cabine — Le Van est recommandé (max 4 en berline).`
+      : `⚠ ${cabin} cabin bags — Van recommended (max 4 in sedan).`;
+    return;
+  }
+
+  al.style.display = 'none';
 }
 
 function checkCode() {
@@ -256,9 +284,9 @@ function addTrip() {
         </div>
         <div class="f"><span class="lbl">${fr ? 'Véhicule' : 'Vehicle'}</span>
           <select>
-            <option>${fr ? 'Berline — Cl. E' : 'Sedan — Cl. E'}</option>
-            <option>${fr ? 'Van — Cl. V' : 'Van — Cl. V'}</option>
-            <option>${fr ? 'Berline — Cl. S' : 'Sedan — Cl. S'}</option>
+            <option>Berline</option>
+            <option>Van</option>
+            <option>Berline Confort</option>
           </select>
         </div>
         <div class="f f--w"><span class="lbl">${fr ? 'Noms & contacts passagers' : 'Passenger names & contacts'}</span><input type="text" placeholder="${fr ? 'Prénom Nom, +33…' : 'First Last, +33…'}"/></div>
