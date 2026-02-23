@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ustad — Devenir chauffeur</title>
+  <meta name="description" content="Rejoignez l'équipe Ustad. Candidatez pour devenir chauffeur privé premium sur la Côte d'Azur, France et Europe.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend+Zetta:wght@100;200;300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="Ustad/css/variables.css">
+  <link rel="stylesheet" href="Ustad/css/resets.css">
+  <link rel="stylesheet" href="Ustad/css/nav.css">
+  <link rel="stylesheet" href="Ustad/css/sections.css">
+  <link rel="stylesheet" href="Ustad/css/forms.css">
+  <link rel="stylesheet" href="Ustad/css/driver-section.css">
+  <link rel="stylesheet" href="Ustad/css/contact-bar.css">
+  <link rel="stylesheet" href="Ustad/css/footer.css">
+  <link rel="stylesheet" href="Ustad/css/modals.css">
+  <link rel="stylesheet" href="Ustad/css/noise.css">
+</head>
+<body>
+
+<!-- ═══ BRUIT / TEXTURE ═══ -->
+<div class="noise" aria-hidden="true"></div>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <div class="nav-logo">
+    Ustad
+    <small>Savoir-Faire in Motion</small>
+  </div>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="index.html" data-fr="Accueil" data-en="Home">Accueil</a></li>
+    </ul>
+    <div class="nav-lang">
+      <button id="btn-fr" class="on" data-lang="fr">FR</button>
+      <span class="sep">|</span>
+      <button id="btn-en" data-lang="en">EN</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ SECTION — RECRUTEMENT ═══ -->
+<section class="driver-sec" id="driver">
+  <div class="sec-head">
+    <span class="sec-num">01</span>
+    <h2 class="sec-title" data-fr="Devenir <em>chauffeur Ustad</em>" data-en="Become an <em>Ustad driver</em>">Devenir <em>chauffeur Ustad</em></h2>
+  </div>
+  <div class="form">
+    <div class="row row--2">
+      <div class="f">
+        <span class="lbl" data-fr="Prénom" data-en="First name">Prénom</span>
+        <input id="d-fname" type="text"
+          data-fr-placeholder="Jean" data-en-placeholder="John"
+          placeholder="Jean">
+      </div>
+      <div class="f">
+        <span class="lbl" data-fr="Nom" data-en="Last name">Nom</span>
+        <input id="d-lname" type="text"
+          data-fr-placeholder="Dupont" data-en-placeholder="Smith"
+          placeholder="Dupont">
+      </div>
+    </div>
+    <div class="row row--2">
+      <div class="f">
+        <span class="lbl" data-fr="Téléphone" data-en="Phone">Téléphone</span>
+        <input id="d-phone" type="tel"
+          data-fr-placeholder="+33 6 00 00 00 00" data-en-placeholder="+33 6 00 00 00 00"
+          placeholder="+33 6 00 00 00 00">
+      </div>
+      <div class="f">
+        <span class="lbl" data-fr="E-mail" data-en="E-mail">E-mail</span>
+        <input id="d-email" type="email"
+          data-fr-placeholder="votre@email.com" data-en-placeholder="your@email.com"
+          placeholder="votre@email.com">
+      </div>
+    </div>
+    <div class="f">
+      <span class="lbl" data-fr="Motivation" data-en="Motivation">Motivation</span>
+      <textarea id="d-motiv" rows="4"
+        data-fr-placeholder="Décrivez votre expérience et motivations…"
+        data-en-placeholder="Describe your experience and motivations…"
+        placeholder="Décrivez votre expérience et motivations…"></textarea>
+    </div>
+    <button id="btn-attach-driver" class="attach" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/>
+      </svg>
+      <span data-fr="Joindre votre CV (PDF, Word)" data-en="Attach your CV (PDF, Word)">Joindre votre CV (PDF, Word)</span>
+    </button>
+    <input id="d-cv" type="file" accept=".pdf,.doc,.docx" style="display:none">
+    <span id="d-cvname" style="display:none;font-size:12px;opacity:.6;margin-top:4px"></span>
+
+    <label class="rgpd" id="rgpd-drv">
+      <input type="checkbox" id="rgpd-drv-chk">
+      <span class="rgpd-text" data-fr="J'accepte que les données de ma candidature (nom, coordonnées, CV) soient collectées et utilisées par Ustad dans le cadre du recrutement, conformément à notre <a id='link-privacy-driver'>Politique de confidentialité</a>. Elles seront conservées 24 mois maximum." data-en="I agree that my application data (name, contact, CV) is collected by Ustad for recruitment purposes, in accordance with our <a id='link-privacy-driver'>Privacy Policy</a>. Data is kept for 24 months maximum.">
+        J'accepte que les données de ma candidature (nom, coordonnées, CV) soient collectées et utilisées par Ustad dans le cadre du recrutement, conformément à notre <a id="link-privacy-driver">Politique de confidentialité</a>. Elles seront conservées 24 mois maximum.
+      </span>
+    </label>
+    <p class="driver-note" data-fr="Seules les candidatures justifiant d'au moins 8 ans d'expérience en tant que chauffeur professionnel seront étudiées." data-en="Only applications with at least 8 years of professional driving experience will be considered.">
+      Seules les candidatures justifiant d'au moins 8 ans d'expérience en tant que chauffeur professionnel seront étudiées.
+    </p>
+    <div style="margin-top:16px">
+      <button id="btn-submit-driver" class="btn-sub" type="button"
+        data-fr="Envoyer ma candidature" data-en="Submit my application">Envoyer ma candidature</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div>
+    <div class="f-logo">Ustad</div>
+    <div class="f-base">Savoir-Faire in Motion</div>
+  </div>
+  <ul class="f-links">
+    <li><a id="link-legal"   href="#" data-fr="Mentions légales"  data-en="Legal notices">Mentions légales</a></li>
+    <li><a id="link-privacy" href="#" data-fr="Confidentialité"   data-en="Privacy">Confidentialité</a></li>
+    <li><a href="mailto:ustadcontact@gmail.com" data-fr="Contact" data-en="Contact">Contact</a></li>
+    <li><a href="index.html" data-fr="Réserver" data-en="Book">Réserver</a></li>
+  </ul>
+  <span class="f-copy">© 2025 Ustad. All rights reserved.</span>
+</footer>
+
+<!-- ═══ MODAL — MENTIONS LÉGALES ═══ -->
+<div id="legal" class="modal" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <button id="btn-close-legal" class="modal-close" aria-label="Fermer">← RETOUR</button>
+    <h2 data-fr="Mentions légales" data-en="Legal notices">Mentions légales</h2>
+    <h3 data-fr="Éditeur du site" data-en="Site editor">Éditeur du site</h3>
+    <p data-fr="Le site ustad.fr est édité par la société Ustad SAS, immatriculée au Registre du Commerce et des Sociétés sous le numéro À COMPLÉTER, dont le siège social est situé à À COMPLÉTER, France." data-en="The website ustad.fr is published by Ustad SAS, registered under number TO BE COMPLETED, headquartered in TO BE COMPLETED, France.">Le site ustad.fr est édité par la société Ustad SAS, immatriculée au Registre du Commerce et des Sociétés sous le numéro À COMPLÉTER, dont le siège social est situé à À COMPLÉTER, France.</p>
+    <p data-fr="Directeur de la publication : À COMPLÉTER — E-mail : ustadcontact@gmail.com" data-en="Publication director: TO BE COMPLETED — E-mail: ustadcontact@gmail.com">Directeur de la publication : À COMPLÉTER — E-mail : ustadcontact@gmail.com</p>
+    <h3 data-fr="Hébergement" data-en="Hosting">Hébergement</h3>
+    <p data-fr="Le site est hébergé par Netlify, Inc., 44 Montgomery Street, Suite 300, San Francisco, California 94104." data-en="The site is hosted by Netlify, Inc., 44 Montgomery Street, Suite 300, San Francisco, California 94104.">Le site est hébergé par Netlify, Inc.</p>
+    <h3 data-fr="Propriété intellectuelle" data-en="Intellectual property">Propriété intellectuelle</h3>
+    <p data-fr="L'ensemble des contenus présents sur le site (textes, images, logos, graphismes) est la propriété exclusive d'Ustad SAS. Toute reproduction sans autorisation écrite préalable est interdite." data-en="All content on this site (text, images, logos, graphics) is the exclusive property of Ustad SAS. Any reproduction without prior written permission is prohibited.">L'ensemble des contenus présents sur le site (textes, images, logos, graphismes) est la propriété exclusive d'Ustad SAS. Toute reproduction sans autorisation écrite préalable est interdite.</p>
+    <p style="opacity:.4;font-size:11px;margin-top:24px" data-fr="Dernière mise à jour : janvier 2025" data-en="Last updated: January 2025">Dernière mise à jour : janvier 2025</p>
+  </div>
+</div>
+
+<!-- ═══ MODAL — POLITIQUE DE CONFIDENTIALITÉ ═══ -->
+<div id="privacy" class="modal" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <button id="btn-close-privacy" class="modal-close" aria-label="Fermer">← RETOUR</button>
+    <h2 data-fr="Politique de confidentialité" data-en="Privacy Policy">Politique de confidentialité</h2>
+    <h3 data-fr="Responsable du traitement" data-en="Data controller">Responsable du traitement</h3>
+    <p>Ustad SAS — ustadcontact@gmail.com</p>
+    <h3 data-fr="Données collectées" data-en="Data collected">Données collectées</h3>
+    <ul>
+      <li data-fr="Réservation : nom, prénom, email, téléphone, adresses, date/heure." data-en="Booking: name, email, phone, addresses, date/time.">Réservation : nom, prénom, email, téléphone, adresses, date/heure.</li>
+      <li data-fr="Entreprise : raison sociale, responsable, email, téléphone, trajets." data-en="Enterprise: company name, contact, email, phone, journeys.">Entreprise : raison sociale, responsable, email, téléphone, trajets.</li>
+      <li data-fr="Chauffeur : nom, prénom, email, téléphone, motivation, CV." data-en="Driver: name, email, phone, motivation, CV.">Chauffeur : nom, prénom, email, téléphone, motivation, CV.</li>
+    </ul>
+    <h3 data-fr="Durée de conservation" data-en="Retention period">Durée de conservation</h3>
+    <ul>
+      <li data-fr="Réservations : 3 ans" data-en="Bookings: 3 years">Réservations : 3 ans</li>
+      <li data-fr="Données entreprise : 5 ans" data-en="Enterprise data: 5 years">Données entreprise : 5 ans</li>
+      <li data-fr="Candidatures chauffeurs : 24 mois" data-en="Driver applications: 24 months">Candidatures chauffeurs : 24 mois</li>
+    </ul>
+    <h3 data-fr="Vos droits" data-en="Your rights">Vos droits</h3>
+    <p data-fr="Vous disposez de droits d'accès, de rectification et d'effacement. Contactez ustadcontact@gmail.com pour exercer vos droits." data-en="You have rights of access, rectification and deletion. Contact ustadcontact@gmail.com to exercise your rights.">Vous disposez de droits d'accès, de rectification et d'effacement. Contactez ustadcontact@gmail.com pour exercer vos droits.</p>
+    <p style="opacity:.4;font-size:11px;margin-top:24px" data-fr="Dernière mise à jour : janvier 2025" data-en="Last updated: January 2025">Dernière mise à jour : janvier 2025</p>
+  </div>
+</div>
+
+<!-- ═══ SCRIPTS ═══ -->
+<script src="Ustad/js/config.js"></script>
+<script src="Ustad/js/lang.js"></script>
+<script src="Ustad/js/driver.js"></script>
+<script src="Ustad/js/modals.js"></script>
+<script src="Ustad/js/init.js"></script>
+
+</body>
+</html>

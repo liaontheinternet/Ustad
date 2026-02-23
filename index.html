@@ -46,7 +46,6 @@
   <div class="nav-right">
     <ul class="nav-links">
       <li><a href="#booking" data-fr="Réserver" data-en="Book">Réserver</a></li>
-      <li><a href="#driver"  data-fr="Chauffeurs" data-en="Drivers">Chauffeurs</a></li>
       <li><a href="#contact" data-fr="Contact" data-en="Contact">Contact</a></li>
     </ul>
     <div class="nav-lang">
@@ -70,7 +69,6 @@
     <p class="hero-sub" data-fr="Votre trajet entre les mains<br>des meilleurs chauffeurs" data-en="Your journey in the hands<br>of the finest drivers">Votre trajet entre les mains<br>des meilleurs chauffeurs</p>
     <div class="hero-ctas">
       <a href="#booking" class="btn-red" data-fr="Réserver maintenant" data-en="Book now">Réserver maintenant</a>
-      <a href="#driver"  class="btn-out" data-fr="Devenir chauffeur" data-en="Become a driver">Devenir chauffeur</a>
     </div>
     <div class="hero-stats">
       <div class="st">
@@ -381,72 +379,6 @@
 
 </section>
 
-<!-- ═══ SECTION 02 — RECRUTEMENT ═══ -->
-<section class="driver-sec" id="driver">
-  <div class="sec-head">
-    <span class="sec-num">02</span>
-    <h2 class="sec-title" data-fr="Devenir <em>chauffeur Ustad</em>" data-en="Become an <em>Ustad driver</em>">Devenir <em>chauffeur Ustad</em></h2>
-  </div>
-  <div class="form">
-    <div class="row row--2">
-      <div class="f">
-        <span class="lbl" data-fr="Prénom" data-en="First name">Prénom</span>
-        <input id="d-fname" type="text"
-          data-fr-placeholder="Jean" data-en-placeholder="John"
-          placeholder="Jean">
-      </div>
-      <div class="f">
-        <span class="lbl" data-fr="Nom" data-en="Last name">Nom</span>
-        <input id="d-lname" type="text"
-          data-fr-placeholder="Dupont" data-en-placeholder="Smith"
-          placeholder="Dupont">
-      </div>
-    </div>
-    <div class="row row--2">
-      <div class="f">
-        <span class="lbl" data-fr="Téléphone" data-en="Phone">Téléphone</span>
-        <input id="d-phone" type="tel"
-          data-fr-placeholder="+33 6 00 00 00 00" data-en-placeholder="+33 6 00 00 00 00"
-          placeholder="+33 6 00 00 00 00">
-      </div>
-      <div class="f">
-        <span class="lbl" data-fr="E-mail" data-en="E-mail">E-mail</span>
-        <input id="d-email" type="email"
-          data-fr-placeholder="votre@email.com" data-en-placeholder="your@email.com"
-          placeholder="votre@email.com">
-      </div>
-    </div>
-    <div class="f">
-      <span class="lbl" data-fr="Motivation" data-en="Motivation">Motivation</span>
-      <textarea id="d-motiv" rows="4"
-        data-fr-placeholder="Décrivez votre expérience et motivations…"
-        data-en-placeholder="Describe your experience and motivations…"
-        placeholder="Décrivez votre expérience et motivations…"></textarea>
-    </div>
-    <button id="btn-attach-driver" class="attach" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/>
-      </svg>
-      <span data-fr="Joindre votre CV (PDF, Word)" data-en="Attach your CV (PDF, Word)">Joindre votre CV (PDF, Word)</span>
-    </button>
-    <input id="d-cv" type="file" accept=".pdf,.doc,.docx" style="display:none">
-    <span id="d-cvname" style="display:none;font-size:12px;opacity:.6;margin-top:4px"></span>
-
-    <label class="rgpd" id="rgpd-drv">
-      <input type="checkbox" id="rgpd-drv-chk">
-      <span class="rgpd-text" data-fr="J'accepte que les données de ma candidature (nom, coordonnées, CV) soient collectées et utilisées par Ustad dans le cadre du recrutement, conformément à notre <a id='link-privacy-driver'>Politique de confidentialité</a>. Elles seront conservées 24 mois maximum." data-en="I agree that my application data (name, contact, CV) is collected by Ustad for recruitment purposes, in accordance with our <a id='link-privacy-driver'>Privacy Policy</a>. Data is kept for 24 months maximum.">
-        J'accepte que les données de ma candidature (nom, coordonnées, CV) soient collectées et utilisées par Ustad dans le cadre du recrutement, conformément à notre <a id="link-privacy-driver">Politique de confidentialité</a>. Elles seront conservées 24 mois maximum.
-      </span>
-    </label>
-    <p class="driver-note" data-fr="Seules les candidatures justifiant d'au moins 8 ans d'expérience en tant que chauffeur professionnel seront étudiées." data-en="Only applications with at least 8 years of professional driving experience will be considered.">
-      Seules les candidatures justifiant d'au moins 8 ans d'expérience en tant que chauffeur professionnel seront étudiées.
-    </p>
-    <div style="margin-top:16px">
-      <button id="btn-submit-driver" class="btn-sub" type="button"
-        data-fr="Envoyer ma candidature" data-en="Submit my application">Envoyer ma candidature</button>
-    </div>
-  </div>
-</section>
 
 <!-- ═══ BARRE DE CONTACT ═══ -->
 <div class="contact-bar" id="contact">
@@ -480,7 +412,7 @@
     <li><a id="link-legal"   href="#" data-fr="Mentions légales"  data-en="Legal notices">Mentions légales</a></li>
     <li><a id="link-privacy" href="#" data-fr="Confidentialité"   data-en="Privacy">Confidentialité</a></li>
     <li><a href="mailto:ustadcontact@gmail.com" data-fr="Contact" data-en="Contact">Contact</a></li>
-    <li><a id="link-driver"  href="#driver" data-fr="Devenir chauffeur" data-en="Become a driver">Devenir chauffeur</a></li>
+    <li><a href="chauffeur.html" data-fr="Devenir chauffeur" data-en="Become a driver">Devenir chauffeur</a></li>
   </ul>
   <span class="f-copy">© 2025 Ustad. All rights reserved.</span>
 </footer>
@@ -536,7 +468,6 @@
 <script src="Ustad/js/lang.js"></script>
 <script src="Ustad/js/confirmation.js"></script>
 <script src="Ustad/js/form.js"></script>
-<script src="Ustad/js/driver.js"></script>
 <script src="Ustad/js/modals.js"></script>
 <script src="Ustad/js/init.js"></script>
 <script>

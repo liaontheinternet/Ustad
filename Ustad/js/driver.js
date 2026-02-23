@@ -2,30 +2,7 @@
    SECTION RECRUTEMENT (Driver)
 ════════════════════════════════════════════ */
 
-function showDriver() {
-  const sec = document.getElementById('driver');
-  if (sec) {
-    sec.style.display = 'block';
-    sec.style.opacity = '0';
-    sec.style.transform = 'translateY(28px)';
-    sec.style.transition = 'opacity .7s ease, transform .7s ease';
-    setTimeout(() => {
-      sec.style.opacity = '1';
-      sec.style.transform = 'translateY(0)';
-    }, 30);
-    setTimeout(() => {
-      sec.scrollIntoView({behavior:'smooth', block:'start'});
-    }, 50);
-  }
-}
-
 document.addEventListener('DOMContentLoaded', () => {
-  // Clic sur le lien footer
-  document.getElementById('link-driver')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    showDriver();
-  });
-
   // Affichage du nom du fichier CV
   document.getElementById('btn-attach-driver')?.addEventListener('click', () => {
     document.getElementById('d-cv')?.click();
@@ -41,11 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Soumission
   document.getElementById('btn-submit-driver')?.addEventListener('click', submitDriver);
-
-  // Hash detection
-  if (window.location.hash === '#driver') {
-    showDriver();
-  }
 });
 
 function submitDriver() {
