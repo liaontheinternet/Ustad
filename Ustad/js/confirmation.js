@@ -140,16 +140,26 @@ function showConfirmation(data) {
   });
 
   document.getElementById('conf-pdf')?.addEventListener('click', () => {
-    const html = data.emailHtml;
-    if (!html) return;
-    const win = window.open('', '_blank', 'width=720,height=960');
-    if (!win) return;
-    win.document.open();
-    win.document.write(html);
-    win.document.close();
-    // Attendre le chargement complet avant d'ouvrir la boîte d'impression
-    win.addEventListener('load', () => {
-      setTimeout(() => { win.focus(); win.print(); }, 400);
+    const btn = document.getElementById('conf-pdf');
+    const card = document.getElementById('conf-inner');
+    if (!card) return;
+
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = fr ? 'Génération…' : 'Generating…';
+    }
+
+    html2pdf().set({
+      margin:     [8, 8, 8, 8],
+      filename:   `Ustad-BDC-${data.ref || 'reservation'}.pdf`,
+      image:      { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true, backgroundColor: null },
+      jsPDF:      { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    }).from(card).save().then(() => {
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;flex-shrink:0"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> ${fr ? 'Télécharger PDF' : 'Download PDF'}`;
+      }
     });
   });
 }

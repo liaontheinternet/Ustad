@@ -27,7 +27,7 @@ function tabLabel() {
 
 /* ─── Génération du bon de commande HTML (table-based pour Gmail dark mode) ─── */
 function genEmailHtml({ ref, now, fname, lname, email, phone, type, dateLabel, pickup, dest, vehLabel, pax, cabin, large, baby, partner, notes, prix }) {
-  const NAVY  = '#0D1B2A';
+  const NAVY  = '#1B3D7A';  // bleu marine — moins agressif en mode sombre Gmail
   const RED   = '#8B1A1A';
   const CREAM = '#F5F0E8';
   const SEP   = 'border-bottom:1px solid rgba(13,27,42,.07);';
@@ -80,8 +80,8 @@ function genEmailHtml({ ref, now, fname, lname, email, phone, type, dateLabel, p
   <meta name="supported-color-schemes" content="light">
   <title>Bon de commande Ustad — ${ref}</title>
 </head>
-<body bgcolor="#c5bdb4" style="margin:0;padding:0;background-color:#c5bdb4;">
-<table width="100%" cellpadding="0" cellspacing="0" bgcolor="#c5bdb4" style="background-color:#c5bdb4;">
+<body bgcolor="#C6D0E8" style="margin:0;padding:0;background-color:#C6D0E8;">
+<table width="100%" cellpadding="0" cellspacing="0" bgcolor="#C6D0E8" style="background-color:#C6D0E8;">
 <tr><td align="center" style="padding:24px 16px;">
 
   <!-- BANNIÈRE -->
@@ -130,7 +130,8 @@ function genEmailHtml({ ref, now, fname, lname, email, phone, type, dateLabel, p
     <tr><td style="padding:22px 40px;border-top:3px solid ${RED};text-align:center;">
       <p style="font-family:Georgia,serif;font-size:14px;letter-spacing:.32em;text-transform:uppercase;color:rgba(232,224,212,.58);margin:0;">Ustad</p>
       <p style="font-size:11px;color:rgba(232,224,212,.38);margin:7px 0 0;letter-spacing:.06em;">ustadcontact@gmail.com &nbsp;·&nbsp; +33 6 61 50 54 54</p>
-      <p style="font-size:9px;color:rgba(232,224,212,.22);margin:16px 0 0;line-height:1.6;letter-spacing:.04em;">Ce bon de commande est généré automatiquement lors de votre réservation en ligne.<br>© ${new Date().getFullYear()} Ustad — Savoir-Faire in Motion</p>
+      <p style="font-size:9px;color:rgba(200,220,240,.55);margin:16px 0 0;line-height:1.6;letter-spacing:.03em;border-top:1px solid rgba(232,224,212,.12);padding-top:14px;">💡 Pour sauvegarder ce document en PDF : Imprimer cet e-mail (Ctrl+P) → Enregistrer en PDF</p>
+      <p style="font-size:9px;color:rgba(232,224,212,.22);margin:10px 0 0;line-height:1.6;letter-spacing:.04em;">Ce bon de commande est généré automatiquement lors de votre réservation en ligne.<br>© ${new Date().getFullYear()} Ustad — Savoir-Faire in Motion</p>
     </td></tr>
   </table>
 
@@ -195,7 +196,7 @@ function submitStd() {
     dateLabel = dur + (fr ? ' heure(s)' : ' hour(s)');
   }
 
-  const vehLabel = { berline:'Berline — Classe E', van:'Van — Classe V', classe_s:'Berline — Classe S' }[veh] || veh;
+  const vehLabel = { berline:'Berline', van:'Van', classe_s:'Berline Confort' }[veh] || veh;
   const prix = currentPrice();
   const ref  = makeRef();
   const now  = new Date().toLocaleString(fr ? 'fr-FR' : 'en-GB');
