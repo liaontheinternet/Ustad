@@ -1,51 +1,72 @@
 /* ════════════════════════════════════════════
-   AUTOCOMPLÉTION D'ADRESSES (Nominatim / OSM)
-   Biaisé vers la Côte d'Azur
+   AUTOCOMPLÉTION D'ADRESSES — Google Places
 ════════════════════════════════════════════ */
 
-const AC_DELAY = 350; // ms debounce
-const AC_MIN   = 3;   // caractères minimum
+const AC_DELAY   = 250; // ms debounce
+let   acTimer    = null;
+let   _gmService = null;
+let   _gmGeocoder = null;
 
-let acTimer = null;
+/* ── Chargement dynamique de l'API Google Maps ── */
+(function () {
+  const s   = document.createElement('script');
+  s.async   = true;
+  s.src     = 'https://maps.googleapis.com/maps/api/js'
+            + '?key='       + CFG.maps_key
+            + '&libraries=places'
+            + '&callback=initMapsAC'
+            + '&language='  + (document.documentElement.lang || 'fr');
+  document.head.appendChild(s);
+})();
 
+/* ── Callback appelé quand l'API est prête ── */
+function initMapsAC() {
+  _gmService  = new google.maps.places.AutocompleteService();
+  _gmGeocoder = new google.maps.Geocoder();
+
+  ['pickup', 'dest'].forEach(id => {
+    const input = document.getElementById(id);
+    const list  = document.getElementById(id + '-ac');
+    if (input && list) {
+      input.addEventListener('input', () => acSearch(input, list));
+      input.addEventListener('focus', () => {
+        if (input.value.length >= 3) acSearch(input, list);
+      });
+    }
+  });
+}
+
+/* ── Déclenchement avec debounce ── */
 function acSearch(inputEl, listEl) {
   const q = inputEl.value.trim();
-
-  if (q.length < AC_MIN) {
+  if (q.length < 3) {
     listEl.style.display = 'none';
     listEl.innerHTML = '';
     return;
   }
-
   clearTimeout(acTimer);
   acTimer = setTimeout(() => _acFetch(q, inputEl, listEl), AC_DELAY);
 }
 
-async function _acFetch(q, inputEl, listEl) {
-  const lang = APP_STATE.lang === 'fr' ? 'fr' : 'en';
-  const url = 'https://nominatim.openstreetmap.org/search'
-    + '?q=' + encodeURIComponent(q)
-    + '&format=jsonv2'
-    + '&limit=6'
-    + '&accept-language=' + lang
-    + '&countrycodes=fr,mc,it'
-    + '&addressdetails=1';
+/* ── Appel Places AutocompleteService ── */
+function _acFetch(q, inputEl, listEl) {
+  if (!_gmService) return;
 
-  try {
-    const r = await fetch(url, { headers: { 'Accept-Language': lang } });
-    const data = await r.json();
-
+  _gmService.getPlacePredictions({
+    input: q,
+    componentRestrictions: { country: ['fr', 'mc', 'it'] },
+    language: APP_STATE.lang === 'fr' ? 'fr' : 'en',
+  }, (predictions, status) => {
     listEl.innerHTML = '';
 
-    if (!data || data.length === 0) {
+    if (status !== google.maps.places.PlacesServiceStatus.OK || !predictions) {
       listEl.style.display = 'none';
       return;
     }
 
-    data.forEach(place => {
-      const parts = place.display_name.split(', ');
-      const main  = parts[0] || place.display_name;
-      const sub   = parts.slice(1, 3).join(', ');
+    predictions.slice(0, 6).forEach(pred => {
+      const main = pred.structured_formatting.main_text;
+      const sub  = pred.structured_formatting.secondary_text || '';
 
       const item = document.createElement('div');
       item.className = 'ac-item';
@@ -63,46 +84,34 @@ async function _acFetch(q, inputEl, listEl) {
 
       item.addEventListener('mousedown', (e) => {
         e.preventDefault();
-        inputEl.value = place.display_name;
+        const display = pred.description;
+        inputEl.value = display;
         listEl.style.display = 'none';
         listEl.innerHTML = '';
-        // Mettre en cache les coordonnées
-        APP_STATE.coordCache[place.display_name.trim().toLowerCase()] = {
-          lat: parseFloat(place.lat),
-          lon: parseFloat(place.lon),
-        };
-        // Déclencher le calcul de prix
-        inputEl.dispatchEvent(new Event('input', { bubbles: true }));
+
+        /* Mise en cache des coordonnées via Geocoder */
+        _gmGeocoder.geocode({ placeId: pred.place_id }, (results, gStatus) => {
+          if (gStatus === 'OK' && results[0]) {
+            const loc = results[0].geometry.location;
+            APP_STATE.coordCache[display.trim().toLowerCase()] = {
+              lat: loc.lat(),
+              lon: loc.lng(),
+            };
+          }
+          inputEl.dispatchEvent(new Event('input', { bubbles: true }));
+        });
       });
 
       listEl.appendChild(item);
     });
 
     listEl.style.display = 'block';
-  } catch (e) {
-    listEl.style.display = 'none';
-  }
+  });
 }
 
-// Fermer la liste si clic ailleurs
+/* ── Fermer la liste si clic ailleurs ── */
 document.addEventListener('click', (e) => {
   document.querySelectorAll('.ac-list').forEach(list => {
-    if (!list.contains(e.target)) {
-      list.style.display = 'none';
-    }
-  });
-});
-
-// Initialiser les champs autocomplete de la section standard
-document.addEventListener('DOMContentLoaded', () => {
-  ['pickup', 'dest'].forEach(id => {
-    const input = document.getElementById(id);
-    const list  = document.getElementById(id + '-ac');
-    if (input && list) {
-      input.addEventListener('input', () => acSearch(input, list));
-      input.addEventListener('focus', () => {
-        if (input.value.length >= AC_MIN) acSearch(input, list);
-      });
-    }
+    if (!list.contains(e.target)) list.style.display = 'none';
   });
 });

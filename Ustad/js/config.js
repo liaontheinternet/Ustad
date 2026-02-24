@@ -14,6 +14,9 @@ const CFG = {
   emailjs_template_std: 'template_te2tcuu',
   emailjs_template_ent: 'template_te2tcuu',
   emailjs_public_key:   'Cg_-rym5ScOdhBeAv',
+
+  // Google Maps (Places Autocomplete)
+  maps_key: 'AIzaSyC2hINVb4Uc6fZtDL2qdLt08UkG2XlpFS0',
 };
 
 /* ════ TARIFS FIXES PARTENAIRES HÔTELS ════ */
