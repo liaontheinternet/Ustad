@@ -153,21 +153,23 @@ async function geocode(address) {
 
   /* Google Geocoder (disponible après chargement de l'API Maps) */
   if (window.google?.maps?.Geocoder) {
-    return new Promise((resolve) => {
+    const googleResult = await new Promise((resolve) => {
       new google.maps.Geocoder().geocode({ address }, (results, status) => {
         if (status === 'OK' && results[0]) {
           const loc = results[0].geometry.location;
-          const c = { lat: loc.lat(), lon: loc.lng() };
-          APP_STATE.coordCache[k] = c;
-          resolve(c);
+          resolve({ lat: loc.lat(), lon: loc.lng() });
         } else {
           resolve(null);
         }
       });
     });
+    if (googleResult) {
+      APP_STATE.coordCache[k] = googleResult;
+      return googleResult;
+    }
   }
 
-  /* Fallback Nominatim si Maps API pas encore chargée */
+  /* Fallback Nominatim (Maps API absente ou échec geocodage) */
   try {
     const url = 'https://nominatim.openstreetmap.org/search?q=' + encodeURIComponent(address) + '&format=jsonv2&limit=1&accept-language=' + (APP_STATE.lang === 'fr' ? 'fr' : 'en');
     const r = await fetch(url);
@@ -212,7 +214,11 @@ async function _calcPrice() {
   let night = false;
   const dt = document.getElementById('bdt').value;
   if (dt) {
-    const h = new Date(dt).getHours();
+    const timePart = dt.includes('T') ? dt.split('T')[1] : '';
+    const h = timePart ? parseInt(timePart.split(':')[0]) : new Date(dt).getHours();
+    if (h < 7 || h >= 20) night = true;
+  } else if (APP_STATE.tab === 'now') {
+    const h = new Date().getHours();
     if (h < 7 || h >= 20) night = true;
   }
 
