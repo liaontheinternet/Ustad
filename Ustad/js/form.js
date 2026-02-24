@@ -27,24 +27,22 @@ function tabLabel() {
 
 /* ─── Génération du bon de commande HTML (table-based pour Gmail dark mode) ─── */
 function genEmailHtml({ ref, now, fname, lname, email, phone, type, dateLabel, pickup, dest, vehLabel, pax, cabin, large, baby, partner, notes, prix }) {
-  const NAVY  = '#1B3D7A';  // bleu marine — moins agressif en mode sombre Gmail
+  const NAVY  = '#1B3D7A';
   const RED   = '#8B1A1A';
   const CREAM = '#F5F0E8';
-  const SEP   = 'border-bottom:1px solid rgba(13,27,42,.07);';
+  const SEP   = 'border-bottom:1px solid rgba(13,27,42,.07)';
 
-  // Ligne de données : cellule label + cellule valeur
+  // Ligne directe dans la table parente — labels alignés grâce à la largeur fixe de la 1re colonne
   const trow = (lbl, val, last = false) => (val && val !== '—') ? `
-      <tr><td style="padding:0;${last ? '' : SEP}">
-        <table width="100%" cellpadding="0" cellspacing="0"><tr>
-          <td width="38%" style="font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(13,27,42,.45);padding:9px 12px 9px 16px;vertical-align:top;">${lbl}</td>
-          <td style="font-size:13px;color:${NAVY};font-weight:600;line-height:1.4;padding:9px 16px 9px 0;word-break:normal;overflow-wrap:break-word;">${val}</td>
-        </tr></table>
-      </td></tr>` : '';
+      <tr>
+        <td width="150" valign="top" style="width:150px;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(13,27,42,.45);padding:9px 12px 9px 16px;vertical-align:top;${last ? '' : SEP};">${lbl}</td>
+        <td valign="top" style="font-size:13px;color:${NAVY};font-weight:600;line-height:1.4;padding:9px 16px 9px 0;word-break:break-word;vertical-align:top;${last ? '' : SEP};">${val}</td>
+      </tr>` : '';
 
-  // Bloc avec en-tête bordeaux
+  // Bloc avec en-tête bordeaux — les trow s'insèrent directement dans cette table
   const tblock = (title, rows) => !rows.trim() ? '' : `
     <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid ${RED};margin-bottom:14px;">
-      <tr><td bgcolor="${RED}" style="background-color:${RED};padding:9px 16px;">
+      <tr><td colspan="2" class="red-bg" bgcolor="${RED}" style="background-color:${RED};padding:9px 16px;">
         <span style="font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:${CREAM};font-weight:normal;">${title}</span>
       </td></tr>
       ${rows}
@@ -76,27 +74,39 @@ function genEmailHtml({ ref, now, fname, lname, email, phone, type, dateLabel, p
 <html lang="fr"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <meta name="color-scheme" content="light">
+  <meta name="color-scheme" content="light only">
   <meta name="supported-color-schemes" content="light">
   <title>Bon de commande Ustad — ${ref}</title>
+  <style>
+    :root { color-scheme: light only; }
+    body  { color-scheme: light only; }
+    /* Forcer les couleurs d'origine en mode sombre Gmail (data-ogsc) */
+    [data-ogsc] .navy-bg  { background-color: ${NAVY}    !important; }
+    [data-ogsc] .red-bg   { background-color: ${RED}     !important; }
+    [data-ogsc] .cream-bg { background-color: ${CREAM}   !important; }
+    [data-ogsc] .outer-bg { background-color: #C6D0E8    !important; }
+    [data-ogsc] .navy-txt { color: ${NAVY} !important; }
+    [data-ogsc] .red-txt  { color: ${RED}  !important; }
+    [data-ogsc] .cream-txt{ color: ${CREAM}!important; }
+  </style>
 </head>
-<body bgcolor="#C6D0E8" style="margin:0;padding:0;background-color:#C6D0E8;">
-<table width="100%" cellpadding="0" cellspacing="0" bgcolor="#C6D0E8" style="background-color:#C6D0E8;">
+<body bgcolor="#C6D0E8" style="margin:0;padding:0;background-color:#C6D0E8;color-scheme:light;">
+<table class="outer-bg" width="100%" cellpadding="0" cellspacing="0" bgcolor="#C6D0E8" style="background-color:#C6D0E8;">
 <tr><td align="center" style="padding:24px 16px;">
 
   <!-- BANNIÈRE -->
-  <table width="620" cellpadding="0" cellspacing="0" bgcolor="${NAVY}" style="max-width:620px;background-color:${NAVY};">
+  <table class="navy-bg" width="620" cellpadding="0" cellspacing="0" bgcolor="${NAVY}" style="max-width:620px;background-color:${NAVY};">
     <tr><td style="padding:32px 40px 28px;border-bottom:3px solid ${RED};">
-      <p style="font-family:Georgia,serif;font-size:24px;letter-spacing:.32em;text-transform:uppercase;color:${CREAM};margin:0;font-weight:normal;">Ustad</p>
+      <p class="cream-txt" style="font-family:Georgia,serif;font-size:24px;letter-spacing:.32em;text-transform:uppercase;color:${CREAM};margin:0;font-weight:normal;">Ustad</p>
       <p style="font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:rgba(232,224,212,.42);margin:4px 0 0;">Savoir-Faire in Motion</p>
       <p style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(232,224,212,.65);margin:22px 0 0;">Référence</p>
-      <p style="font-size:14px;letter-spacing:.12em;color:${CREAM};font-weight:bold;margin:3px 0 0;">${ref}</p>
+      <p class="cream-txt" style="font-size:14px;letter-spacing:.12em;color:${CREAM};font-weight:bold;margin:3px 0 0;">${ref}</p>
       <p style="font-size:10px;color:rgba(232,224,212,.45);letter-spacing:.06em;margin:6px 0 0;">${now}</p>
     </td></tr>
   </table>
 
   <!-- CORPS -->
-  <table width="620" cellpadding="0" cellspacing="0" bgcolor="${CREAM}" style="max-width:620px;background-color:${CREAM};">
+  <table class="cream-bg" width="620" cellpadding="0" cellspacing="0" bgcolor="${CREAM}" style="max-width:620px;background-color:${CREAM};">
     <tr><td style="padding:32px 40px 24px;">
       <p style="font-size:13px;color:rgba(13,27,42,.62);line-height:1.7;margin:0 0 24px;padding-bottom:22px;border-bottom:1px solid rgba(13,27,42,.10);">
         Bonjour ${fname},<br>
@@ -114,10 +124,10 @@ function genEmailHtml({ ref, now, fname, lname, email, phone, type, dateLabel, p
         <tr><td style="padding:20px 16px;">
           <table width="100%" cellpadding="0" cellspacing="0"><tr>
             <td>
-              <p style="font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:${RED};margin:0;">Tarif estimé</p>
+              <p class="red-txt" style="font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:${RED};margin:0;">Tarif estimé</p>
               <p style="font-size:10px;color:rgba(13,27,42,.40);margin:5px 0 0;line-height:1.5;">Tarif indicatif<br>Confirmation par l'équipe Ustad</p>
             </td>
-            <td align="right" style="font-size:32px;color:${NAVY};font-weight:700;letter-spacing:-.01em;white-space:nowrap;vertical-align:middle;">${prix}</td>
+            <td align="right" class="navy-txt" style="font-size:32px;color:${NAVY};font-weight:700;letter-spacing:-.01em;white-space:nowrap;vertical-align:middle;">${prix}</td>
           </tr></table>
         </td></tr>
       </table>
@@ -126,7 +136,7 @@ function genEmailHtml({ ref, now, fname, lname, email, phone, type, dateLabel, p
   </table>
 
   <!-- PIED DE PAGE -->
-  <table width="620" cellpadding="0" cellspacing="0" bgcolor="${NAVY}" style="max-width:620px;background-color:${NAVY};">
+  <table class="navy-bg" width="620" cellpadding="0" cellspacing="0" bgcolor="${NAVY}" style="max-width:620px;background-color:${NAVY};">
     <tr><td style="padding:22px 40px;border-top:3px solid ${RED};text-align:center;">
       <p style="font-family:Georgia,serif;font-size:14px;letter-spacing:.32em;text-transform:uppercase;color:rgba(232,224,212,.58);margin:0;">Ustad</p>
       <p style="font-size:11px;color:rgba(232,224,212,.38);margin:7px 0 0;letter-spacing:.06em;">ustadcontact@gmail.com &nbsp;·&nbsp; +33 6 61 50 54 54</p>
