@@ -151,11 +151,11 @@ async function geocode(address) {
   const k = address.trim().toLowerCase();
   if (APP_STATE.coordCache[k]) return APP_STATE.coordCache[k];
 
-  /* Google Geocoder (disponible après chargement de l'API Maps) */
-  if (window.google?.maps?.Geocoder) {
-    const googleResult = await new Promise((resolve) => {
-      new google.maps.Geocoder().geocode({ address }, (results, status) => {
-        if (status === 'OK' && results[0]) {
+  /* Places API — findPlaceFromQuery (même clé que l'autocomplete, pas besoin de Geocoding API séparée) */
+  if (window._placesService) {
+    const placesResult = await new Promise((resolve) => {
+      _placesService.findPlaceFromQuery({ query: address, fields: ['geometry'] }, (results, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK && results?.[0]?.geometry?.location) {
           const loc = results[0].geometry.location;
           resolve({ lat: loc.lat(), lon: loc.lng() });
         } else {
@@ -163,9 +163,9 @@ async function geocode(address) {
         }
       });
     });
-    if (googleResult) {
-      APP_STATE.coordCache[k] = googleResult;
-      return googleResult;
+    if (placesResult) {
+      APP_STATE.coordCache[k] = placesResult;
+      return placesResult;
     }
   }
 
@@ -241,13 +241,14 @@ async function _calcPrice() {
 
   const puRaw = (document.getElementById('pickup').value || '').trim();
   const deRaw = (document.getElementById('dest').value || '').trim();
-  const PORT_KW = ['aeroport', 'aéroport', 'airport', 'gare', 'station'];
-  const atPort = PORT_KW.some(k => puRaw.toLowerCase().includes(k));
+  const AIRPORT_KW = ['aeroport', 'aéroport', 'airport'];
+  const atPort = AIRPORT_KW.some(k => puRaw.toLowerCase().includes(k));
 
   function show(p, detail, est = true) {
     if (gen !== _calcGen) return;
     if (night) p = Math.round(p * 1.2);
     ok.style.display = 'flex';
+    ok.classList.remove('quote');
     hint.style.display = 'none';
     pv.textContent = p + ' €';
     const lbl = est ? (APP_STATE.lang === 'fr' ? 'Estimation · ' : 'Estimate · ') : '';
@@ -293,6 +294,7 @@ async function _calcPrice() {
     show(base, km + ' km · ' + r + '€/km');
   } else {
     ok.style.display = 'flex';
+    ok.classList.add('quote');
     hint.style.display = 'none';
     pv.textContent = APP_STATE.lang === 'fr' ? 'Sur devis' : 'On quote';
     pno.textContent = APP_STATE.lang === 'fr' ? 'Confirmation par l\'équipe Ustad' : 'Confirmed by Ustad team';

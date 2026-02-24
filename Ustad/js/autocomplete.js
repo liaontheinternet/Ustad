@@ -3,9 +3,10 @@
 ════════════════════════════════════════════ */
 
 const AC_DELAY   = 250; // ms debounce
-let   acTimer    = null;
-let   _gmService = null;
-let   _gmGeocoder = null;
+let   acTimer        = null;
+let   _gmService     = null;
+let   _gmGeocoder    = null;
+let   _placesService = null;
 
 /* ── Chargement dynamique de l'API Google Maps ── */
 (function () {
@@ -23,6 +24,8 @@ let   _gmGeocoder = null;
 function initMapsAC() {
   _gmService  = new google.maps.places.AutocompleteService();
   _gmGeocoder = new google.maps.Geocoder();
+  const _dummy = document.createElement('div');
+  _placesService = new google.maps.places.PlacesService(_dummy);
 
   ['pickup', 'dest'].forEach(id => {
     const input = document.getElementById(id);
@@ -89,10 +92,10 @@ function _acFetch(q, inputEl, listEl) {
         listEl.style.display = 'none';
         listEl.innerHTML = '';
 
-        /* Mise en cache des coordonnées via Geocoder */
-        _gmGeocoder.geocode({ placeId: pred.place_id }, (results, gStatus) => {
-          if (gStatus === 'OK' && results[0]) {
-            const loc = results[0].geometry.location;
+        /* Mise en cache des coordonnées via Places API (pas besoin de Geocoding API) */
+        _placesService.getDetails({ placeId: pred.place_id, fields: ['geometry'] }, (place, pStatus) => {
+          if (pStatus === google.maps.places.PlacesServiceStatus.OK && place?.geometry?.location) {
+            const loc = place.geometry.location;
             APP_STATE.coordCache[display.trim().toLowerCase()] = {
               lat: loc.lat(),
               lon: loc.lng(),
