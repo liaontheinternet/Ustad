@@ -183,21 +183,37 @@ async function geocode(address) {
   return null;
 }
 
+function haversineKm(A, B) {
+  const R = 6371;
+  const dLat = (B.lat - A.lat) * Math.PI / 180;
+  const dLon = (B.lon - A.lon) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(A.lat * Math.PI/180) * Math.cos(B.lat * Math.PI/180) * Math.sin(dLon/2)**2;
+  return Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)) * 1.5);
+}
+
 async function getRouteKm(a, b) {
   const [A, B] = await Promise.all([geocode(a), geocode(b)]);
   if (!A || !B) return null;
 
   try {
-    const url = 'https://router.project-osrm.org/route/v1/driving/' + A.lon + ',' + A.lat + ';' + B.lon + ',' + B.lat + '?overview=false';
-    const r = await fetch(url);
+    const ctrl = new AbortController();
+    const timeout = setTimeout(() => ctrl.abort(), 5000);
+    const r = await fetch(
+      'https://router.project-osrm.org/route/v1/driving/' + A.lon + ',' + A.lat + ';' + B.lon + ',' + B.lat + '?overview=false',
+      { signal: ctrl.signal }
+    );
+    clearTimeout(timeout);
     const d = await r.json();
-
     if (d.code === 'Ok' && d.routes[0]) {
       return Math.round(d.routes[0].distance / 1000);
     }
   } catch (e) {}
-  return null;
+
+  // Fallback : distance à vol d'oiseau × 1.35 (approximation routière)
+  return haversineKm(A, B);
 }
+
+let _calcGen = 0;
 
 function calcPrice() {
   clearTimeout(APP_STATE.priceTimer);
@@ -205,10 +221,12 @@ function calcPrice() {
 }
 
 async function _calcPrice() {
-  const veh = document.getElementById('veh').value;
-  const ok = document.getElementById('pok');
-  const pv = document.getElementById('pv');
-  const pno = document.getElementById('pno');
+  const gen = ++_calcGen;
+
+  const veh  = document.getElementById('veh').value;
+  const ok   = document.getElementById('pok');
+  const pv   = document.getElementById('pv');
+  const pno  = document.getElementById('pno');
   const hint = document.getElementById('phint');
 
   let night = false;
@@ -218,24 +236,25 @@ async function _calcPrice() {
     const h = timePart ? parseInt(timePart.split(':')[0]) : new Date(dt).getHours();
     if (h < 7 || h >= 20) night = true;
   } else if (APP_STATE.tab === 'now') {
-    const h = new Date().getHours();
-    if (h < 7 || h >= 20) night = true;
+    if (new Date().getHours() < 7 || new Date().getHours() >= 20) night = true;
   }
 
   const puRaw = (document.getElementById('pickup').value || '').trim();
-  const atPort = ['aeroport', 'aéroport', 'airport', 'port', 'gare', 'station'].some(k => puRaw.toLowerCase().includes(k));
+  const deRaw = (document.getElementById('dest').value || '').trim();
+  const PORT_KW = ['aeroport', 'aéroport', 'airport', 'gare', 'station'];
+  const atPort = PORT_KW.some(k => puRaw.toLowerCase().includes(k));
 
   function show(p, detail, est = true) {
+    if (gen !== _calcGen) return;
     if (night) p = Math.round(p * 1.2);
     ok.style.display = 'flex';
     hint.style.display = 'none';
     pv.textContent = p + ' €';
-
     const lbl = est ? (APP_STATE.lang === 'fr' ? 'Estimation · ' : 'Estimate · ') : '';
     pno.textContent = lbl + detail + (night ? (APP_STATE.lang === 'fr' ? ' · +20% nuit' : ' · +20% night') : '');
   }
 
-  // Hourly
+  // Mise à disposition à l'heure
   if (APP_STATE.tab === 'hourly') {
     const h = parseInt(document.getElementById('dur').value);
     const r = TARIFS_HEURE[veh] || 90;
@@ -243,11 +262,10 @@ async function _calcPrice() {
     return;
   }
 
-  // Partner hotel
+  // Tarif fixe partenaire hôtel
   if (APP_STATE.partner) {
-    const de = (document.getElementById('dest').value || '').toLowerCase();
     for (const [k, pr] of Object.entries(TARIFS_HOTEL)) {
-      if (de.includes(k)) {
+      if (deRaw.toLowerCase().includes(k)) {
         const key = veh === 'berline' ? 'b' : veh === 'van' ? 'v' : 's';
         show((pr[key] || pr.b) + (atPort ? 10 : 0), APP_STATE.lang === 'fr' ? 'Tarif fixe partenaire' : 'Fixed partner rate', false);
         return;
@@ -255,10 +273,7 @@ async function _calcPrice() {
     }
   }
 
-  const pu = puRaw;
-  const de = (document.getElementById('dest').value || '').trim();
-
-  if (!pu || !de) {
+  if (!puRaw || !deRaw) {
     ok.style.display = 'none';
     hint.style.display = 'block';
     return;
@@ -269,14 +284,18 @@ async function _calcPrice() {
   pv.textContent = '…';
   pno.textContent = APP_STATE.lang === 'fr' ? 'Calcul de la distance réelle…' : 'Calculating real distance…';
 
-  const km = await getRouteKm(pu, de);
+  const km = await getRouteKm(puRaw, deRaw);
+  if (gen !== _calcGen) return; // résultat obsolète — une autre requête a pris le relais
+
   if (km !== null) {
     const r = TARIFS_KM[veh] || 3;
     const base = Math.max(Math.round(km * r), 20) + (atPort ? 10 : 0);
     show(base, km + ' km · ' + r + '€/km');
   } else {
-    const r = TARIFS_KM[veh] || 3;
-    show(20 * r + (atPort ? 10 : 0), APP_STATE.lang === 'fr' ? '~estimation (réseau indisponible)' : '~estimate (offline)');
+    ok.style.display = 'flex';
+    hint.style.display = 'none';
+    pv.textContent = APP_STATE.lang === 'fr' ? 'Sur devis' : 'On quote';
+    pno.textContent = APP_STATE.lang === 'fr' ? 'Confirmation par l\'équipe Ustad' : 'Confirmed by Ustad team';
   }
 }
 
