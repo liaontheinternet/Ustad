@@ -183,20 +183,34 @@ async function geocode(address) {
   return null;
 }
 
+function haversineKm(A, B) {
+  const R = 6371;
+  const dLat = (B.lat - A.lat) * Math.PI / 180;
+  const dLon = (B.lon - A.lon) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(A.lat * Math.PI/180) * Math.cos(B.lat * Math.PI/180) * Math.sin(dLon/2)**2;
+  return Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)) * 1.35);
+}
+
 async function getRouteKm(a, b) {
   const [A, B] = await Promise.all([geocode(a), geocode(b)]);
   if (!A || !B) return null;
 
   try {
-    const url = 'https://router.project-osrm.org/route/v1/driving/' + A.lon + ',' + A.lat + ';' + B.lon + ',' + B.lat + '?overview=false';
-    const r = await fetch(url);
+    const ctrl = new AbortController();
+    const timeout = setTimeout(() => ctrl.abort(), 5000);
+    const r = await fetch(
+      'https://router.project-osrm.org/route/v1/driving/' + A.lon + ',' + A.lat + ';' + B.lon + ',' + B.lat + '?overview=false',
+      { signal: ctrl.signal }
+    );
+    clearTimeout(timeout);
     const d = await r.json();
-
     if (d.code === 'Ok' && d.routes[0]) {
       return Math.round(d.routes[0].distance / 1000);
     }
   } catch (e) {}
-  return null;
+
+  // Fallback : distance à vol d'oiseau × 1.35 (approximation routière)
+  return haversineKm(A, B);
 }
 
 function calcPrice() {
@@ -275,8 +289,10 @@ async function _calcPrice() {
     const base = Math.max(Math.round(km * r), 20) + (atPort ? 10 : 0);
     show(base, km + ' km · ' + r + '€/km');
   } else {
-    const r = TARIFS_KM[veh] || 3;
-    show(20 * r + (atPort ? 10 : 0), APP_STATE.lang === 'fr' ? '~estimation (réseau indisponible)' : '~estimate (offline)');
+    ok.style.display = 'flex';
+    hint.style.display = 'none';
+    pv.textContent = APP_STATE.lang === 'fr' ? 'Sur devis' : 'On quote';
+    pno.textContent = APP_STATE.lang === 'fr' ? 'Confirmation par l\'équipe Ustad' : 'Confirmed by Ustad team';
   }
 }
 
