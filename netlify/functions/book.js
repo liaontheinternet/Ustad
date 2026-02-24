@@ -72,14 +72,13 @@ exports.handler = async (event) => {
     // ── Création de l'événement ──
     await calendar.events.insert({
       calendarId:  process.env.GOOGLE_CALENDAR_ID || 'primary',
-      sendUpdates: 'all', // envoie l'invitation accept/refuser au client
+      sendUpdates: 'none',
       requestBody: {
         summary:     `Réservation Ustad — ${fname} ${lname} [${ref}]`,
         description,
         start:       { dateTime: startDt.toISOString(), timeZone: 'Europe/Paris' },
         end:         { dateTime: endDt.toISOString(),   timeZone: 'Europe/Paris' },
-        attendees:   [{ email }],
-        status:      'tentative', // apparaît comme "à confirmer" dans l'agenda
+        status:      'confirmed',
         reminders: {
           useDefault: false,
           overrides:  [
