@@ -242,7 +242,7 @@ async function _calcPrice() {
   const puRaw = (document.getElementById('pickup').value || '').trim();
   const deRaw = (document.getElementById('dest').value || '').trim();
   const PORT_KW = ['aeroport', 'aéroport', 'airport', 'gare', 'station'];
-  const atPort = PORT_KW.some(k => puRaw.toLowerCase().includes(k) || deRaw.toLowerCase().includes(k));
+  const atPort = PORT_KW.some(k => puRaw.toLowerCase().includes(k));
 
   function show(p, detail, est = true) {
     if (gen !== _calcGen) return;
