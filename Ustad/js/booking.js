@@ -151,11 +151,27 @@ async function geocode(address) {
   const k = address.trim().toLowerCase();
   if (APP_STATE.coordCache[k]) return APP_STATE.coordCache[k];
 
+  /* Google Geocoder (disponible après chargement de l'API Maps) */
+  if (window.google?.maps?.Geocoder) {
+    return new Promise((resolve) => {
+      new google.maps.Geocoder().geocode({ address }, (results, status) => {
+        if (status === 'OK' && results[0]) {
+          const loc = results[0].geometry.location;
+          const c = { lat: loc.lat(), lon: loc.lng() };
+          APP_STATE.coordCache[k] = c;
+          resolve(c);
+        } else {
+          resolve(null);
+        }
+      });
+    });
+  }
+
+  /* Fallback Nominatim si Maps API pas encore chargée */
   try {
     const url = 'https://nominatim.openstreetmap.org/search?q=' + encodeURIComponent(address) + '&format=jsonv2&limit=1&accept-language=' + (APP_STATE.lang === 'fr' ? 'fr' : 'en');
     const r = await fetch(url);
     const data = await r.json();
-
     if (data && data[0]) {
       const c = { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
       APP_STATE.coordCache[k] = c;
