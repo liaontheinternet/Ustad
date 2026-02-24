@@ -246,6 +246,21 @@ function submitStd() {
       emailSent,
       emailHtml: bdc,
     });
+
+    // Créer l'événement Google Calendar (fire-and-forget)
+    fetch('/.netlify/functions/book', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({
+        ref, fname, lname, email, phone,
+        type:     tabLabel(),
+        pickup,   dest,
+        vehLabel, pax, notes, prix,
+        bdt,      dur,
+        tab:      APP_STATE.tab,
+      }),
+    }).catch(() => {}); // silencieux — la réservation est déjà confirmée
+
     // Reset
     APP_STATE.cabin = 0; APP_STATE.large = 0; APP_STATE.partner = false;
   });
