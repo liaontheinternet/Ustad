@@ -5,48 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aperçu — Bon de commande Ustad</title>
   <style>
-    /* ── Fond de page (simuler la boîte mail) ── */
     body {
       margin: 0;
-      padding: 48px 16px;
-      background: #c5bdb4;
+      padding: 32px 16px;
+      background: #e8e8e8;
       font-family: Arial, Helvetica, sans-serif;
     }
 
     .email-wrap {
-      max-width: 620px;
+      max-width: 600px;
       margin: 0 auto;
-      box-shadow: 0 24px 64px rgba(0,0,0,.28);
+      background: #ffffff;
+      box-shadow: 0 4px 24px rgba(0,0,0,.12);
     }
 
     /* ══ BANNIÈRE ══ */
     .banner {
-      background: #0D1B2A;
-      padding: 32px 40px 28px;
-      border-bottom: 3px solid #8B1A1A;
+      background: #ffffff;
+      padding: 24px 32px 18px;
+      border-bottom: 2px solid #111111;
     }
 
     .banner-logo {
       font-family: Georgia, 'Times New Roman', serif;
-      font-size: 24px;
+      font-size: 22px;
       letter-spacing: .32em;
       text-transform: uppercase;
-      color: #F5F0E8;
+      color: #111111;
       margin: 0;
       font-weight: normal;
     }
 
     .banner-sub {
-      font-size: 9px;
-      letter-spacing: .28em;
+      font-size: 8px;
+      letter-spacing: .26em;
       text-transform: uppercase;
-      color: #E8E0D4;
-      opacity: .38;
-      margin-top: 5px;
+      color: #111111;
+      opacity: .35;
+      margin-top: 4px;
     }
 
     .banner-meta {
-      margin-top: 24px;
+      margin-top: 16px;
       display: flex;
       align-items: baseline;
       gap: 20px;
@@ -54,72 +54,74 @@
     }
 
     .banner-ref-lbl {
-      font-size: 9px;
-      letter-spacing: .22em;
+      font-size: 8px;
+      letter-spacing: .20em;
       text-transform: uppercase;
-      color: #E8E0D4;
-      opacity: .42;
+      color: #111111;
+      opacity: .4;
     }
 
     .banner-ref-val {
-      font-size: 14px;
-      letter-spacing: .12em;
-      color: #F5F0E8;
+      font-size: 13px;
+      letter-spacing: .10em;
+      color: #111111;
       font-weight: bold;
     }
 
     .banner-date {
       font-size: 10px;
-      color: #E8E0D4;
-      opacity: .35;
-      letter-spacing: .06em;
+      color: #111111;
+      opacity: .38;
+      letter-spacing: .04em;
     }
 
     /* ══ CORPS PRINCIPAL ══ */
     .main {
-      background: #F5F0E8;
-      padding: 32px 40px 24px;
+      background: #ffffff;
+      padding: 22px 32px 18px;
     }
 
     /* ── Intro ── */
     .intro {
       font-size: 13px;
-      color: #0D1B2A;
-      opacity: .58;
-      line-height: 1.65;
-      margin-bottom: 28px;
-      padding-bottom: 22px;
-      border-bottom: 1px solid rgba(13,27,42,.10);
+      color: #111111;
+      opacity: .55;
+      line-height: 1.6;
+      margin-bottom: 18px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #e0e0e0;
     }
 
     /* ── Blocs ── */
     .block {
-      border: 1px solid #8B1A1A;
-      margin-bottom: 14px;
+      border: 1px solid #e0e0e0;
+      margin-bottom: 10px;
     }
 
     .block-head {
-      background: #8B1A1A;
-      padding: 9px 16px;
+      background: #f5f5f5;
+      padding: 7px 14px;
+      border-bottom: 1px solid #e0e0e0;
     }
 
     .block-head span {
-      font-size: 9px;
-      letter-spacing: .28em;
+      font-size: 8px;
+      letter-spacing: .26em;
       text-transform: uppercase;
-      color: #F5F0E8;
+      color: #111111;
       font-weight: normal;
+      opacity: .55;
     }
 
     .block-body {
-      padding: 4px 0;
+      padding: 2px 0;
     }
 
     .row {
       display: flex;
       align-items: baseline;
-      padding: 9px 16px;
-      border-bottom: 1px solid rgba(13,27,42,.07);
+      padding: 7px 14px;
+      border-bottom: 1px solid #f0f0f0;
     }
 
     .row:last-child {
@@ -127,30 +129,30 @@
     }
 
     .lbl {
-      font-size: 9px;
-      letter-spacing: .18em;
+      font-size: 8px;
+      letter-spacing: .16em;
       text-transform: uppercase;
-      color: #0D1B2A;
-      opacity: .45;
-      width: 38%;
+      color: #111111;
+      opacity: .38;
+      width: 36%;
       flex-shrink: 0;
       padding-right: 12px;
       padding-top: 1px;
     }
 
     .val {
-      font-size: 13px;
-      color: #0D1B2A;
+      font-size: 12px;
+      color: #111111;
       font-weight: 600;
       line-height: 1.4;
     }
 
-    /* ── Bloc tarif (mis en avant) ── */
+    /* ── Bloc tarif ── */
     .price-block {
-      border: 1px solid #8B1A1A;
-      background: rgba(139,26,26,.05);
-      margin-bottom: 14px;
-      padding: 22px 16px;
+      border: 1px solid #111111;
+      background: #f9f9f9;
+      margin-bottom: 10px;
+      padding: 16px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -158,23 +160,23 @@
     }
 
     .price-left .price-lbl {
-      font-size: 9px;
-      letter-spacing: .28em;
+      font-size: 8px;
+      letter-spacing: .26em;
       text-transform: uppercase;
-      color: #8B1A1A;
+      color: #111111;
     }
 
     .price-left .price-note {
       font-size: 10px;
-      color: #0D1B2A;
+      color: #111111;
       opacity: .38;
-      margin-top: 5px;
+      margin-top: 4px;
       line-height: 1.5;
     }
 
     .price-val {
-      font-size: 32px;
-      color: #0D1B2A;
+      font-size: 30px;
+      color: #111111;
       font-weight: 700;
       letter-spacing: -.01em;
       white-space: nowrap;
@@ -182,48 +184,48 @@
 
     /* ── Footer ── */
     .footer {
-      background: #0D1B2A;
-      padding: 24px 40px;
-      border-top: 3px solid #8B1A1A;
+      background: #ffffff;
+      padding: 16px 32px;
+      border-top: 2px solid #111111;
       text-align: center;
     }
 
     .footer-logo {
       font-family: Georgia, 'Times New Roman', serif;
-      font-size: 14px;
-      letter-spacing: .32em;
+      font-size: 13px;
+      letter-spacing: .30em;
       text-transform: uppercase;
-      color: #E8E0D4;
-      opacity: .55;
+      color: #111111;
+      opacity: .45;
     }
 
     .footer-contact {
-      font-size: 11px;
-      color: #E8E0D4;
+      font-size: 10px;
+      color: #111111;
       opacity: .3;
-      margin-top: 8px;
-      letter-spacing: .06em;
+      margin-top: 6px;
+      letter-spacing: .05em;
     }
 
     .footer-legal {
-      font-size: 9px;
-      color: #E8E0D4;
+      font-size: 8px;
+      color: #111111;
       opacity: .18;
-      margin-top: 18px;
+      margin-top: 12px;
       line-height: 1.6;
-      letter-spacing: .04em;
+      letter-spacing: .03em;
     }
 
     /* ── Label d'aperçu ── */
     .preview-label {
       text-align: center;
       font-family: Arial, sans-serif;
-      font-size: 11px;
+      font-size: 10px;
       letter-spacing: .14em;
       text-transform: uppercase;
-      color: #6b5e55;
-      margin-bottom: 20px;
-      opacity: .7;
+      color: #555;
+      margin-bottom: 16px;
+      opacity: .6;
     }
   </style>
 </head>
