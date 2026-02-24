@@ -220,10 +220,19 @@
 /* ── Actions ── */
 .bdc-actions {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 10px;
-  justify-content: center;
   margin-top: 24px;
+}
+
+.bdc-actions-row {
+  display: flex;
+  gap: 10px;
+}
+
+.bdc-actions-row .conf-btn-contact {
+  flex: 1;
+  justify-content: center;
 }
 
 /* ── Pied de page ── */
@@ -253,32 +262,6 @@
 }
 
 /* ── Boutons ── */
-.conf-btn-pdf {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: none;
-  border: 1px solid #8B1A1A;
-  color: #8B1A1A;
-  padding: 13px 22px;
-  font-size: 9px;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background .2s, color .2s;
-}
-
-.conf-btn-pdf:hover {
-  background: #8B1A1A;
-  color: #F5F0E8;
-}
-
-.conf-btn-pdf svg {
-  width: 14px;
-  height: 14px;
-  flex-shrink: 0;
-}
-
 .conf-btn-new {
   background: none;
   border: 1px solid rgba(13,27,42,.22);
@@ -348,7 +331,7 @@
     font-size: 26px;
   }
 
-  .bdc-actions {
+  .bdc-actions-row {
     flex-direction: column;
   }
 

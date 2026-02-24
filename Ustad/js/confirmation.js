@@ -100,30 +100,24 @@ function showConfirmation(data) {
       ${notesBlock}
 
       <div class="bdc-actions">
-        <button id="conf-pdf" class="conf-btn-pdf" type="button">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-            <polyline points="7 10 12 15 17 10"/>
-            <line x1="12" y1="15" x2="12" y2="3"/>
-          </svg>
-          ${fr ? 'Télécharger PDF' : 'Download PDF'}
-        </button>
         <button id="conf-new" class="conf-btn-new" type="button">
           ${fr ? 'Nouvelle réservation' : 'New booking'}
         </button>
-        <a class="conf-btn-contact" href="tel:+33661505454">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.1 10.82a19.79 19.79 0 01-3.07-8.68A2 2 0 012 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92v2z"/>
-          </svg>
-          ${fr ? 'Appeler' : 'Call us'}
-        </a>
-        <a class="conf-btn-contact" href="mailto:ustadcontact@gmail.com">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-            <polyline points="22,6 12,13 2,6"/>
-          </svg>
-          ${fr ? 'Nous écrire' : 'Write to us'}
-        </a>
+        <div class="bdc-actions-row">
+          <a class="conf-btn-contact" href="tel:+33661505454">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.1 10.82a19.79 19.79 0 01-3.07-8.68A2 2 0 012 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92v2z"/>
+            </svg>
+            ${fr ? 'Appeler' : 'Call us'}
+          </a>
+          <a class="conf-btn-contact" href="mailto:ustadcontact@gmail.com">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            ${fr ? 'Nous écrire' : 'Write to us'}
+          </a>
+        </div>
       </div>
     </div>
 
@@ -139,27 +133,4 @@ function showConfirmation(data) {
     if (tabsEl) tabsEl.style.display = '';
   });
 
-  document.getElementById('conf-pdf')?.addEventListener('click', () => {
-    const btn = document.getElementById('conf-pdf');
-    const card = document.getElementById('conf-inner');
-    if (!card) return;
-
-    if (btn) {
-      btn.disabled = true;
-      btn.textContent = fr ? 'Génération…' : 'Generating…';
-    }
-
-    html2pdf().set({
-      margin:     [8, 8, 8, 8],
-      filename:   `Ustad-BDC-${data.ref || 'reservation'}.pdf`,
-      image:      { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true, backgroundColor: null },
-      jsPDF:      { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    }).from(card).save().then(() => {
-      if (btn) {
-        btn.disabled = false;
-        btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;flex-shrink:0"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> ${fr ? 'Télécharger PDF' : 'Download PDF'}`;
-      }
-    });
-  });
 }
