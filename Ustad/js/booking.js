@@ -213,6 +213,29 @@ async function getRouteKm(a, b) {
   return haversineKm(A, B);
 }
 
+/* ════ TARIFS SAISONNIERS — Événements à forte affluence ════
+   Fenêtres = date de l'événement ± 3 jours
+   Format : [label_fr, label_en, 'YYYY-MM-DD', 'YYYY-MM-DD']           */
+const EVENT_WINDOWS = [
+  ['Festival de Cannes 2025',     'Cannes Film Festival 2025',     '2025-05-10', '2025-05-27'],
+  ['Grand Prix de Monaco 2025',   'Monaco Grand Prix 2025',        '2025-05-19', '2025-05-28'],
+  ['Festival de Cannes 2026',     'Cannes Film Festival 2026',     '2026-05-09', '2026-05-26'],
+  ['Grand Prix de Monaco 2026',   'Monaco Grand Prix 2026',        '2026-05-18', '2026-05-27'],
+  ['Festival de Cannes 2027',     'Cannes Film Festival 2027',     '2027-05-08', '2027-05-25'],
+  ['Grand Prix de Monaco 2027',   'Monaco Grand Prix 2027',        '2027-05-17', '2027-05-26'],
+];
+
+function eventSeason(dtStr) {
+  if (!dtStr) return null;
+  const d = new Date(dtStr.slice(0, 10));
+  for (const [labelFr, labelEn, start, end] of EVENT_WINDOWS) {
+    if (d >= new Date(start) && d <= new Date(end)) {
+      return APP_STATE.lang === 'fr' ? labelFr : labelEn;
+    }
+  }
+  return null;
+}
+
 let _calcGen = 0;
 
 function calcPrice() {
@@ -239,6 +262,9 @@ async function _calcPrice() {
     if (new Date().getHours() < 7 || new Date().getHours() >= 20) night = true;
   }
 
+  const dateForEvent = dt || (APP_STATE.tab === 'now' ? new Date().toISOString() : null);
+  const evtLabel = eventSeason(dateForEvent);
+
   const puRaw = (document.getElementById('pickup').value || '').trim();
   const deRaw = (document.getElementById('dest').value || '').trim();
   const AIRPORT_KW = ['aeroport', 'aéroport', 'airport'];
@@ -246,13 +272,18 @@ async function _calcPrice() {
 
   function show(p, detail, est = true) {
     if (gen !== _calcGen) return;
-    if (night) p = Math.round(p * 1.2);
+    if (night)    p = Math.round(p * 1.2);
+    if (evtLabel) p = Math.round(p * 2);
     ok.style.display = 'flex';
     ok.classList.remove('quote');
     hint.style.display = 'none';
     pv.textContent = p + ' €';
     const lbl = est ? (APP_STATE.lang === 'fr' ? 'Estimation · ' : 'Estimate · ') : '';
-    pno.textContent = lbl + detail + (night ? (APP_STATE.lang === 'fr' ? ' · +20% nuit' : ' · +20% night') : '');
+    let suffix = night ? (APP_STATE.lang === 'fr' ? ' · +20% nuit' : ' · +20% night') : '';
+    if (evtLabel) suffix += (APP_STATE.lang === 'fr'
+      ? ` · ×2 Saisonnalité ${evtLabel}`
+      : ` · ×2 Peak season ${evtLabel}`);
+    pno.textContent = lbl + detail + suffix;
   }
 
   // Mise à disposition à l'heure

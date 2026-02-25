@@ -129,6 +129,15 @@
   color: var(--white);
 }
 
+.hero-service {
+  font-size: 11px;
+  color: var(--beige);
+  opacity: .38;
+  letter-spacing: .14em;
+  margin-top: 10px;
+  font-style: italic;
+}
+
 .btn-call {
   display: inline-flex;
   align-items: center;

@@ -375,7 +375,6 @@
 .trip {
   border: 1px solid var(--bord);
   margin-bottom: 2px;
-  overflow: hidden;
 }
 
 .trip-head {

@@ -83,7 +83,7 @@ exports.handler = async (event) => {
           useDefault: false,
           overrides:  [
             { method: 'email', minutes: 60 },
-            { method: 'popup', minutes: 30 },
+            { method: 'popup', minutes: 45 },
           ],
         },
       },
