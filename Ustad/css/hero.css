@@ -129,6 +129,20 @@
   color: var(--white);
 }
 
+.btn-call {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-call svg {
+  flex-shrink: 0;
+  opacity: .75;
+  transition: opacity .25s;
+}
+.btn-call:hover svg {
+  opacity: 1;
+}
+
 .hero-stats {
   display: flex;
   flex-wrap: wrap;
