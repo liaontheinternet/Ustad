@@ -12,8 +12,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500&family=Lexend+Zetta:wght@200;300&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/site.css">
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>
+    /* Écran d'ouverture : seulement à la première visite, jamais si l'animation est réduite */
+    (function () {
+      var seen = false;
+      try { seen = localStorage.getItem('ustad-intro') === '1'; } catch (e) {}
+      if (!seen && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('intro');
+    })();
+  </script>
 </head>
 <body>
+
+<div class="intro-screen" id="intro" aria-hidden="true">
+  <div class="intro-word">USTAD</div>
+  <div class="intro-tag">Savoir-Faire in Motion</div>
+</div>
 
 <header class="nav">
   <a href="#" class="logo">Ustad<small>Savoir-Faire in Motion</small></a>
@@ -197,5 +210,6 @@
 <script src="Ustad/js/autocomplete.js"></script>
 <script src="Ustad/js/form.js"></script>
 <script src="assets/js/app.js"></script>
+<script src="assets/js/intro.js"></script>
 </body>
 </html>

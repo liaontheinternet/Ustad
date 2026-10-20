@@ -162,3 +162,10 @@ em { font-style: italic; color: var(--accent); }
 .modal h3 { font-family: var(--sans); font-size: 12px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; margin: 18px 0 4px; }
 .modal p { margin: 0 0 8px; color: var(--muted); font-size: 14px; }
 .modal-close { float: right; background: none; border: 1px solid var(--line-strong); border-radius: 6px; padding: 4px 12px; font-size: 12px; cursor: pointer; }
+
+/* ── Écran d'ouverture (première visite) ── */
+.intro-screen { display: none; }
+.intro .intro-screen { display: flex; position: fixed; inset: 0; z-index: 100; background: var(--ivory); flex-direction: column; align-items: center; justify-content: center; gap: .9em; font-size: clamp(44px, 11vw, 120px); cursor: pointer; }
+.intro body { overflow: hidden; }
+.intro-word { font-family: 'Lexend Zetta', 'Helvetica Neue', Arial, sans-serif; font-weight: 300; line-height: 1; letter-spacing: .12em; margin-right: -.12em; white-space: nowrap; color: var(--ink); opacity: 0; }
+.intro-tag { font-family: var(--sans); font-size: max(11px, .1em); letter-spacing: .32em; margin-right: -.32em; text-transform: uppercase; color: var(--muted); white-space: nowrap; opacity: 0; }
