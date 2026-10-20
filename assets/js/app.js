@@ -9,7 +9,7 @@
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const t = (fr, en) => (APP_STATE.lang === 'en' ? en : fr);
 
-  const BOOK = { km: null, prices: {}, veh: 'berline', night: false, airport: false };
+  const BOOK = { km: null, A: null, B: null, prices: {}, veh: 'berline', night: false, forfait: null };
   const VEH_LABEL = { berline: { fr: 'Berline', en: 'Sedan' }, van: { fr: 'Van', en: 'Van' } };
   const VEH_MAX = { berline: 3, van: 7 };
 
@@ -63,8 +63,13 @@
     return Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) * 1.35);
   }
 
-  async function routeKm(a, b) {
-    const [A, B] = await Promise.all([geocode(a), geocode(b)]);
+  function distKm(A, B) {
+    const R = 6371, rad = x => x * Math.PI / 180;
+    const a = Math.sin(rad(B.lat - A.lat) / 2) ** 2 + Math.cos(rad(A.lat)) * Math.cos(rad(B.lat)) * Math.sin(rad(B.lon - A.lon) / 2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
+
+  async function routeKm(A, B) {
     if (!A || !B) return null;
     try {
       const ctrl = new AbortController();
@@ -77,11 +82,26 @@
     return crowKm(A, B);
   }
 
-  /* ── Prix (même grille que la v1) ── */
+  /* ── Prix : grille prestige (config.js → PRESTIGE) ── */
+  const isAirport = (P, txt) => (P && distKm(P, PRESTIGE.aeroport) <= PRESTIGE.aeroport.r) || /a[ée]roport|airport/i.test(txt);
+  const zoneOf = P => (P ? PRESTIGE.forfaits.find(z => distKm(P, z) <= z.r) : null);
+  const up5 = x => Math.ceil(x / 5) * 5;
+
+  function findForfait() {
+    const aA = isAirport(BOOK.A, $('#pickup').value), aB = isAirport(BOOK.B, $('#dest').value);
+    if (aA === aB) return null; // aucun ou les deux côtés à l'aéroport
+    return zoneOf(aA ? BOOK.B : BOOK.A);
+  }
+
   function price(veh) {
-    if (BOOK.km == null) return null;
-    let p = Math.max(Math.round(BOOK.km * (TARIFS_KM[veh] || 3)), 20) + (BOOK.airport ? 10 : 0);
-    if (BOOK.night) p = Math.round(p * 1.2);
+    let p = null;
+    if (BOOK.forfait) p = BOOK.forfait[veh];
+    else if (BOOK.km != null) {
+      const f = PRESTIGE.formule[veh];
+      p = Math.max(up5(f.base + BOOK.km * f.km), f.min);
+    }
+    if (p == null) return null;
+    if (BOOK.night) p = up5(p * (1 + PRESTIGE.nuit.majoration));
     return p;
   }
   const fmt = p => (p == null ? t('Sur devis', 'On quote') : p + ' €');
@@ -91,9 +111,11 @@
     $$('.veh').forEach(b => b.classList.toggle('on', b.dataset.veh === BOOK.veh));
     $('#route').innerHTML = `<b>${esc($('#pickup').value)}</b> → <b>${esc($('#dest').value)}</b><br>${dateLabel()}${BOOK.km != null ? ' · ' + BOOK.km + ' km' : ''}`;
     const notes = [];
-    if (BOOK.km == null) notes.push(t("Distance introuvable : l'équipe Ustad vous confirme le prix.", 'Distance not found: the Ustad team will confirm the price.'));
+    const n = PRESTIGE.nuit, pct = Math.round(n.majoration * 100);
+    if (BOOK.forfait) notes.push(t(`Forfait aéroport · ${BOOK.forfait.zone}. Prix tout compris, confirmé par Ustad.`, `Airport flat rate · ${BOOK.forfait.zone}. All-inclusive price, confirmed by Ustad.`));
+    else if (BOOK.km == null) notes.push(t("Distance introuvable : l'équipe Ustad vous confirme le prix.", 'Distance not found: the Ustad team will confirm the price.'));
     else notes.push(t('Prix tout compris, confirmé par Ustad.', 'All-inclusive price, confirmed by Ustad.'));
-    if (BOOK.night) notes.push(t('Tarif de nuit (+20 %) entre 20 h et 7 h.', 'Night rate (+20%) between 8 pm and 7 am.'));
+    if (BOOK.night) notes.push(t(`Majoration de nuit (+${pct} %) entre ${n.debut} h et ${n.fin} h.`, `Night rate (+${pct}%) between ${n.debut}:00 and ${n.fin}:00.`));
     $('#price-note').textContent = notes.join(' ');
   }
 
@@ -125,12 +147,13 @@
 
     const btn = e.submitter || $('#step1 .btn');
     btn.disabled = true; btn.textContent = t('Calcul du trajet…', 'Calculating route…');
-    BOOK.km = await routeKm(pu, de);
+    [BOOK.A, BOOK.B] = await Promise.all([geocode(pu), geocode(de)]);
+    BOOK.km = await routeKm(BOOK.A, BOOK.B);
     btn.disabled = false; btn.textContent = t('Voir les prix', 'See prices');
 
-    const h = d.getHours();
-    BOOK.night = h < 7 || h >= 20;
-    BOOK.airport = /a[ée]roport|airport/i.test(pu);
+    const h = d.getHours(), n = PRESTIGE.nuit;
+    BOOK.night = h >= n.debut || h < n.fin;
+    BOOK.forfait = findForfait();
     BOOK.prices = { berline: price('berline'), van: price('van') };
     renderPrices();
     go(2);
