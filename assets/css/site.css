@@ -39,7 +39,8 @@ em { font-style: italic; color: var(--accent); }
 .hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 60% 40%; }
 .hero-panel { padding: 28px var(--px) 40px; margin-top: -60px; position: relative; }
 .eyebrow { font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
-.hero h1 { font-size: clamp(38px, 9vw, 64px); margin-bottom: 26px; }
+.hero h1 { font-size: clamp(30px, 3.1vw, 46px); line-height: 1.12; margin-bottom: 26px; }
+.hero .l { display: block; }
 .hero-panel > .eyebrow, .hero-panel > h1 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 @media (max-width: 899px) {
@@ -49,12 +50,13 @@ em { font-style: italic; color: var(--accent); }
   .hero-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,0) 35%, rgba(0,0,0,.55) 100%); }
   .hero-cap { position: absolute; z-index: 1; left: var(--px); right: var(--px); bottom: 78px; color: #fff; }
   .hero-cap .eyebrow { color: rgba(255,255,255,.8); margin-bottom: 6px; }
-  .hero-cap p:last-child { margin: 0; font: 400 38px/1.05 var(--serif); }
+  .hero-cap p:last-child { margin: 0; font: 400 32px/1.08 var(--serif); }
   .hero-cap em { color: #fff; }
 }
 
 @media (min-width: 900px) {
   .hero-cap { display: none; }
+  .hero h1 .l { white-space: nowrap; }
   .nav .lang { background: rgba(255,255,255,.9); padding: 4px 10px; border-radius: 999px; }
   .hero-photo { height: auto; order: 2; }
   .hero-panel { order: 1; margin: 0; padding: 120px var(--px) 56px; display: flex; flex-direction: column; justify-content: center; }
