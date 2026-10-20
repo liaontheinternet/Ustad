@@ -55,6 +55,7 @@ em { font-style: italic; color: var(--accent); }
 
 @media (min-width: 900px) {
   .hero-cap { display: none; }
+  .nav .lang { background: rgba(255,255,255,.9); padding: 4px 10px; border-radius: 999px; }
   .hero-photo { height: auto; order: 2; }
   .hero-panel { order: 1; margin: 0; padding: 120px var(--px) 56px; display: flex; flex-direction: column; justify-content: center; }
   .hero-panel > .eyebrow, .hero-panel > h1 { position: static; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal; }
