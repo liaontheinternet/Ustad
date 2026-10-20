@@ -87,7 +87,7 @@
               <img src="assets/img/van.jpg" alt="">
               <span class="veh-txt">
                 <strong data-fr="Van" data-en="Van">Van</strong>
-                <small data-fr="7 passagers · 7 bagages" data-en="7 passengers · 7 bags">7 passagers · 7 bagages</small>
+                <small data-fr="6 passagers · 7 bagages" data-en="6 passengers · 7 bags">6 passagers · 7 bagages</small>
               </span>
               <span class="price" data-price="van">…</span>
             </button>
@@ -110,11 +110,11 @@
           </div>
           <div class="row">
             <div class="field"><label for="pax" data-fr="Passagers" data-en="Passengers">Passagers</label>
-              <select id="pax"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option></select>
+              <select id="pax"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option value="7" data-fr="7 ou plus" data-en="7 or more">7 ou plus</option></select>
             </div>
             <div class="field"><label for="flight" data-fr="N° de vol (facultatif)" data-en="Flight no. (optional)">N° de vol (facultatif)</label><input id="flight" type="text" placeholder="AF7200"></div>
           </div>
-          <div class="field"><label for="notes" data-fr="Message (facultatif)" data-en="Message (optional)">Message (facultatif)</label><input id="notes" type="text" data-fr-placeholder="Siège enfant, arrêt en route…" data-en-placeholder="Child seat, stop on the way…" placeholder="Siège enfant, arrêt en route…"></div>
+          <div class="field"><label for="notes" data-fr="Demandes spécifiques (facultatif)" data-en="Special requests (optional)">Demandes spécifiques (facultatif)</label><textarea id="notes" rows="3" maxlength="600" data-fr-placeholder="Siège enfant ou rehausseur, bagages hors format (golf, ski), arrêt en route, accueil avec pancarte nominative…" data-en-placeholder="Child or booster seat, oversized luggage (golf, ski), stop on the way, name sign at arrival…" placeholder="Siège enfant ou rehausseur, bagages hors format (golf, ski), arrêt en route, accueil avec pancarte nominative…"></textarea></div>
           <label class="check"><input type="checkbox" id="rgpd"> <span data-fr="J'accepte que mes données servent à traiter ma réservation (<a href='#privacy' data-modal='privacy'>confidentialité</a>)." data-en="I agree my data is used to process my booking (<a href='#privacy' data-modal='privacy'>privacy</a>).">J'accepte que mes données servent à traiter ma réservation (<a href="#privacy" data-modal="privacy">confidentialité</a>).</span></label>
           <p class="err" id="err3" role="alert"></p>
           <button class="btn" type="submit" id="submit" data-fr="Confirmer la réservation" data-en="Confirm booking">Confirmer la réservation</button>

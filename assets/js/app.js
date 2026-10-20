@@ -11,7 +11,7 @@
 
   const BOOK = { km: null, A: null, B: null, prices: {}, veh: 'berline', night: false, forfait: null };
   const VEH_LABEL = { berline: { fr: 'Berline', en: 'Sedan' }, van: { fr: 'Van', en: 'Van' } };
-  const VEH_MAX = { berline: 3, van: 7 };
+  const VEH_MAX = { berline: 3, van: 6 };
 
   /* ── Langue ── */
   function setLang(l) {
@@ -183,12 +183,17 @@
     bad('pax', !paxOk);
 
     if (Object.values(checks).includes(false)) { err.textContent = t('Vérifiez les champs en rouge.', 'Check the fields in red.'); return; }
-    if (!paxOk) { err.textContent = t('Au-delà de 3 passagers, choisissez le Van.', 'For more than 3 passengers, choose the Van.'); return; }
+    if (!paxOk) {
+      err.textContent = pax > VEH_MAX.van
+        ? t('Au-delà de 6 passagers, il faut deux véhicules : écrivez-nous sur WhatsApp au +33 6 61 50 54 54.', 'For more than 6 passengers, two vehicles are needed: message us on WhatsApp at +33 6 61 50 54 54.')
+        : t('Au-delà de 3 passagers, choisissez le Van.', 'For more than 3 passengers, choose the Van.');
+      return;
+    }
     if (!rgpd) { err.textContent = t('Merci d’accepter l’utilisation de vos données pour la réservation.', 'Please accept the use of your data for the booking.'); return; }
     err.textContent = '';
     send();
   });
-  ['fname', 'lname', 'phone', 'email', 'pax'].forEach(id => $('#' + id).addEventListener('input', () => bad(id, false)));
+  ['fname', 'lname', 'phone', 'email', 'pax'].forEach(id => $('#' + id).addEventListener('input', () => { bad(id, false); $('#err3').textContent = ''; }));
   $('#rgpd').addEventListener('change', () => { $('.check').classList.remove('bad'); $('#err3').textContent = ''; });
 
   function send() {
@@ -199,12 +204,12 @@
     const prix = fmt(BOOK.prices[BOOK.veh]);
     const d = when();
     const dateFr = d.toLocaleString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-    const notes = [v('flight') && 'Vol : ' + v('flight'), v('notes')].filter(Boolean).join(' · ');
+    const notes = [v('flight') && 'Vol : ' + v('flight'), v('notes')].filter(Boolean).join('\n');
     const data = {
       ref, now, fname: v('fname'), lname: v('lname'), email: v('email'), phone: v('phone'),
       type: 'Trajet planifié', dateLabel: dateFr, pickup: v('pickup'), dest: v('dest'),
       vehLabel, pax: v('pax'), cabin: 0, large: 0, baby: false, partner: false,
-      notes: esc(notes), prix,
+      notes: esc(notes).replace(/\n/g, '<br>'), prix,
     };
 
     const btn = $('#submit');
@@ -220,7 +225,7 @@
 
     fetch('/.netlify/functions/book', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...data, bdt: d.toISOString(), tab: 'planned' }),
+      body: JSON.stringify({ ...data, notes, bdt: d.toISOString(), tab: 'planned' }),
     }).catch(() => {});
 
     mail.then(ok => {
@@ -230,7 +235,7 @@
       $('#conf-msg').textContent = ok
         ? t(`Votre demande (${vehLabel}, ${prix}) est bien reçue. Nous vous confirmons le trajet par téléphone ou e-mail très vite.`, `Your request (${VEH_LABEL[BOOK.veh].en}, ${prix}) has been received. We will confirm your ride by phone or e-mail shortly.`)
         : t('L’envoi automatique n’a pas abouti. Envoyez-nous votre demande sur WhatsApp, elle est déjà rédigée.', 'Automatic sending failed. Send us your request on WhatsApp, it is already written.');
-      const wa = `Bonjour Ustad, réservation ${ref} : ${data.pickup} → ${data.dest}, ${dateFr}, ${vehLabel}, ${data.pax} passager(s), ${prix}. ${data.fname} ${data.lname}, ${data.phone}`;
+      const wa = `Bonjour Ustad, réservation ${ref} : ${data.pickup} → ${data.dest}, ${dateFr}, ${vehLabel}, ${data.pax} passager(s), ${prix}. ${data.fname} ${data.lname}, ${data.phone}${notes ? '. Demandes : ' + notes.replace(/\n/g, ' / ') : ''}`;
       $('#conf-wa').href = 'https://wa.me/' + CFG.whatsapp_numero + '?text=' + encodeURIComponent(wa);
       go(4);
     });
