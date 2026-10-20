@@ -17,7 +17,8 @@
     (function () {
       var seen = false;
       try { seen = localStorage.getItem('ustad-intro') === '1'; } catch (e) {}
-      if (!seen && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('intro');
+      var force = /[?&]intro\b/.test(location.search); // ustad.pro/?intro la rejoue à volonté
+      if (force || (!seen && !matchMedia('(prefers-reduced-motion: reduce)').matches)) document.documentElement.classList.add('intro');
     })();
   </script>
 </head>
