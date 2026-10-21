@@ -236,7 +236,7 @@
   function send() {
     const v = id => $('#' + id).value.trim();
     const ref = 'UST-' + Math.random().toString(36).slice(2, 8).toUpperCase();
-    const now = new Date().toLocaleString('fr-FR');
+    const now = new Date().toLocaleString('fr-FR', { dateStyle: 'long', timeStyle: 'short' });
     const vehLabel = VEH_LABEL[BOOK.veh].fr;
     const prix = fmt(BOOK.prices[BOOK.veh]);
     const d = when();
@@ -245,38 +245,67 @@
     const data = {
       ref, now, fname: v('fname'), lname: v('lname'), email: v('email'), phone: v('phone'),
       type: 'Trajet planifié', dateLabel: dateFr, pickup: v('pickup'), dest: v('dest'),
-      vehLabel, pax: v('pax'), cabin: 0, large: 0, baby: false, partner: false,
-      notes: esc(notes).replace(/\n/g, '<br>'), prix,
+      vehLabel, pax: v('pax'), flight: v('flight'), requests: v('notes'), prix,
+      priceNote: $('#price-note').textContent,
     };
 
     const btn = $('#submit');
     btn.disabled = true; btn.textContent = t('Envoi…', 'Sending…');
 
-    const html = typeof genEmailHtml === 'function' ? genEmailHtml(data) : JSON.stringify(data);
+    const html = ustadEmailHtml(data);
     const mail = window.emailjs
       ? emailjs.send(CFG.emailjs_service_id, CFG.emailjs_template_std, {
           from_name: data.fname + ' ' + data.lname, from_email: data.email, reply_to: data.email,
           to_name: 'Équipe Ustad', message: html,
-        }).then(() => true, e => { console.error('EmailJS', e); return false; })
-      : Promise.resolve(false);
+        }, { publicKey: CFG.emailjs_public_key }).then(() => ({ ok: true }), err => {
+          console.error('EmailJS', err);
+          return { ok: false, code: (err && (err.status || err.text)) || 'réseau' };
+        })
+      : Promise.resolve({ ok: false, code: 'script' });
 
     fetch('/.netlify/functions/book', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...data, notes, bdt: d.toISOString(), tab: 'planned' }),
     }).catch(() => {});
 
-    mail.then(ok => {
+    mail.then(res => {
       btn.disabled = false; btn.textContent = t('Confirmer la réservation', 'Confirm booking');
-      $('#conf-title').textContent = t(`Merci ${data.fname}`, `Thank you ${data.fname}`);
-      $('#conf-ref').textContent = t('Référence ', 'Reference ') + ref;
-      $('#conf-msg').textContent = ok
-        ? t(`Votre demande (${vehLabel}, ${prix}) est bien reçue. Nous vous confirmons le trajet par téléphone ou e-mail très vite.`, `Your request (${VEH_LABEL[BOOK.veh].en}, ${prix}) has been received. We will confirm your ride by phone or e-mail shortly.`)
-        : t('L’envoi automatique n’a pas abouti. Envoyez-nous votre demande sur WhatsApp, elle est déjà rédigée.', 'Automatic sending failed. Send us your request on WhatsApp, it is already written.');
       const wa = `Bonjour Ustad, réservation ${ref} : ${data.pickup} → ${data.dest}, ${dateFr}, ${vehLabel}, ${data.pax} passager(s), ${prix}. ${data.fname} ${data.lname}, ${data.phone}${notes ? '. Demandes : ' + notes.replace(/\n/g, ' / ') : ''}`;
-      $('#conf-wa').href = 'https://wa.me/' + CFG.whatsapp_numero + '?text=' + encodeURIComponent(wa);
+      showConfirmation(data, res, 'https://wa.me/' + CFG.whatsapp_numero + '?text=' + encodeURIComponent(wa));
       go(4);
     });
   }
+
+  function showConfirmation(data, res, waLink) {
+    const en = APP_STATE.lang === 'en';
+    $('#conf-eyebrow').textContent = t('Réservation ', 'Booking ') + data.ref;
+    $('#conf-title').textContent = t(`Merci ${data.fname}`, `Thank you ${data.fname}`);
+    const st = $('#conf-status');
+    st.classList.toggle('warn', !res.ok);
+    st.textContent = res.ok
+      ? t('Votre demande est bien transmise à l’équipe Ustad. Nous vous rappelons très vite pour confirmer le trajet.', 'Your request has been sent to the Ustad team. We will call you back shortly to confirm your ride.')
+      : t(`Votre demande est enregistrée, mais l’e-mail n’a pas pu partir (code ${res.code}). Envoyez-la sur WhatsApp en un clic, elle est déjà rédigée.`, `Your request is saved, but the e-mail could not be sent (code ${res.code}). Send it on WhatsApp in one tap, it is already written.`);
+    $('#conf-veh').textContent = `${t(VEH_LABEL[BOOK.veh].fr, VEH_LABEL[BOOK.veh].en)} · ${data.pax} ${t(+data.pax > 1 ? 'passagers' : 'passager', +data.pax > 1 ? 'passengers' : 'passenger')}`;
+    $('#conf-date').textContent = when().toLocaleString(en ? 'en-GB' : 'fr-FR', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
+    $('#conf-price').textContent = data.prix;
+    const rows = [
+      [t('Départ', 'Pick-up'), data.pickup], [t('Arrivée', 'Drop-off'), data.dest],
+      [t('N° de vol', 'Flight'), data.flight], [t('Demandes', 'Requests'), data.requests],
+      [t('Contact', 'Contact'), `${data.fname} ${data.lname}\n${data.phone}\n${data.email}`],
+    ].filter(r => r[1]);
+    $('#conf-list').innerHTML = rows.map(([k, val]) => `<dt>${esc(k)}</dt><dd>${esc(val).replace(/\n/g, '<br>')}</dd>`).join('');
+    const wa = $('#conf-wa');
+    wa.href = waLink;
+    wa.textContent = res.ok ? t('Une question ? WhatsApp', 'Questions? WhatsApp') : t('Envoyer sur WhatsApp', 'Send on WhatsApp');
+    wa.classList.toggle('btn-out', res.ok);
+  }
+
+  $('#conf-new').addEventListener('click', () => {
+    ['fname', 'lname', 'phone', 'email', 'flight', 'notes'].forEach(id => { $('#' + id).value = ''; });
+    $('#rgpd').checked = false;
+    history.replaceState(null, '');
+    show(1);
+  });
 
   /* ── Modales ── */
   document.addEventListener('click', e => {

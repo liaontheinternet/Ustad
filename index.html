@@ -144,11 +144,18 @@
 
         <!-- Étape 4 : confirmation -->
         <div class="step" id="step4" aria-live="polite">
-          <p class="eyebrow" data-fr="Demande envoyée" data-en="Request sent">Demande envoyée</p>
+          <p class="eyebrow" id="conf-eyebrow"></p>
           <h2 id="conf-title"></h2>
-          <p class="conf-ref" id="conf-ref"></p>
-          <p class="note" id="conf-msg"></p>
-          <a class="btn btn-out" id="conf-wa" target="_blank" rel="noopener" data-fr="Une question ? WhatsApp" data-en="Questions? WhatsApp">Une question ? WhatsApp</a>
+          <p class="conf-status" id="conf-status"></p>
+          <div class="conf-sum">
+            <div class="conf-head">
+              <div><span class="conf-veh" id="conf-veh"></span><span class="conf-date" id="conf-date"></span></div>
+              <span class="conf-price" id="conf-price"></span>
+            </div>
+            <dl class="conf-list" id="conf-list"></dl>
+          </div>
+          <a class="btn" id="conf-wa" target="_blank" rel="noopener"></a>
+          <button type="button" class="back conf-new" id="conf-new" data-fr="Faire une autre réservation" data-en="Make another booking">Faire une autre réservation</button>
         </div>
       </div>
     </div>
@@ -217,7 +224,7 @@
 
 <script src="Ustad/js/config.js"></script>
 <script src="Ustad/js/autocomplete.js"></script>
-<script src="Ustad/js/form.js"></script>
+<script src="assets/js/email.js"></script>
 <script src="assets/js/app.js"></script>
 <script src="assets/js/intro.js"></script>
 </body>
