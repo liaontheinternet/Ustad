@@ -63,36 +63,54 @@ const APP_STATE = {
 };
 
 /* ════════════════════════════════════════════
-   GRILLE PRESTIGE (site v2, index.html)
-   Référence marché Côte d'Azur 2026 : chauffeurs Mercedes Classe E / Classe V
+   GRILLE TARIFAIRE USTAD (site v2, index.html)
+   Source : grille « Tarifs transferts depuis Nice » fournie par Ustad.
    Toutes les valeurs sont modifiables ici, sans toucher au reste du code.
 ════════════════════════════════════════════ */
 const PRESTIGE = {
-  // Trajets hors forfait : prise en charge + prix au km, avec un minimum
+  // Trajets hors grille : prise en charge + prix au km, avec un minimum
   formule: {
-    berline: { base: 35, km: 3.0, min: 70 },
-    van:     { base: 45, km: 3.6, min: 90 },
+    berline:  { base: 35, km: 3.0, min: 70 },
+    van:      { base: 45, km: 3.6, min: 90 },
+    classe_s: { base: 50, km: 4.5, min: 100 },
   },
 
-  // Majoration de nuit (heure de prise en charge)
-  nuit: { debut: 22, fin: 6, majoration: 0.20 },
+  // Suppléments (s'ajoutent à tous les trajets)
+  supplements: {
+    priseEnCharge: 10,              // départ depuis l'aéroport, le port ou la gare
+    nuit: 10, nuitAvant: 7, nuitApres: 20, // départ avant 7 h ou à partir de 20 h
+  },
 
-  // Aéroport Nice Côte d'Azur (rayon en km)
+  // Tours privés (mise à disposition), prix à l'heure
+  heure: { berline: 100, van: 110, classe_s: 150 },
+
+  // Lieux de prise en charge donnant droit au supplément (rayon en km)
   aeroport: { lat: 43.6584, lon: 7.2159, r: 2.5 },
+  gare:     { lat: 43.7046, lon: 7.2620, r: 0.4 },
+  port:     { lat: 43.6960, lon: 7.2855, r: 0.6 },
 
-  // Forfaits aéroport <-> zone, dans les deux sens.
-  // L'ordre compte : la première zone qui contient l'adresse l'emporte.
+  // Nice (ville) : point de départ de la grille
+  nice: [[43.7009, 7.2683, 4.5]],
+
+  // Prix fixes depuis Nice, valables dans les deux sens.
+  // pts = cercles [latitude, longitude, rayon km]. L'ordre compte : la première zone trouvée l'emporte.
   forfaits: [
-    { zone: 'Villefranche · Beaulieu · Cap-Ferrat', lat: 43.700, lon: 7.325, r: 2.8, berline: 100, van: 120 },
-    { zone: 'Èze',                                  lat: 43.728, lon: 7.362, r: 2.5, berline: 110, van: 130 },
-    { zone: 'Monaco',                               lat: 43.738, lon: 7.425, r: 3,   berline: 130, van: 150 },
-    { zone: 'Menton',                               lat: 43.777, lon: 7.505, r: 3,   berline: 150, van: 180 },
-    { zone: 'Antibes · Juan-les-Pins',              lat: 43.577, lon: 7.115, r: 4,   berline: 100, van: 120 },
-    { zone: 'Cannes',                               lat: 43.553, lon: 7.017, r: 4,   berline: 120, van: 140 },
-    { zone: 'Sophia Antipolis',                     lat: 43.616, lon: 7.055, r: 3,   berline: 100, van: 120 },
-    { zone: 'Saint-Paul-de-Vence · Vence',          lat: 43.705, lon: 7.115, r: 4,   berline: 100, van: 120 },
-    { zone: 'Grasse',                               lat: 43.659, lon: 6.924, r: 4,   berline: 130, van: 160 },
-    { zone: 'Saint-Tropez · Ramatuelle',            lat: 43.245, lon: 6.630, r: 7,   berline: 380, van: 450 },
-    { zone: 'Nice',                                 lat: 43.701, lon: 7.268, r: 5,   berline: 80,  van: 100 },
+    { zone: 'Aéroport',                   special: 'aeroport',                                        berline: 45,  van: 70,  classe_s: 100 },
+    { zone: 'Gare Nice Ville',            special: 'gare',                                            berline: 30,  van: 50,  classe_s: 80 },
+    { zone: 'Villefranche',               pts: [[43.7040, 7.3115, 1.3]],                              berline: 60,  van: 80,  classe_s: 100 },
+    { zone: 'Beaulieu / Cap-Ferrat',      pts: [[43.7075, 7.3325, 1.0], [43.6860, 7.3310, 1.6]],      berline: 70,  van: 90,  classe_s: 130 },
+    { zone: 'Èze',                        pts: [[43.7255, 7.3615, 1.8]],                              berline: 90,  van: 110, classe_s: 150 },
+    { zone: 'Monaco',                     pts: [[43.7384, 7.4246, 2.5]],                              berline: 110, van: 130, classe_s: 180 },
+    { zone: 'Menton',                     pts: [[43.7765, 7.5048, 3.0]],                              berline: 130, van: 150, classe_s: 200 },
+    { zone: 'Vintimille',                 pts: [[43.7906, 7.6072, 3.0]],                              berline: 180, van: 230, classe_s: 280 },
+    { zone: 'San Remo',                   pts: [[43.8159, 7.7761, 4.0]],                              berline: 230, van: 250, classe_s: 300 },
+    { zone: 'Saint-Paul-de-Vence',        pts: [[43.6966, 7.1222, 1.8]],                              berline: 90,  van: 110, classe_s: 130 },
+    { zone: 'Antibes / Sophia Antipolis', pts: [[43.5770, 7.1180, 3.5], [43.6163, 7.0552, 3.0]],      berline: 90,  van: 110, classe_s: 150 },
+    { zone: 'Cannes',                     pts: [[43.5528, 7.0174, 4.0]],                              berline: 110, van: 130, classe_s: 180 },
+    { zone: 'Grasse',                     pts: [[43.6589, 6.9237, 4.0]],                              berline: 130, van: 150, classe_s: 200 },
+    { zone: 'Fréjus',                     pts: [[43.4300, 6.7500, 5.0]],                              berline: 300, van: 350, classe_s: 400 },
+    { zone: 'Saint-Tropez',               pts: [[43.2650, 6.6450, 4.0]],                              berline: 400, van: 500, classe_s: 700 },
+    { zone: 'Marseille',                  pts: [[43.2965, 5.3698, 9.0]],                              berline: 550, van: 650, classe_s: 800 },
+    { zone: 'Isola',                      pts: [[44.1866, 7.0510, 2.0], [44.1880, 7.1580, 3.0]],      berline: 280, van: 350, classe_s: 400 },
   ],
 };

@@ -10,8 +10,8 @@
   const t = (fr, en) => (APP_STATE.lang === 'en' ? en : fr);
 
   const BOOK = { km: null, A: null, B: null, prices: {}, veh: 'berline', night: false, forfait: null };
-  const VEH_LABEL = { berline: { fr: 'Berline', en: 'Sedan' }, van: { fr: 'Van', en: 'Van' } };
-  const VEH_MAX = { berline: 3, van: 6 };
+  const VEH_LABEL = { berline: { fr: 'Berline', en: 'Sedan' }, van: { fr: 'Van', en: 'Van' }, classe_s: { fr: 'Classe S', en: 'S-Class' } };
+  const VEH_MAX = { berline: 3, van: 6, classe_s: 3 };
 
   /* ── Langue ── */
   function setLang(l) {
@@ -26,11 +26,28 @@
   }
   $$('.lang button').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
 
-  /* ── Étapes ── */
-  function go(n) {
+  /* ── Étapes, reliées à l'historique du navigateur ──
+     Le bouton « retour » du navigateur (ou le glissement sur iPhone/iPad)
+     revient à l'étape précédente au lieu de quitter le site. */
+  let cur = 1;
+  function show(n) {
+    cur = n;
     $$('.step').forEach(s => s.classList.toggle('on', s.id === 'step' + n));
     if (window.innerWidth < 900) $('#book').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
+  function go(n) {
+    n = +n;
+    if (n === cur) return;
+    if (n < cur && history.state && history.state.ustadStep === cur) { history.back(); return; }
+    if (n === 4) history.replaceState({ ustadStep: 4 }, '');     // pas de retour vers un formulaire déjà envoyé
+    else if (n > cur) history.pushState({ ustadStep: n }, '');
+    show(n);
+  }
+  window.addEventListener('popstate', e => {
+    const n = (e.state && e.state.ustadStep) || 1;
+    if (cur === 4 && n > 1) { history.go(-(n - 1)); return; } // après l'envoi, retour direct au début
+    show(cur === 4 ? 1 : n);
+  });
   $$('[data-go]').forEach(b => b.addEventListener('click', () => go(b.dataset.go)));
 
   function bad(id, on) { const f = document.getElementById(id)?.closest('.field'); if (f) f.classList.toggle('bad', on); }
@@ -82,15 +99,31 @@
     return crowKm(A, B);
   }
 
-  /* ── Prix : grille prestige (config.js → PRESTIGE) ── */
-  const isAirport = (P, txt) => (P && distKm(P, PRESTIGE.aeroport) <= PRESTIGE.aeroport.r) || /a[ée]roport|airport/i.test(txt);
-  const zoneOf = P => (P ? PRESTIGE.forfaits.find(z => distKm(P, z) <= z.r) : null);
+  /* ── Prix : grille Ustad (config.js → PRESTIGE) ── */
+  const VEHS = ['berline', 'van', 'classe_s'];
+  const inPts = (P, pts) => !!P && pts.some(([lat, lon, r]) => distKm(P, { lat, lon }) <= r);
+  const near = (P, c) => !!P && distKm(P, c) <= c.r;
   const up5 = x => Math.ceil(x / 5) * 5;
 
-  function findForfait() {
-    const aA = isAirport(BOOK.A, $('#pickup').value), aB = isAirport(BOOK.B, $('#dest').value);
-    if (aA === aB) return null; // aucun ou les deux côtés à l'aéroport
-    return zoneOf(aA ? BOOK.B : BOOK.A);
+  // Classe un lieu : 'aeroport', 'gare', une zone de la grille, 'nice' ou null
+  function classify(P, txt) {
+    if (near(P, PRESTIGE.aeroport) || /a[ée]roport|airport/i.test(txt)) return 'aeroport';
+    if (near(P, PRESTIGE.gare) || (/\bgare\b/i.test(txt) && /nice/i.test(txt))) return 'gare';
+    const z = PRESTIGE.forfaits.find(f => f.pts && inPts(P, f.pts));
+    if (z) return z;
+    if (inPts(P, PRESTIGE.nice)) return 'nice';
+    return null;
+  }
+  const special = k => PRESTIGE.forfaits.find(f => f.special === k);
+
+  function findForfait(a, b) {
+    const niceSide = x => x === 'nice' || x === 'gare' || x === 'aeroport';
+    const pair = (x, y) => (a === x && b === y) || (a === y && b === x);
+    if (pair('aeroport', 'nice') || pair('aeroport', 'gare')) return special('aeroport');
+    if (pair('gare', 'nice')) return special('gare');
+    if (niceSide(a) && b && typeof b === 'object') return b;
+    if (niceSide(b) && a && typeof a === 'object') return a;
+    return null;
   }
 
   function price(veh) {
@@ -101,21 +134,23 @@
       p = Math.max(up5(f.base + BOOK.km * f.km), f.min);
     }
     if (p == null) return null;
-    if (BOOK.night) p = up5(p * (1 + PRESTIGE.nuit.majoration));
+    const sup = PRESTIGE.supplements;
+    if (BOOK.pickupSup) p += sup.priseEnCharge;
+    if (BOOK.night) p += sup.nuit;
     return p;
   }
   const fmt = p => (p == null ? t('Sur devis', 'On quote') : p + ' €');
 
   function renderPrices() {
-    ['berline', 'van'].forEach(v => { $(`[data-price="${v}"]`).textContent = fmt(BOOK.prices[v]); });
+    VEHS.forEach(v => { const el = $(`[data-price="${v}"]`); if (el) el.textContent = fmt(BOOK.prices[v]); });
     $$('.veh').forEach(b => b.classList.toggle('on', b.dataset.veh === BOOK.veh));
     $('#route').innerHTML = `<b>${esc($('#pickup').value)}</b> → <b>${esc($('#dest').value)}</b><br>${dateLabel()}${BOOK.km != null ? ' · ' + BOOK.km + ' km' : ''}`;
-    const notes = [];
-    const n = PRESTIGE.nuit, pct = Math.round(n.majoration * 100);
-    if (BOOK.forfait) notes.push(t(`Forfait aéroport · ${BOOK.forfait.zone}. Prix tout compris, confirmé par Ustad.`, `Airport flat rate · ${BOOK.forfait.zone}. All-inclusive price, confirmed by Ustad.`));
+    const sup = PRESTIGE.supplements, notes = [];
+    if (BOOK.forfait) notes.push(t(`Prix fixe Nice ↔ ${BOOK.forfait.zone}.`, `Fixed price Nice ↔ ${BOOK.forfait.zone}.`));
     else if (BOOK.km == null) notes.push(t("Distance introuvable : l'équipe Ustad vous confirme le prix.", 'Distance not found: the Ustad team will confirm the price.'));
-    else notes.push(t('Prix tout compris, confirmé par Ustad.', 'All-inclusive price, confirmed by Ustad.'));
-    if (BOOK.night) notes.push(t(`Majoration de nuit (+${pct} %) entre ${n.debut} h et ${n.fin} h.`, `Night rate (+${pct}%) between ${n.debut}:00 and ${n.fin}:00.`));
+    if (BOOK.pickupSup) notes.push(t(`Prise en charge aéroport, port ou gare : +${sup.priseEnCharge} € inclus.`, `Airport, port or station pick-up: +€${sup.priseEnCharge} included.`));
+    if (BOOK.night) notes.push(t(`Tarif de nuit (avant ${sup.nuitAvant} h et après ${sup.nuitApres} h) : +${sup.nuit} € inclus.`, `Night rate (before ${sup.nuitAvant}:00 and after ${sup.nuitApres}:00): +€${sup.nuit} included.`));
+    if (BOOK.km != null || BOOK.forfait) notes.push(t('Prix tout compris, confirmé par Ustad.', 'All-inclusive price, confirmed by Ustad.'));
     $('#price-note').textContent = notes.join(' ');
   }
 
@@ -151,10 +186,12 @@
     BOOK.km = await routeKm(BOOK.A, BOOK.B);
     btn.disabled = false; btn.textContent = t('Voir les prix', 'See prices');
 
-    const h = d.getHours(), n = PRESTIGE.nuit;
-    BOOK.night = h >= n.debut || h < n.fin;
-    BOOK.forfait = findForfait();
-    BOOK.prices = { berline: price('berline'), van: price('van') };
+    const h = d.getHours(), sup = PRESTIGE.supplements;
+    BOOK.night = h < sup.nuitAvant || h >= sup.nuitApres;
+    const ca = classify(BOOK.A, pu), cb = classify(BOOK.B, de);
+    BOOK.forfait = findForfait(ca, cb);
+    BOOK.pickupSup = ca === 'aeroport' || ca === 'gare' || near(BOOK.A, PRESTIGE.port) || /port (de nice|lympia)|port lympia/i.test(pu);
+    BOOK.prices = { berline: price('berline'), van: price('van'), classe_s: price('classe_s') };
     renderPrices();
     go(2);
   });
@@ -199,7 +236,7 @@
   function send() {
     const v = id => $('#' + id).value.trim();
     const ref = 'UST-' + Math.random().toString(36).slice(2, 8).toUpperCase();
-    const now = new Date().toLocaleString('fr-FR');
+    const now = new Date().toLocaleString('fr-FR', { dateStyle: 'long', timeStyle: 'short' });
     const vehLabel = VEH_LABEL[BOOK.veh].fr;
     const prix = fmt(BOOK.prices[BOOK.veh]);
     const d = when();
@@ -208,38 +245,67 @@
     const data = {
       ref, now, fname: v('fname'), lname: v('lname'), email: v('email'), phone: v('phone'),
       type: 'Trajet planifié', dateLabel: dateFr, pickup: v('pickup'), dest: v('dest'),
-      vehLabel, pax: v('pax'), cabin: 0, large: 0, baby: false, partner: false,
-      notes: esc(notes).replace(/\n/g, '<br>'), prix,
+      vehLabel, pax: v('pax'), flight: v('flight'), requests: v('notes'), prix,
+      priceNote: $('#price-note').textContent,
     };
 
     const btn = $('#submit');
     btn.disabled = true; btn.textContent = t('Envoi…', 'Sending…');
 
-    const html = typeof genEmailHtml === 'function' ? genEmailHtml(data) : JSON.stringify(data);
+    const html = ustadEmailHtml(data);
     const mail = window.emailjs
       ? emailjs.send(CFG.emailjs_service_id, CFG.emailjs_template_std, {
           from_name: data.fname + ' ' + data.lname, from_email: data.email, reply_to: data.email,
           to_name: 'Équipe Ustad', message: html,
-        }).then(() => true, e => { console.error('EmailJS', e); return false; })
-      : Promise.resolve(false);
+        }, { publicKey: CFG.emailjs_public_key }).then(() => ({ ok: true }), err => {
+          console.error('EmailJS', err);
+          return { ok: false, code: (err && (err.status || err.text)) || 'réseau' };
+        })
+      : Promise.resolve({ ok: false, code: 'script' });
 
     fetch('/.netlify/functions/book', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...data, notes, bdt: d.toISOString(), tab: 'planned' }),
     }).catch(() => {});
 
-    mail.then(ok => {
+    mail.then(res => {
       btn.disabled = false; btn.textContent = t('Confirmer la réservation', 'Confirm booking');
-      $('#conf-title').textContent = t(`Merci ${data.fname}`, `Thank you ${data.fname}`);
-      $('#conf-ref').textContent = t('Référence ', 'Reference ') + ref;
-      $('#conf-msg').textContent = ok
-        ? t(`Votre demande (${vehLabel}, ${prix}) est bien reçue. Nous vous confirmons le trajet par téléphone ou e-mail très vite.`, `Your request (${VEH_LABEL[BOOK.veh].en}, ${prix}) has been received. We will confirm your ride by phone or e-mail shortly.`)
-        : t('L’envoi automatique n’a pas abouti. Envoyez-nous votre demande sur WhatsApp, elle est déjà rédigée.', 'Automatic sending failed. Send us your request on WhatsApp, it is already written.');
       const wa = `Bonjour Ustad, réservation ${ref} : ${data.pickup} → ${data.dest}, ${dateFr}, ${vehLabel}, ${data.pax} passager(s), ${prix}. ${data.fname} ${data.lname}, ${data.phone}${notes ? '. Demandes : ' + notes.replace(/\n/g, ' / ') : ''}`;
-      $('#conf-wa').href = 'https://wa.me/' + CFG.whatsapp_numero + '?text=' + encodeURIComponent(wa);
+      showConfirmation(data, res, 'https://wa.me/' + CFG.whatsapp_numero + '?text=' + encodeURIComponent(wa));
       go(4);
     });
   }
+
+  function showConfirmation(data, res, waLink) {
+    const en = APP_STATE.lang === 'en';
+    $('#conf-eyebrow').textContent = t('Réservation ', 'Booking ') + data.ref;
+    $('#conf-title').textContent = t(`Merci ${data.fname}`, `Thank you ${data.fname}`);
+    const st = $('#conf-status');
+    st.classList.toggle('warn', !res.ok);
+    st.textContent = res.ok
+      ? t('Votre demande est bien transmise à l’équipe Ustad. Nous vous rappelons très vite pour confirmer le trajet.', 'Your request has been sent to the Ustad team. We will call you back shortly to confirm your ride.')
+      : t(`Votre demande est enregistrée, mais l’e-mail n’a pas pu partir (code ${res.code}). Envoyez-la sur WhatsApp en un clic, elle est déjà rédigée.`, `Your request is saved, but the e-mail could not be sent (code ${res.code}). Send it on WhatsApp in one tap, it is already written.`);
+    $('#conf-veh').textContent = `${t(VEH_LABEL[BOOK.veh].fr, VEH_LABEL[BOOK.veh].en)} · ${data.pax} ${t(+data.pax > 1 ? 'passagers' : 'passager', +data.pax > 1 ? 'passengers' : 'passenger')}`;
+    $('#conf-date').textContent = when().toLocaleString(en ? 'en-GB' : 'fr-FR', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
+    $('#conf-price').textContent = data.prix;
+    const rows = [
+      [t('Départ', 'Pick-up'), data.pickup], [t('Arrivée', 'Drop-off'), data.dest],
+      [t('N° de vol', 'Flight'), data.flight], [t('Demandes', 'Requests'), data.requests],
+      [t('Contact', 'Contact'), `${data.fname} ${data.lname}\n${data.phone}\n${data.email}`],
+    ].filter(r => r[1]);
+    $('#conf-list').innerHTML = rows.map(([k, val]) => `<dt>${esc(k)}</dt><dd>${esc(val).replace(/\n/g, '<br>')}</dd>`).join('');
+    const wa = $('#conf-wa');
+    wa.href = waLink;
+    wa.textContent = res.ok ? t('Une question ? WhatsApp', 'Questions? WhatsApp') : t('Envoyer sur WhatsApp', 'Send on WhatsApp');
+    wa.classList.toggle('btn-out', res.ok);
+  }
+
+  $('#conf-new').addEventListener('click', () => {
+    ['fname', 'lname', 'phone', 'email', 'flight', 'notes'].forEach(id => { $('#' + id).value = ''; });
+    $('#rgpd').checked = false;
+    history.replaceState(null, '');
+    show(1);
+  });
 
   /* ── Modales ── */
   document.addEventListener('click', e => {
