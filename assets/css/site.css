@@ -163,11 +163,17 @@ em { font-style: italic; color: var(--accent); }
 .modal p { margin: 0 0 8px; color: var(--muted); font-size: 14px; }
 .modal-close { float: right; background: none; border: 1px solid var(--line-strong); border-radius: 6px; padding: 4px 12px; font-size: 12px; cursor: pointer; }
 
-/* ── Écran d'ouverture (première visite) ── */
+/* ── Écran d'ouverture (première visite) · animation « Espacement » en CSS pur ── */
 .intro-screen { display: none; }
-.intro .intro-screen { display: flex; position: fixed; inset: 0; z-index: 100; background: var(--ivory); flex-direction: column; align-items: center; justify-content: center; gap: .9em; font-size: clamp(44px, 11vw, 120px); cursor: pointer; }
-/* filet de sécurité : l'écran disparaît seul après 5 s, même si le script ne se charge pas */
-.intro .intro-screen { animation: intro-off .4s ease 5s forwards; }
-@keyframes intro-off { to { opacity: 0; visibility: hidden; pointer-events: none; } }
-.intro-word { font-family: 'Lexend Zetta', 'Helvetica Neue', Arial, sans-serif; font-weight: 300; line-height: 1; letter-spacing: .12em; margin-right: -.12em; white-space: nowrap; color: var(--ink); opacity: 0; }
-.intro-tag { font-family: var(--sans); font-size: max(11px, .1em); letter-spacing: .32em; margin-right: -.32em; text-transform: uppercase; color: var(--muted); white-space: nowrap; opacity: 0; }
+.intro .intro-screen { display: flex; position: fixed; inset: 0; z-index: 100; background: var(--ivory); flex-direction: column; align-items: center; justify-content: center; gap: .9em; font-size: clamp(44px, 11vw, 120px); cursor: pointer;
+  -webkit-animation: intro-out .5s ease 2.7s forwards; animation: intro-out .5s ease 2.7s forwards; }
+.intro-word { font-family: 'Lexend Zetta', 'Helvetica Neue', Arial, sans-serif; font-weight: 300; line-height: 1; letter-spacing: .12em; margin-right: -.12em; white-space: nowrap; color: var(--ink); }
+.intro-tag { font-family: var(--sans); font-size: max(11px, .1em); letter-spacing: .32em; margin-right: -.32em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.intro .intro-word { opacity: 0; -webkit-animation: intro-spread 1.6s cubic-bezier(.2,.7,.2,1) .3s forwards; animation: intro-spread 1.6s cubic-bezier(.2,.7,.2,1) .3s forwards; }
+.intro .intro-tag { opacity: 0; -webkit-animation: intro-tag .8s cubic-bezier(.2,.7,.2,1) 1.4s forwards; animation: intro-tag .8s cubic-bezier(.2,.7,.2,1) 1.4s forwards; }
+@-webkit-keyframes intro-spread { 0% { opacity: 0; letter-spacing: -.09em; margin-right: .09em; -webkit-filter: blur(10px); filter: blur(10px); } 55% { opacity: 1; } 100% { opacity: 1; letter-spacing: .12em; margin-right: -.12em; -webkit-filter: blur(0); filter: blur(0); } }
+@keyframes intro-spread { 0% { opacity: 0; letter-spacing: -.09em; margin-right: .09em; filter: blur(10px); } 55% { opacity: 1; } 100% { opacity: 1; letter-spacing: .12em; margin-right: -.12em; filter: blur(0); } }
+@-webkit-keyframes intro-tag { 0% { opacity: 0; letter-spacing: .18em; margin-right: -.18em; } 100% { opacity: 1; letter-spacing: .32em; margin-right: -.32em; } }
+@keyframes intro-tag { 0% { opacity: 0; letter-spacing: .18em; margin-right: -.18em; } 100% { opacity: 1; letter-spacing: .32em; margin-right: -.32em; } }
+@-webkit-keyframes intro-out { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+@keyframes intro-out { to { opacity: 0; visibility: hidden; pointer-events: none; } }
