@@ -26,11 +26,28 @@
   }
   $$('.lang button').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
 
-  /* ── Étapes ── */
-  function go(n) {
+  /* ── Étapes, reliées à l'historique du navigateur ──
+     Le bouton « retour » du navigateur (ou le glissement sur iPhone/iPad)
+     revient à l'étape précédente au lieu de quitter le site. */
+  let cur = 1;
+  function show(n) {
+    cur = n;
     $$('.step').forEach(s => s.classList.toggle('on', s.id === 'step' + n));
     if (window.innerWidth < 900) $('#book').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
+  function go(n) {
+    n = +n;
+    if (n === cur) return;
+    if (n < cur && history.state && history.state.ustadStep === cur) { history.back(); return; }
+    if (n === 4) history.replaceState({ ustadStep: 4 }, '');     // pas de retour vers un formulaire déjà envoyé
+    else if (n > cur) history.pushState({ ustadStep: n }, '');
+    show(n);
+  }
+  window.addEventListener('popstate', e => {
+    const n = (e.state && e.state.ustadStep) || 1;
+    if (cur === 4 && n > 1) { history.go(-(n - 1)); return; } // après l'envoi, retour direct au début
+    show(cur === 4 ? 1 : n);
+  });
   $$('[data-go]').forEach(b => b.addEventListener('click', () => go(b.dataset.go)));
 
   function bad(id, on) { const f = document.getElementById(id)?.closest('.field'); if (f) f.classList.toggle('bad', on); }
